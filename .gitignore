@@ -1,0 +1,11 @@
+.idea
+atlassian-ide-plugin.xml
+vendor
+nbproject
+.idea
+.buildpath
+.project
+.settings/
+.DS_Store
+composer.phar
+composer.lock

@@ -1,0 +1,36 @@
+{
+    "name": "phpro/smartcrud",
+    "description": "Module for creating smartcrud with the ZF2 MVC layer.",
+    "type": "zf-module",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "smartcrud",
+        "zend",
+        "zf2",
+        "module"
+    ],
+    "homepage": "https://github.com/phpro/SmartCrud",
+    "authors": [
+        {
+            "name": "Toon Verwerft",
+            "email": "toonverwerft@gmail.com"
+        }
+    ],
+    "require": {
+        "php":                               ">=5.3.3",
+        "zendframework/zend-mvc":            "2.*",
+        "zendframework/zend-eventmanager":   "2.*",
+        "zendframework/zend-stdlib":         "2.*",
+        "zendframework/zend-servicemanager": "2.*",
+        "zendframework/zend-view":           "2.*",
+        "zendframework/zend-version":        "2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "SmartCrud": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
