@@ -1,4 +1,11 @@
 <?php
+/**
+ * Smartcrud for Zend Framework (http://framework.zend.com/)
+ *
+ * @link http://github.com/veewee/PhproSmartCrud for the canonical source repository
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 
 namespace PhproSmartCrud\Service;
 
@@ -50,11 +57,32 @@ abstract class AbstractCrudActionService
      */
     public function createEvent($eventName)
     {
-        $event = new CrudEvent();
-        $event->setName($eventName);
-        $event->setTarget($this->getCrudService()->getEntity());
-        $event->setParameters($this->getCrudservice()->getParameters());
+        $event = new CrudEvent($eventName, $this->getEntity(), $this->getParameters());
         return $event;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->getCrudService()->getParameters();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntity()
+    {
+        return $this->getCrudService()->getEntity();
+    }
+
+    /**
+     * @return \PhproSmartCrud\Gateway\CrudGatewayInterface
+     */
+    public function getGateway()
+    {
+        return $this->getCrudService()->getGateway();
     }
 
 }

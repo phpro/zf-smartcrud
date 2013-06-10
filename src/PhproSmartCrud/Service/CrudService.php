@@ -1,8 +1,18 @@
 <?php
+/**
+ * Smartcrud for Zend Framework (http://framework.zend.com/)
+ *
+ * @link http://github.com/veewee/PhproSmartCrud for the canonical source repository
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 
 namespace PhproSmartCrud\Service;
 
+use PhproSmartCrud\Event\CrudEvent;
+use PhproSmartCrud\Exception\SmartCrudException;
 use PhproSmartCrud\Gateway\CrudGatewayInterface;
+use Zend\EventManager\EventManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Form\Form;
@@ -50,7 +60,7 @@ class CrudService implements ServiceManagerAwareInterface
      */
     public function getList()
     {
-        $service = $this->getServiceManager()->get('PhproSmartCrud\Service\ListService');
+        $service = $this->getActionService('PhproSmartCrud\Service\ListService');
         return $service->getList();
     }
 
@@ -59,11 +69,11 @@ class CrudService implements ServiceManagerAwareInterface
      */
     public function create()
     {
-        if (!$this->getForm()->isValid()) {
+        if (!$this->isValid()) {
             return false;
         }
 
-        $service = $this->getServiceManager()->get('PhproSmartCrud\Service\CreateService');
+        $service = $this->getActionService('PhproSmartCrud\Service\CreateService');
         return $service->create();
     }
 
@@ -72,7 +82,7 @@ class CrudService implements ServiceManagerAwareInterface
      */
     public function read()
     {
-        $service = $this->getServiceManager()->get('PhproSmartCrud\Service\ReadService');
+        $service = $this->getActionService('PhproSmartCrud\Service\ReadService');
         return $service->read();
     }
 
@@ -81,11 +91,11 @@ class CrudService implements ServiceManagerAwareInterface
      */
     public function update()
     {
-        if (!$this->getForm()->isValid()) {
+        if (!$this->isValid()) {
             return false;
         }
 
-        $service = $this->getServiceManager()->get('PhproSmartCrud\Service\UpdateService');
+        $service = $this->getActionService('PhproSmartCrud\Service\UpdateService');
         return $service->update();
     }
 
@@ -94,8 +104,68 @@ class CrudService implements ServiceManagerAwareInterface
      */
     public function delete()
     {
-        $service = $this->getServiceManager()->get('PhproSmartCrud\Service\DeleteService');
+        $service = $this->getActionService('PhproSmartCrud\Service\DeleteService');
         return $service->delete();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $valid = $this->triggerValidationEvent(CrudEvent::BEFORE_VALIDATE);
+        if (!$valid) {
+            return false;
+        }
+
+        $this->getForm()->bindValues($this->getParameters());
+        $valid = $this->getForm()->isValid();
+        if (!$valid) {
+            return false;
+        }
+
+        $valid = $this->triggerValidationEvent(CrudEvent::AFTER_VALIDATE);
+        if (!$valid) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $eventName
+     *
+     * @return bool
+     */
+    protected function triggerValidationEvent($eventName)
+    {
+        $eventManager = $this->getEventManager();
+        $event = new CrudEvent($eventName);
+        $results = $eventManager->trigger($event, $this->getEntity(), $this->getParameters(), function ($valid) {
+            return !$valid;
+        });
+
+        if($results->stopped()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param $actionService
+     *
+     * @return AbstractCrudActionService
+     * @throws SmartCrudException
+     */
+    public function getActionService($actionService)
+    {
+        if (!$this->getServiceManager()->has($actionService)) {
+            throw new SmartCrudException('Invalid crud action service: ' . $actionService);
+        }
+
+        $service =  $this->getServiceManager()->get($actionService);
+        $service->setCrudService($this);
+        return $service;
     }
 
     /**
@@ -126,10 +196,13 @@ class CrudService implements ServiceManagerAwareInterface
     }
 
     /**
-     * @return \Zend\EventManager\Event
+     * @return \Zend\EventManager\EventManager
      */
     public function getEventManager()
     {
+        if (!$this->eventManager) {
+            $this->eventManager = new EventManager();
+        }
         return $this->eventManager;
     }
 

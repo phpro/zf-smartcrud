@@ -7,14 +7,14 @@
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace PhproSmartCrud\Output;
+namespace PhproSmartCrud\Exception;
 
 /**
- * Class RedirectModel
+ * Class SmartCrudException
  *
- * @package PhproSmartCrud\Output
+ * @package PhproSmartCrud\Exception
  */
-class RedirectModel
+class SmartCrudException extends \Exception
 {
 
 }

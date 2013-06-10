@@ -1,6 +1,16 @@
 <?php
+/**
+ * Smartcrud for Zend Framework (http://framework.zend.com/)
+ *
+ * @link http://github.com/veewee/PhproSmartCrud for the canonical source repository
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 
 namespace PhproSmartCrud\Gateway;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\EntityRepository\EntityRepository;
 
 /**
  * Class DoctrineCrudGateway
@@ -82,7 +92,7 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
     /**
      * @param $entity
      *
-     * @return Repository
+     * @return EntityRepository
      */
     public function getRepository($entity)
     {

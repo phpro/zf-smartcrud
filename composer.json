@@ -23,7 +23,12 @@
         "zendframework/zend-stdlib":         "2.*",
         "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-view":           "2.*",
-        "zendframework/zend-version":        "2.*"
+        "zendframework/zend-version":        "2.*",
+        "symfony/console":                   "2.*"
+    },
+    "suggest": {
+        "doctrine/doctrine-orm-module":      "If you want to use the Doctrine Gateway",
+        "zendframework/zend-db":             "If you want to use the Zend DB Gateway"
     },
     "autoload": {
         "psr-0": {
@@ -32,5 +37,6 @@
         "classmap": [
             "./Module.php"
         ]
-    }
+    },
+    "bin": ["bin/smartcrud", "bin/smartcrud.php"]
 }
