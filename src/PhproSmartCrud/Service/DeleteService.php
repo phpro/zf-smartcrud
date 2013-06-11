@@ -16,7 +16,7 @@ use PhproSmartCrud\Event\CrudEvent;
  *
  * @package PhproSmartCrud\Service
  */
-class DeleteService extends AbstractCrudActionService
+class DeleteService extends AbstractCrudService
 {
 
     /**

@@ -16,7 +16,7 @@ use PhproSmartCrud\Event\CrudEvent;
  *
  * @package PhproSmartCrud\Service
  */
-class ListService extends AbstractCrudActionService
+class ListService extends AbstractCrudService
 {
 
     /**

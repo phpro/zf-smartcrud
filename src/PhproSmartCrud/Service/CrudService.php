@@ -22,28 +22,9 @@ use Zend\Form\Form;
  *
  * @package PhproSmartCrud\Service
  */
-class CrudService implements ServiceManagerAwareInterface
+class CrudService extends AbstractCrudService
+    implements ServiceManagerAwareInterface
 {
-
-    /**
-     * @var array
-     */
-    protected $parameters;
-
-    /**
-     * @var CrudGatewayInterface
-     */
-    protected $gateway;
-
-    /**
-     * @var mixed
-     */
-    protected $entity;
-
-    /**
-     * @var \Zend\EventManager\Event
-     */
-    protected $eventManager;
 
     /**
      * @var \Zend\ServiceManager\ServiceManager
@@ -118,7 +99,7 @@ class CrudService implements ServiceManagerAwareInterface
             return false;
         }
 
-        $this->getForm()->bindValues($this->getParameters());
+        $this->getForm()->setData($this->getParameters());
         $valid = $this->getForm()->isValid();
         if (!$valid) {
             return false;
@@ -140,8 +121,8 @@ class CrudService implements ServiceManagerAwareInterface
     protected function triggerValidationEvent($eventName)
     {
         $eventManager = $this->getEventManager();
-        $event = new CrudEvent($eventName);
-        $results = $eventManager->trigger($event, $this->getEntity(), $this->getParameters(), function ($valid) {
+        $event = $this->createEvent($eventName);
+        $results = $eventManager->trigger($event, null, array(), function ($valid) {
             return !$valid;
         });
 
@@ -154,7 +135,7 @@ class CrudService implements ServiceManagerAwareInterface
     /**
      * @param $actionService
      *
-     * @return AbstractCrudActionService
+     * @return AbstractCrudService
      * @throws SmartCrudException
      */
     public function getActionService($actionService)
@@ -163,85 +144,18 @@ class CrudService implements ServiceManagerAwareInterface
             throw new SmartCrudException('Invalid crud action service: ' . $actionService);
         }
 
+        /** @var AbstractCrudService $service  */
         $service =  $this->getServiceManager()->get($actionService);
-        $service->setCrudService($this);
-        return $service;
-    }
-
-    /**
-     * @param mixed $entity
-     */
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
-    /**
-     * @param $eventManager
-     *
-     * @return $this
-     */
-    public function setEventManager($eventManager)
-    {
-        $this->eventManager = $eventManager;
-        return $this;
-    }
-
-    /**
-     * @return \Zend\EventManager\EventManager
-     */
-    public function getEventManager()
-    {
-        if (!$this->eventManager) {
-            $this->eventManager = new EventManager();
+        if (!($service instanceof AbstractCrudService)) {
+            throw new SmartCrudException('Invalid crud action service: ' . $actionService);
         }
-        return $this->eventManager;
-    }
 
-    /**
-     * @param $gateway
-     *
-     * @return $this
-     */
-    public function setGateway($gateway)
-    {
-        $this->gateway = $gateway;
-        return $this;
-    }
-
-    /**
-     * @return \PhproSmartCrud\Gateway\CrudGatewayInterface
-     */
-    public function getGateway()
-    {
-        return $this->gateway;
-    }
-
-    /**
-     * @param $parameters
-     *
-     * @return $this
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
+        $service
+            ->setEventManager($this->getEventManager())
+            ->setEntity($this->getEntity())
+            ->setParameters($this->getParameters())
+            ->setGateway($this->getGateway());
+        return $service;
     }
 
     /**

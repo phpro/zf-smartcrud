@@ -18,7 +18,18 @@ use Prophecy\Argument;
  * @package spec\PhproSmartCrud\Service
  * @todo spec abstract classes
  */
-class AbstractCrudActionServiceSpec extends ObjectBehavior
+class AbstractCrudServiceSpec extends ObjectBehavior
 {
+
+    /**
+     * @parameter \PhproSmartCrud\Service\AbstractCrudService $service
+     * @todo find a way to spec abstract classes
+     */
+    public function it_should_have_parameters($service)
+    {
+        $parameters = array(1,2,3);
+        $service->setParameters($parameters)->shouldReturn($service);
+        $service->getParameters()->shouldReturn($parameters);
+    }
 
 }
