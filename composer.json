@@ -24,15 +24,19 @@
         "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-view":           "2.*",
         "zendframework/zend-version":        "2.*",
-        "symfony/console":                   "2.*"
+        "symfony/console":                   "2.*",
+
+
+        "phpspec/phpspec":                   "2.0.*@dev"
     },
     "suggest": {
         "doctrine/doctrine-orm-module":      "If you want to use the Doctrine Gateway",
-        "zendframework/zend-db":             "If you want to use the Zend DB Gateway"
+        "zendframework/zend-db":             "If you want to use the Zend DB Gateway",
+        "phpspec/phpspec":                   "If you want to run the tests, use phpspec 2.0.*@dev"
     },
     "autoload": {
         "psr-0": {
-            "SmartCrud": "src/"
+            "PhproSmartCrud": "src/"
         },
         "classmap": [
             "./Module.php"
