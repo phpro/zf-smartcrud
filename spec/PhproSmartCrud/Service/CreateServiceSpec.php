@@ -21,34 +21,65 @@ use Prophecy\Prophet;
  */
 class CreateServiceSpec extends ObjectBehavior
 {
+    /**
+     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \stdClass $entity
+     */
+    public function let($gateway, $eventManager, $entity)
+    {
+        $this->setGateway($gateway);
+        $this->setEventManager($eventManager);
+        $this->setEntity($entity);
+        $this->setParameters(array());
+    }
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Service\CreateService');
     }
 
-    function it_should_extend_PhproSmartCrud_AbstractCrudService()
+    public function it_should_extend_PhproSmartCrud_AbstractCrudService()
     {
         $this->shouldBeAnInstanceOf('PhproSmartCrud\Service\AbstractCrudService');
     }
 
     /**
-     * @todo find a way to mock the callback function
-     *
      * @param \Zend\EventManager\EventManager $eventManager
-     * @param \PhproSmartCrud\Event\CrudEvent $event
      */
-    function it_should_trigger_before_create_event($eventManager, $event)
+    public function it_should_trigger_before_create_event($eventManager)
     {
-        $prophet = new Prophet();
-        $prophecy = $prophet->prophesize();
-        $prophecy->beforeUpdate()->willReturn(true);
-
-        $callback = $prophecy->reveal();
-        $eventManager->attach(CrudEvent::BEFORE_CREATE, array($callback, 'beforeUpdate'));
-        $this->setEventManager($eventManager);
         $this->create();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldBeCalled();
+    }
 
-        $callback->beforeUpdate($event)->shouldHaveBeenCalled();
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     */
+    public function it_should_trigger_after_create_event($eventManager)
+    {
+        $this->create();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_CREATE))->shouldBeCalled();
+    }
+
+    /**
+     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     */
+    public function it_should_call_create_function_on_gateway($gateway)
+    {
+        $this->create();
+        $gateway->create(Argument::type('stdClass'), Argument::exact(array()))->shouldBeCalled();
+    }
+
+    /**
+     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     */
+    public function it_should_return_gateway_return_value($gateway)
+    {
+        $gateway->create(Argument::any(), Argument::any())->willReturn(true);
+        $this->create()->shouldReturn(true);
+
+        $gateway->create(Argument::any(), Argument::any())->willReturn(false);
+        $this->create()->shouldReturn(false);
     }
 }
