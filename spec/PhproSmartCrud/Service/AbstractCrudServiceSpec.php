@@ -82,15 +82,11 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
     public function it_should_create_crud_event($entity)
     {
         $eventName = 'test-event-name';
-        $params = array('param1' => 'value1', 'param2' => 'value2');
-        $this->setParameters($params);
-        $this->setEntity($entity);
-
         $crudEvent = $this->createEvent($eventName);
         $crudEvent->shouldBeAnInstanceOf('PhproSmartCrud\Event\CrudEvent');
         $crudEvent->getName()->shouldReturn($eventName);
         $crudEvent->getTarget()->shouldReturn($entity);
-        $crudEvent->getParams()->shouldReturn($params);
+        $crudEvent->getParams()->shouldReturn(array());
     }
 
 }
