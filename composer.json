@@ -42,5 +42,5 @@
             "./Module.php"
         ]
     },
-    "bin": ["bin/smartcrud"]
+    "bin": ["bin/smartcrud", "bin/smartcrud.php"]
 }
