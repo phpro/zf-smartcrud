@@ -34,66 +34,13 @@ class CrudEvent extends Event
     const AFTER_VALIDATE = 'after-validate';
 
     /**
-     * @var array
-     */
-    protected $parameters;
-
-    /**
-     * @var mixed
-     */
-    protected $entity;
-
-    /**
-     * @var CrudGatewayInterface
-     */
-    protected $gateway;
-
-    /**
-     * @param mixed $entity
-     */
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-    }
-
-    /**
-     * @return mixed
+     * Shortcut function to retreive entity
+     *
+     * @return object|string
      */
     public function getEntity()
     {
-        return $this->entity;
-    }
-
-    /**
-     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
-     */
-    public function setGateway($gateway)
-    {
-        $this->gateway = $gateway;
-    }
-
-    /**
-     * @return \PhproSmartCrud\Gateway\CrudGatewayInterface
-     */
-    public function getGateway()
-    {
-        return $this->gateway;
-    }
-
-    /**
-     * @param array $parameters
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
+        return $this->getTarget();
     }
 
 }

@@ -18,21 +18,8 @@ use Prophecy\Argument;
  *
  * @package spec\PhproSmartCrud\Service
  */
-class DeleteServiceSpec extends ObjectBehavior
+class DeleteServiceSpec extends AbstractCrudServiceSpec
 {
-
-    /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
-     * @param \Zend\EventManager\EventManager $eventManager
-     * @param \stdClass $entity
-     */
-    public function let($gateway, $eventManager, $entity)
-    {
-        $this->setGateway($gateway);
-        $this->setEventManager($eventManager);
-        $this->setEntity($entity);
-        $this->setParameters(array());
-    }
 
     public function it_is_initializable()
     {
@@ -76,10 +63,12 @@ class DeleteServiceSpec extends ObjectBehavior
      */
     public function it_should_return_gateway_return_value($gateway)
     {
-        $gateway->delete(Argument::any(), Argument::any())->willReturn(true);
+        $dummy = Argument::any();
+
+        $gateway->delete($dummy, $dummy)->willReturn(true);
         $this->delete()->shouldReturn(true);
 
-        $gateway->delete(Argument::any(), Argument::any())->willReturn(false);
+        $gateway->delete($dummy, $dummy)->willReturn(false);
         $this->delete()->shouldReturn(false);
     }
 

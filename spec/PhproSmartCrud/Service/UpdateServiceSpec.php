@@ -18,21 +18,8 @@ use Prophecy\Argument;
  *
  * @package spec\PhproSmartCrud\Service
  */
-class UpdateServiceSpec extends ObjectBehavior
+class UpdateServiceSpec extends AbstractCrudServiceSpec
 {
-
-    /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
-     * @param \Zend\EventManager\EventManager $eventManager
-     * @param \stdClass $entity
-     */
-    public function let($gateway, $eventManager, $entity)
-    {
-        $this->setGateway($gateway);
-        $this->setEventManager($eventManager);
-        $this->setEntity($entity);
-        $this->setParameters(array());
-    }
 
     public function it_is_initializable()
     {
@@ -76,10 +63,12 @@ class UpdateServiceSpec extends ObjectBehavior
      */
     public function it_should_return_gateway_return_value($gateway)
     {
-        $gateway->update(Argument::any(), Argument::any())->willReturn(true);
+        $dummy = Argument::any();
+
+        $gateway->update($dummy, $dummy)->willReturn(true);
         $this->update()->shouldReturn(true);
 
-        $gateway->update(Argument::any(), Argument::any())->willReturn(false);
+        $gateway->update($dummy, $dummy)->willReturn(false);
         $this->update()->shouldReturn(false);
     }
 

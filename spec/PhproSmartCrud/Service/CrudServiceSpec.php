@@ -17,10 +17,62 @@ use Prophecy\Argument;
  *
  * @package spec\PhproSmartCrud\Service
  */
-class CrudServiceSpec extends ObjectBehavior
+class CrudServiceSpec extends AbstractCrudServiceSpec
 {
+    /**
+     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \stdClass $entity
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \Zend\Form\Form $form
+     */
+    public function let($gateway, $eventManager, $entity, $serviceManager, $form)
+    {
+        parent::let($gateway, $eventManager, $entity);
+
+        $this->setForm($form);
+        $this->setServiceManager($serviceManager);
+    }
+
+
     function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Service\CrudService');
     }
+
+    public function it_should_extend_PhproSmartCrud_AbstractCrudService()
+    {
+        $this->shouldBeAnInstanceOf('PhproSmartCrud\Service\AbstractCrudService');
+    }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     */
+    public function it_should_have_fluent_interfaces($serviceManager)
+    {
+        parent::it_should_have_fluent_interfaces();
+
+        $dummy = Argument::any();
+        $this->setServiceManager($serviceManager)->shouldReturn($this);
+        $this->setForm($dummy)->shouldReturn($this);
+    }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     */
+    public function it_should_have_a_service_manager($serviceManager)
+    {
+        $this->setServiceManager($serviceManager);
+        $this->getServiceManager()->shouldReturn($serviceManager);
+    }
+
+    /**
+     * @param \Zend\Form\Form $form
+     */
+    public function it_should_have_a_form($form)
+    {
+        $this->setForm($form);
+        $this->getForm()->shouldReturn($form);
+    }
+
 }
