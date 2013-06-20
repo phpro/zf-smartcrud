@@ -9,7 +9,6 @@
 
 namespace spec\PhproSmartCrud\Service;
 
-use PhpSpec\ObjectBehavior;
 use PhproSmartCrud\Event\CrudEvent;
 use Prophecy\Argument;
 
@@ -63,13 +62,13 @@ class ListServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_return_gateway_return_value($gateway)
     {
-        $dummy = Argument::any();
+        $arguments = Argument::cetera();
         $data = array(array('record1'), array('record2'));
 
-        $gateway->getList($dummy, $dummy)->willReturn($data);
+        $gateway->getList($arguments)->willReturn($data);
         $this->getList()->shouldReturn($data);
 
-        $gateway->getList($dummy, $dummy)->willReturn(array());
+        $gateway->getList($arguments)->willReturn(array());
         $this->getList()->shouldReturn(array());
     }
 

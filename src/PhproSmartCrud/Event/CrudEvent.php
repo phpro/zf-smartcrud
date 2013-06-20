@@ -9,7 +9,6 @@
 
 namespace PhproSmartCrud\Event;
 
-use PhproSmartCrud\Gateway\CrudGatewayInterface;
 use Zend\EventManager\Event;
 
 /**

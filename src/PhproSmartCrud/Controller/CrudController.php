@@ -129,7 +129,7 @@ class CrudController extends AbstractActionController implements ServiceManagerA
     {
         if (!$this->crudService) {
             /** @var \PhproSmartCrud\Service\CrudService $crudService  */
-            $crudService = $this->getServiceManager()->get('PhproSmartCrud\Service\CrudService');
+            $crudService = $this->getServiceManager()->get('phpro.smartcrud.crud');
             $crudService
                 ->setParameters(array_merge($this->params()->fromQuery(), $this->params()->fromPost()))
                 ->setGateway($this->getGateway())

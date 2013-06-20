@@ -9,10 +9,8 @@
 
 namespace spec\PhproSmartCrud\Service;
 
-use PhpSpec\ObjectBehavior;
 use PhproSmartCrud\Event\CrudEvent;
 use Prophecy\Argument;
-use Prophecy\Prophet;
 
 /**
  * Class CreateServiceSpec
@@ -64,12 +62,11 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_return_gateway_return_value($gateway)
     {
-        $dummy = Argument::any();
-
-        $gateway->create($dummy, $dummy)->willReturn(true);
+        $arguments = Argument::cetera();
+        $gateway->create($arguments)->willReturn(true);
         $this->create()->shouldReturn(true);
 
-        $gateway->create($dummy, $dummy)->willReturn(false);
+        $gateway->create($arguments)->willReturn(false);
         $this->create()->shouldReturn(false);
     }
 }

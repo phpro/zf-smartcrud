@@ -166,8 +166,8 @@ class Generate extends CliCommand
     protected function getGatewayList()
     {
         return array(
-            'PhproSmartCrud\Gateway\DoctrineCrudGateWay' => 'Doctrine',
-            'PhproSmartCrud\Gateway\ZendDbCrudGateway'   => 'Zend-Db',
+            'phpro.smartcrud.gateway.doctrine' => 'Doctrine',
+            'phpro.smartcrud.gateway.zenddb'   => 'Zend-Db',
         );
     }
 

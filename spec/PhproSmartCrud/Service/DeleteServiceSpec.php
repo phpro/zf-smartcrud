@@ -9,7 +9,6 @@
 
 namespace spec\PhproSmartCrud\Service;
 
-use PhpSpec\ObjectBehavior;
 use PhproSmartCrud\Event\CrudEvent;
 use Prophecy\Argument;
 
@@ -63,12 +62,11 @@ class DeleteServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_return_gateway_return_value($gateway)
     {
-        $dummy = Argument::any();
-
-        $gateway->delete($dummy, $dummy)->willReturn(true);
+        $arguments = Argument::cetera();
+        $gateway->delete($arguments)->willReturn(true);
         $this->delete()->shouldReturn(true);
 
-        $gateway->delete($dummy, $dummy)->willReturn(false);
+        $gateway->delete($arguments)->willReturn(false);
         $this->delete()->shouldReturn(false);
     }
 
