@@ -9,6 +9,7 @@
 
 namespace spec\PhproSmartCrud\Service;
 
+use PhproSmartCrud\Event\CrudEvent;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 
@@ -60,6 +61,13 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $service->setParameters($dummy)->willReturn($service);
         $service->setGateway($dummy)->willReturn($service);
 
+        // Add dummy getters
+        // TODO: add instanceof instead of dummy value
+        $service->getEntity()->willReturn($dummy);
+        $service->getEventManager()->willReturn($dummy);
+        $service->getParameters()->willReturn($dummy);
+        $service->getGateway()->willReturn($dummy);
+
         return $this;
     }
 
@@ -76,12 +84,29 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $prophet = new Prophet();
         $eventManager = $prophet->prophesize('\Zend\EventManager\EventManager');
         $eventResponseCollection = $prophet->prophesize('\Zend\EventManager\ResponseCollection');
-        $form = $prophet->prophesize('\Zend\Form\Form');
 
         // Event validation:
         $this->setEventManager($eventManager);
         $eventManager->trigger(Argument::cetera())->willReturn($eventResponseCollection);
         $eventResponseCollection->stopped()->willReturn(false);
+
+        // Mock form validation
+        $this->mockFormValidation($returnValue);
+
+        return $this;
+    }
+
+    /**
+     * This mock will make the isValid() method on zend form return the wanted value
+     *
+     * @param bool $returnValue
+     *
+     * @return $this
+     */
+    protected function mockFormValidation($returnValue)
+    {
+        $prophet = new Prophet();
+        $form = $prophet->prophesize('\Zend\Form\Form');
 
         // Form validation:
         $this->setForm($form);
@@ -91,7 +116,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         return $this;
     }
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Service\CrudService');
     }
@@ -99,6 +124,11 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
     public function it_should_extend_PhproSmartCrud_AbstractCrudService()
     {
         $this->shouldBeAnInstanceOf('PhproSmartCrud\Service\AbstractCrudService');
+    }
+
+    public function it_should_implement_Zend_ServiceManagerAwareInterface()
+    {
+        $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
     }
 
     /**
@@ -131,29 +161,124 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->getForm()->shouldReturn($form);
     }
 
-    public function it_should_trigger_validation_events()
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\EventManager\ResponseCollection $eventResponseCollection
+     */
+    public function it_should_trigger_before_validate_event($eventManager, $eventResponseCollection)
     {
-        // TODO
+        // Event validation:
+        $this->setEventManager($eventManager);
+        $eventManager->trigger(Argument::cetera())->willReturn($eventResponseCollection);
+        $eventResponseCollection->stopped()->willReturn(false);
+
+        // Test event
+        $this->isValid();
+        $eventManager->trigger(
+            Argument::which('getName', CrudEvent::BEFORE_VALIDATE),
+            Argument::type('null'),
+            Argument::type('array'),
+            Argument::type('callable')
+        )->shouldBeCalled();
+
     }
 
-    public function it_should_pre_validate_data()
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\EventManager\ResponseCollection $eventResponseCollection
+     */
+    public function it_should_trigger_after_validate_event($eventManager, $eventResponseCollection)
     {
-        // TODO
+        // Mock Event validation:
+        $this->setEventManager($eventManager);
+        $eventManager->trigger(Argument::cetera())->willReturn($eventResponseCollection);
+        $eventResponseCollection->stopped()->willReturn(false);
+
+        // Mock Form validation
+        $this->mockFormValidation(true);
+
+        // Test event
+        $this->isValid();
+        $eventManager->trigger(
+            Argument::which('getName', CrudEvent::AFTER_VALIDATE),
+            Argument::type('null'),
+            Argument::type('array'),
+            Argument::type('callable')
+        )->shouldBeCalled();
     }
 
-    public function it_should_validate_data()
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\EventManager\ResponseCollection $beforeResponse
+     * @param \Zend\EventManager\ResponseCollection $afterResponse
+     */
+    public function it_should_validate_triggered_validation_events($eventManager, $beforeResponse, $afterResponse)
     {
-        // TODO
+        // Mock Form validation
+        $this->mockFormValidation(true);
+
+        // Event validation:
+        $this->setEventManager($eventManager);
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_VALIDATE), Argument::cetera())->willReturn($beforeResponse);
+        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_VALIDATE), Argument::cetera())->willReturn($afterResponse);
+
+        // Valid before & after event response:
+        $beforeResponse->stopped()->willReturn(false);
+        $afterResponse->stopped()->willReturn(false);
+        $this->isValid()->shouldReturn(true);
+
+        // Invalid before event response:
+        $beforeResponse->stopped()->willReturn(true);
+        $afterResponse->stopped()->willReturn(false);
+        $this->isValid()->shouldReturn(false);
+
+        // Invalid after event response:
+        $beforeResponse->stopped()->willReturn(false);
+        $afterResponse->stopped()->willReturn(true);
+        $this->isValid()->shouldReturn(false);
+
+        // Invalid before and after event response:
+        $beforeResponse->stopped()->willReturn(true);
+        $afterResponse->stopped()->willReturn(true);
+        $this->isValid()->shouldReturn(false);
+
     }
 
-    public function it_should_post_validate_data()
+    public function it_should_validate_form_data()
     {
-        // TODO
+        $this->mockValidation(true);
+        $this->isValid()->shouldReturn(true);
+
+        $this->mockValidation(false);
+        $this->isValid()->shouldReturn(false);
     }
 
-    public function it_should_provide_valid_action_services()
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
+     */
+    public function it_should_provide_valid_action_services($serviceManager, $crudService)
     {
-        // TODO
+        // Validate if the service exists in the service manager
+        $serviceManager->has(Argument::any())->willReturn(false);
+        $this->shouldThrow('\PhproSmartCrud\Exception\SmartCrudException')->duringGetActionService('invalid-action-key');
+
+        // Validate if the returned service is an abstractCrudService
+        $serviceManager->has(Argument::any())->willReturn(true);
+        $serviceManager->get(Argument::any())->willReturn(null);
+        $this->shouldThrow('\PhproSmartCrud\Exception\SmartCrudException')->duringGetActionService('invalid-service-type');
+
+        // Mock actionservice
+        $this->mockActionService('valid-action-service', $crudService);
+
+        // Validate service
+        $service = $this->getActionService('valid-action-service');
+        $service->shouldReturn($crudService);
+        // TODO: add instanceof instead of dummy value
+        $service->getEventManager()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
+        $service->getEntity()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
+        $service->getParameters()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
+        $service->getGateway()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
     }
 
     /**
