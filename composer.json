@@ -9,13 +9,14 @@
         "zf2",
         "module"
     ],
-    "homepage": "https://github.com/phpro/SmartCrud",
+    "homepage": "https://github.com/veewee/PhproSmartCrud",
     "authors": [
         {
             "name": "Toon Verwerft",
-            "email": "toonverwerft@gmail.com"
+            "email": "toon.verwerft@phpro.be"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "php":                               ">=5.3.3",
         "zendframework/zend-mvc":            "2.*",
@@ -24,10 +25,12 @@
         "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-view":           "2.*",
         "zendframework/zend-version":        "2.*",
-        "symfony/console":                   "2.*",
-
-
-        "phpspec/phpspec":                   "2.0.*@dev"
+        "symfony/console":                   "2.*"
+    },
+    "require-dev": {
+        "phpspec/phpspec":                   "2.0.*@dev",
+        "doctrine/doctrine-orm-module":      "0.8.*@dev",
+        "zendframework/zend-db":             "2.*"
     },
     "suggest": {
         "doctrine/doctrine-orm-module":      "If you want to use the Doctrine Gateway",
