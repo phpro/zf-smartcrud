@@ -62,11 +62,10 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $service->setGateway($dummy)->willReturn($service);
 
         // Add dummy getters
-        // TODO: add instanceof instead of dummy value
-        $service->getEntity()->willReturn($dummy);
-        $service->getEventManager()->willReturn($dummy);
-        $service->getParameters()->willReturn($dummy);
-        $service->getGateway()->willReturn($dummy);
+        $service->getEntity()->willReturn($prophet->prophesize('\stdClass')->reveal());
+        $service->getEventManager()->willReturn($prophet->prophesize('\Zend\EventManager\EventManager')->reveal());
+        $service->getParameters()->willReturn(array());
+        $service->getGateway()->willReturn($prophet->prophesize('\PhproSmartCrud\Gateway\AbstractCrudGateway')->reveal());
 
         return $this;
     }
@@ -274,11 +273,10 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         // Validate service
         $service = $this->getActionService('valid-action-service');
         $service->shouldReturn($crudService);
-        // TODO: add instanceof instead of dummy value
-        $service->getEventManager()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
-        $service->getEntity()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
-        $service->getParameters()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
-        $service->getGateway()->shouldReturnAnInstanceOf('\Prophecy\Argument\Token\AnyValueToken');
+        $service->getEntity()->shouldReturnAnInstanceOf('\stdClass');
+        $service->getEventManager()->shouldReturnAnInstanceOf('\Zend\EventManager\EventManager');
+        $service->getParameters()->shouldReturn(array());
+        $service->getGateway()->shouldReturnAnInstanceOf('\PhproSmartCrud\Gateway\AbstractCrudGateway');
     }
 
     /**
