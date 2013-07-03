@@ -26,26 +26,33 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
         $this->shouldHaveType('PhproSmartCrud\Gateway\DoctrineCrudGateway');
     }
 
-    protected function mockDoctrine()
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager Make sure to use the wrapped / revealed object
+     */
+    protected function mockEntityManager($entityManager)
     {
         // Create mocks
         $prophet = new Prophet();
         $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
-        $entityManager = $prophet->prophesize('\Doctrine\ORM\EntityManager');
-        $repository = $prophet->prophesize('Doctrine\ORM\EntityRepository');
-        $entity = $prophet->prophesize('\stdClass');
 
         // Configure ServiceManager
         $this->setServiceManager($serviceManager);
         $serviceManager->has('Doctrine\ORM\EntityManager')->willReturn(true);
         $serviceManager->get('Doctrine\ORM\EntityManager')->willReturn($entityManager);
+    }
 
-        // Configure Entitymanager
+    /**
+     * @param \Doctrine\ORM\EntityRepository $repository Make sure to use the wrapped / revealed object
+     */
+    protected function mockEntityRepository($repository)
+    {
+        // Mock entity manager
+        $prophet = new Prophet();
+        $entityManager = $prophet->prophesize('Doctrine\ORM\EntityManager');
+        $this->mockEntityManager($entityManager->reveal());
+
+        // Mock repository
         $entityManager->getRepository(Argument::type('string'))->willReturn($repository);
-
-        // Configure repository:
-        $repository->findAll()->willReturn(array());
-        $repository->find(Argument::any())->willReturn($entity);
     }
 
 
@@ -76,41 +83,91 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \Doctrine\ORM\EntityManager $entityManager
      * @param \Doctrine\ORM\EntityRepository $repository
      * @param \stdClass $entity
      */
-    public function it_should_load_entity_repositories($serviceManager, $entityManager, $repository, $entity)
+    public function it_should_load_entity_repositories($repository, $entity)
     {
-        // Setup service manager
-        $serviceManager->has('Doctrine\ORM\EntityManager')->willReturn(true);
-        $serviceManager->get('Doctrine\ORM\EntityManager')->willReturn($entityManager);
-
-        // Setup entityManager
-        $entityManager->getRepository(Argument::type('string'))->willReturn($repository);
-
-        // Run test
+        $this->mockEntityRepository($repository->getWrappedObject());
         $this->getRepository($entity)->shouldReturn($repository);
     }
 
     /**
+     * @param \Doctrine\ORM\EntityRepository $repository
      * @param \stdClass $entity
      */
-    public function it_should_generate_list($entity)
+    public function it_should_generate_list($repository, $entity)
     {
-        $this->mockDoctrine();
-        $params = array('filter1' => 'value1', 'filter2' => 'value2');
-        $this->getList($entity, $params)->shouldReturn(array());
+        $this->mockEntityRepository($repository->getWrappedObject());
+
+        $this->getList($entity, array());
+        $repository->findAll()->shouldBeCalled();
     }
 
     /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
      * @param \stdClass $entity
-     * @TODO
      */
-    public function it_should_create_entity($entity)
+    public function it_should_create_entity($entityManager, $entity)
     {
-        // TODO: find a better way to mock entityManager (shouldBeCalled instead of validating output)
+        $this->mockEntityManager($entityManager->getWrappedObject());
+
+        // Valid create:
+        $this->create($entity, array())->shouldReturn(true);
+        $entityManager->persist($entity)->shouldBeCalled();
+        $entityManager->flush()->shouldBeCalled();
+
+        // Invalid create:
+        $entityManager->flush()->willThrow('\Exception');
+        $this->create($entity, array())->shouldReturn(false);
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityRepository $repository
+     * @param \stdClass $entity
+     */
+    public function it_should_read_entity($repository, $entity)
+    {
+        $this->mockEntityRepository($repository->getWrappedObject());
+
+        $this->read($entity, 1);
+        $repository->find(1)->shouldBeCalled();
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \stdClass $entity
+     */
+    public function it_should_update_entity($entityManager, $entity)
+    {
+        $this->mockEntityManager($entityManager->getWrappedObject());
+
+        // Valid update:
+        $this->update($entity, array())->shouldReturn(true);
+        $entityManager->persist($entity)->shouldBeCalled();
+        $entityManager->flush()->shouldBeCalled();
+
+        // Invalid update:
+        $entityManager->flush()->willThrow('\Exception');
+        $this->update($entity, array())->shouldReturn(false);
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \stdClass $entity
+     */
+    public function it_should_delete_entity($entityManager, $entity)
+    {
+        $this->mockEntityManager($entityManager->getWrappedObject());
+
+        // Valid delete:
+        $this->delete($entity, array())->shouldReturn(true);
+        $entityManager->remove($entity)->shouldBeCalled();
+        $entityManager->flush()->shouldBeCalled();
+
+        // Invalid delete:
+        $entityManager->flush()->willThrow('\Exception');
+        $this->delete($entity, array())->shouldReturn(false);
     }
 
 }
