@@ -10,7 +10,8 @@
 namespace PhproSmartCrud\Gateway;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\EntityRepository\EntityRepository;
+use Doctrine\ORM\EntityRepository;
+use PhproSmartCrud\Exception\SmartCrudException;
 
 /**
  * Class DoctrineCrudGateway
@@ -39,8 +40,14 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
     public function create($entity, $parameters)
     {
         $em = $this->getEntityManager();
-        $em->persist($entity);
-        $em->flush();
+        try {
+            $em->persist($entity);
+            $em->flush();
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -52,7 +59,6 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
     public function read($entity, $id)
     {
         return $this->getRepository($entity)->find($id);
-
     }
 
     /**
@@ -64,8 +70,14 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
     public function update($entity, $parameters)
     {
         $em = $this->getEntityManager();
-        $em->persist($entity);
-        $em->flush();
+        try {
+            $em->persist($entity);
+            $em->flush();
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -76,17 +88,29 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
      */
     public function delete($entity, $id)
     {
-        $em = $this->getEntityManager();
-        $em->remove($entity);
-        $em->flush();
+        try {
+            $em = $this->getEntityManager();
+            $em->remove($entity);
+            $em->flush();
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * @return EntityManager
+     * @throws SmartCrudException
      */
     public function getEntityManager()
     {
-        return $this->getServiceManager()->get('Doctrine\ORM\EntityManager');
+        $serviceManager = $this->getServiceManager();
+        if (!$serviceManager->has('Doctrine\ORM\EntityManager')) {
+            throw new SmartCrudException('There is no entity manger registered in the service manager with the key: Doctrine\ORM\EntityManager.');
+        }
+
+        return $serviceManager->get('Doctrine\ORM\EntityManager');
     }
 
     /**
@@ -98,6 +122,5 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
     {
         return $this->getEntityManager()->getRepository(get_class($entity));
     }
-
 
 }

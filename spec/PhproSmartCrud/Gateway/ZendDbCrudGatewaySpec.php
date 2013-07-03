@@ -17,16 +17,11 @@ use Prophecy\Argument;
  *
  * @package spec\PhproSmartCrud\Gateway
  */
-class ZendDbCrudGatewaySpec extends ObjectBehavior
+class ZendDbCrudGatewaySpec extends AbstractCrudGatewaySpec
 {
     function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Gateway\ZendDbCrudGateway');
-    }
-
-    function it_should_implement_PhproSmartCrud_GatewayInterface()
-    {
-        $this->shouldImplement('PhproSmartCrud\Gateway\CrudGatewayInterface');
     }
 
     function it_should_extend_PhproSmartCrud_AbstractGateway()

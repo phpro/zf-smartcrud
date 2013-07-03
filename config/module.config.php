@@ -11,7 +11,6 @@ return array(
             'phpro.smartcrud.gateway.doctrine'  => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
             'phpro.smartcrud.gateway.zenddb'    => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
         ),
-
     ),
     'view_manager' => array(
         'template_path_stack' => array(
