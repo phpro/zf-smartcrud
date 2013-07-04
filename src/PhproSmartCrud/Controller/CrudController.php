@@ -146,6 +146,7 @@ class CrudController extends AbstractActionController implements ServiceManagerA
     public function setForm($form)
     {
         $this->form = $form;
+        return $this;
     }
 
     /**

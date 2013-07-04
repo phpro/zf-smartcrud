@@ -19,8 +19,14 @@ use Prophecy\Argument;
  */
 class GenerateSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Console\Command\Controller\Generate');
     }
+
+    public function it_should_extend_Symfony_Console_Command()
+    {
+        $this->shouldBeAnInstanceOf('Symfony\Component\Console\Command\Command');
+    }
+
 }

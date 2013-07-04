@@ -23,4 +23,9 @@ class SmartCrudExceptionSpec extends ObjectBehavior
     {
         $this->shouldHaveType('PhproSmartCrud\Exception\SmartCrudException');
     }
+
+    public function it_should_extend_Exception()
+    {
+        $this->shouldBeAnInstanceOf('Exception');
+    }
 }

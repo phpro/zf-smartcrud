@@ -19,8 +19,27 @@ use Prophecy\Argument;
  */
 class CrudEventSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+
+    /**
+     * @param \stdClass $entity
+     */
+    public function let($entity)
+    {
+        $this->setTarget($entity);
+    }
+
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Event\CrudEvent');
+    }
+
+    public function it_should_extend_Zend_Event()
+    {
+        $this->shouldBeAnInstanceOf('Zend\EventManager\Event');
+    }
+
+    public function it_should_have_an_entity()
+    {
+        $this->getEntity()->shouldReturn($this->getTarget());
     }
 }

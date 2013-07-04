@@ -19,8 +19,14 @@ use Prophecy\Argument;
  */
 class ApplicationSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Console\Application');
     }
+
+    public function it_should_extend_Symfony_Console_Application()
+    {
+        $this->shouldBeAnInstanceOf('\Symfony\Component\Console\Application');
+    }
+
 }

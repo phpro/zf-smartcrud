@@ -26,6 +26,11 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
         $this->shouldHaveType('PhproSmartCrud\Gateway\DoctrineCrudGateway');
     }
 
+    public function it_should_extend_PhproSmartCrud_AbstractGateway()
+    {
+        $this->shouldBeAnInstanceOf('PhproSmartCrud\Gateway\AbstractCrudGateway');
+    }
+
     /**
      * @param \Doctrine\ORM\EntityManager $entityManager Make sure to use the wrapped / revealed object
      */
@@ -53,12 +58,6 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
 
         // Mock repository
         $entityManager->getRepository(Argument::type('string'))->willReturn($repository);
-    }
-
-
-    public function it_should_extend_PhproSmartCrud_AbstractGateway()
-    {
-        $this->shouldBeAnInstanceOf('PhproSmartCrud\Gateway\AbstractCrudGateway');
     }
 
     /**
@@ -112,13 +111,22 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
     {
         $this->mockEntityManager($entityManager->getWrappedObject());
 
-        // Valid create:
         $this->create($entity, array())->shouldReturn(true);
+
         $entityManager->persist($entity)->shouldBeCalled();
         $entityManager->flush()->shouldBeCalled();
 
-        // Invalid create:
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \stdClass $entity
+     */
+    public function it_should_not_create_invalid_entity($entityManager, $entity)
+    {
+        $this->mockEntityManager($entityManager->getWrappedObject());
         $entityManager->flush()->willThrow('\Exception');
+
         $this->create($entity, array())->shouldReturn(false);
     }
 
@@ -142,15 +150,24 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
     {
         $this->mockEntityManager($entityManager->getWrappedObject());
 
-        // Valid update:
         $this->update($entity, array())->shouldReturn(true);
+
         $entityManager->persist($entity)->shouldBeCalled();
         $entityManager->flush()->shouldBeCalled();
+    }
 
-        // Invalid update:
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \stdClass $entity
+     */
+    public function it_should_not_update_invalid_entity($entityManager, $entity)
+    {
+        $this->mockEntityManager($entityManager->getWrappedObject());
         $entityManager->flush()->willThrow('\Exception');
+
         $this->update($entity, array())->shouldReturn(false);
     }
+
 
     /**
      * @param \Doctrine\ORM\EntityManager $entityManager
@@ -160,13 +177,21 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
     {
         $this->mockEntityManager($entityManager->getWrappedObject());
 
-        // Valid delete:
         $this->delete($entity, array())->shouldReturn(true);
+
         $entityManager->remove($entity)->shouldBeCalled();
         $entityManager->flush()->shouldBeCalled();
+    }
 
-        // Invalid delete:
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \stdClass $entity
+     */
+    public function it_should_not_delete_invalid_entity($entityManager, $entity)
+    {
+        $this->mockEntityManager($entityManager->getWrappedObject());
         $entityManager->flush()->willThrow('\Exception');
+
         $this->delete($entity, array())->shouldReturn(false);
     }
 
