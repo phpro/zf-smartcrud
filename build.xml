@@ -11,6 +11,15 @@
         <mkdir dir="${basedir}/build/cs-results"/>
     </target>
 
+
+    <target name="phpcs" description="Runs PHP CodeSniffer">
+        <check-cs/>
+    </target>
+
+    <target name="phpspec" description="Run Phpspec tests">
+        <component-test/>
+    </target>
+
     <target name="composer-install" description="Installs dependencies via composer install">
         <sequential>
             <exec executable="composer" failonerror="true">

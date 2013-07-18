@@ -23,12 +23,15 @@ class CrudEvent extends Event
     const AFTER_LIST = 'after-list';
     const BEFORE_CREATE = 'before-create';
     const AFTER_CREATE = 'after-create';
+    const INVALID_CREATE = 'invalid-create';
     const BEFORE_READ = 'before-read';
     const AFTER_READ = 'after-read';
     const BEFORE_UPDATE = 'before-update';
     const AFTER_UPDATE = 'after-update';
+    const INVALID_UPDATE = 'invalid-update';
     const BEFORE_DELETE = 'before-delete';
     const AFTER_DELETE = 'after-delete';
+    const INVALID_DELETE = 'invalid-delete';
     const BEFORE_VALIDATE = 'before-validate';
     const AFTER_VALIDATE = 'after-validate';
 
