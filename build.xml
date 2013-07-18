@@ -78,12 +78,13 @@
 
             </echo>
             <exec
-                    executable="${basedir}/php-cs-fixer.phar"
+                    executable="php"
                     output="${basedir}/build/cs-results/check-cs.log"
                     error="${basedir}/build/cs-results/check-cs.log"
                     failonerror="true"
                     append="true"
                     />
+            <arg value="${basedir}/php-cs-fixer.phar" />
             <arg value="fix" />
             <arg value="-v" />
             <arg value="--dry-run" />
