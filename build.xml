@@ -12,11 +12,11 @@
     </target>
 
 
-    <target name="phpcs" description="Runs PHP CodeSniffer">
+    <target name="phpcs" description="Runs PHP CodeSniffer" depends="prepare">
         <check-cs/>
     </target>
 
-    <target name="phpspec" description="Run Phpspec tests">
+    <target name="phpspec" description="Run Phpspec tests" depends="prepare">
         <component-test/>
     </target>
 
@@ -57,9 +57,9 @@
 
     <macrodef name="component-test">
         <sequential>
-            <echo output="${basedir}/build/test-results/bdd.log" level="debug">
+            <echo output="${basedir}/build/test-results/phpspec.log" level="debug">
 
-                Validating Business logica
+                Validating Business logica with PhpSpec
 
             </echo>
             <exec
@@ -79,21 +79,22 @@
         <sequential>
             <echo output="${basedir}/build/cs-results/check-cs.log" level="debug">
 
-                Validating Coding standards
+                Validating Coding standards with PhpCsFixer
 
             </echo>
             <exec executable="${basedir}/vendor/bin/php-cs-fixer"
-                  output="${basedir}/build/test-results/phpspec.log"
-                  error="${basedir}/build/test-results/phpspec.log"
+                  output="${basedir}/build/test-results/check-cs.log"
+                  error="${basedir}/build/test-results/check-cs.log"
                   failonerror="true"
-                  append="true">
-                <arg value="--standard=PSR2" />
+                  append="true"
+                  >
                 <arg value="--level=psr2" />
-                <arg value="--report=full" />
                 <arg value="--dry-run" />
                 <arg value="-v" />
+                <arg value="fix" />
                 <arg value="${basedir}" />
             </exec>
+
         </sequential>
     </macrodef>
 </project>

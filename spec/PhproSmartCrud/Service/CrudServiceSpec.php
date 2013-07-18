@@ -24,13 +24,17 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
      * @param \Zend\EventManager\EventManager $eventManager
      * @param \stdClass $entity
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \Zend\Form\Form $form
      */
-    public function let($gateway, $eventManager, $entity, $serviceManager, $form)
+    public function let($gateway, $eventManager, $entity)
     {
         parent::let($gateway, $eventManager, $entity);
 
+        // Load stubs
+        $prophet = new Prophet();
+        $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
+        $form = $prophet->prophesize('\Zend\Form\Form');
+
+        // Set stubs
         $this->setForm($form);
         $this->setServiceManager($serviceManager);
     }
