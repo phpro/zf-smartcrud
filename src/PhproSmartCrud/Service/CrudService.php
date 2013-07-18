@@ -50,12 +50,17 @@ class CrudService extends AbstractCrudService
      */
     public function create()
     {
-        if (!$this->isValid()) {
-            return false;
+        $result = false;
+        if ($this->isValid()) {
+            $service = $this->getActionService('phpro.smartcrud.create');
+            $result = $service->create();
         }
 
-        $service = $this->getActionService('phpro.smartcrud.create');
-        return $service->create();
+        if (!$result) {
+            $this->getEventManager()->trigger($this->createEvent(CrudEvent::INVALID_CREATE));
+        }
+
+        return $result;
     }
 
     /**
@@ -72,12 +77,17 @@ class CrudService extends AbstractCrudService
      */
     public function update()
     {
-        if (!$this->isValid()) {
-            return false;
+        $result = false;
+        if ($this->isValid()) {
+            $service = $this->getActionService('phpro.smartcrud.update');
+            $result = $service->update();
         }
 
-        $service = $this->getActionService('phpro.smartcrud.update');
-        return $service->update();
+        if (!$result) {
+            $this->getEventManager()->trigger($this->createEvent(CrudEvent::INVALID_UPDATE));
+        }
+
+        return $result;
     }
 
     /**
@@ -86,7 +96,13 @@ class CrudService extends AbstractCrudService
     public function delete()
     {
         $service = $this->getActionService('phpro.smartcrud.delete');
-        return $service->delete();
+        $result = $service->delete();
+
+        if (!$result) {
+            $this->getEventManager()->trigger($this->createEvent(CrudEvent::INVALID_DELETE));
+        }
+
+        return $result;
     }
 
     /**

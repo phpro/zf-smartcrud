@@ -82,7 +82,7 @@
                 Validating Coding standards
 
             </echo>
-            <exec executable="${basedir}/vendor/bin/phpcs"
+            <exec executable="${basedir}/vendor/bin/php-cs-fixer"
                   output="${basedir}/build/test-results/phpspec.log"
                   error="${basedir}/build/test-results/phpspec.log"
                   failonerror="true"

@@ -115,6 +115,28 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         return $this;
     }
 
+    /**
+     * Mock the event manager so that it passes all requests
+     *
+     * @param $eventManager
+     *
+     * @return $this
+     */
+    protected function mockEventManager($eventManager)
+    {
+        // Create mocks:
+        $prophet = new Prophet();
+        $eventResponseCollection = $prophet->prophesize('\Zend\EventManager\ResponseCollection');
+
+        // Event validation:
+        $this->setEventManager($eventManager);
+        $eventManager->trigger(Argument::any())->willReturn(true);
+        $eventManager->trigger(Argument::cetera())->willReturn($eventResponseCollection);
+        $eventResponseCollection->stopped()->willReturn(false);
+
+        return $this;
+    }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Service\CrudService');
@@ -299,11 +321,10 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->mockActionService('phpro.smartcrud.create', $createService);
         $this->mockValidation(true);
 
-        // Test the create function
+        // Test the create
         $createService->create()->willReturn(true);
         $this->create()->shouldReturn(true);
     }
-
 
     /**
      * @param \PhproSmartCrud\Service\CreateService $createService
@@ -313,8 +334,23 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->mockActionService('phpro.smartcrud.create', $createService);
         $this->mockValidation(false);
 
-        // Test the create function
+        // Test the create
         $this->create()->shouldReturn(false);
+    }
+
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \PhproSmartCrud\Service\CreateService $createService
+     */
+    public function it_should_trigger_invalid_create_event($eventManager, $createService)
+    {
+        $this->mockActionService('phpro.smartcrud.create', $createService);
+        $this->mockValidation(true);
+        $this->mockEventManager($eventManager);
+        $createService->create()->willReturn(false);
+
+        $this->create()->shouldReturn(false);
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldBeCalled();
     }
 
     /**
@@ -324,7 +360,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
     {
         $this->mockActionService('phpro.smartcrud.read', $readService);
 
-        // Test the read function
+        // Test the read
         $entity = new \stdClass();
         $readService->read()->willReturn($entity);
         $this->read()->shouldReturn($entity);
@@ -338,7 +374,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->mockActionService('phpro.smartcrud.update', $updateService);
         $this->mockValidation(true);
 
-        // Test the create function
+        // Test the update
         $updateService->update()->willReturn(true);
         $this->update()->shouldReturn(true);
     }
@@ -351,8 +387,23 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->mockActionService('phpro.smartcrud.update', $updateService);
         $this->mockValidation(false);
 
-        // Test the create function
+        // Test the update
         $this->update()->shouldReturn(false);
+    }
+
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \PhproSmartCrud\Service\UpdateService $updateService
+     */
+    public function it_should_trigger_invalid_update_event($eventManager, $updateService)
+    {
+        $this->mockActionService('phpro.smartcrud.update', $updateService);
+        $this->mockValidation(true);
+        $this->mockEventManager($eventManager);
+        $updateService->update()->willReturn(false);
+
+        $this->update()->shouldReturn(false);
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldBeCalled();
     }
 
     /**
@@ -363,9 +414,24 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->mockActionService('phpro.smartcrud.delete', $deleteService);
         $this->mockValidation(true);
 
-        // Test the create function
+        // Test the update
         $deleteService->delete()->willReturn(true);
         $this->delete()->shouldReturn(true);
+    }
+
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \PhproSmartCrud\Service\DeleteService $deleteService
+     */
+    public function it_should_trigger_invalid_delete_event($eventManager, $deleteService)
+    {
+        $this->mockActionService('phpro.smartcrud.delete', $deleteService);
+        $this->mockEventManager($eventManager);
+        $deleteService->delete()->willReturn(false);
+
+        $this->delete()->shouldReturn(false);
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldBeCalled();
+
     }
 
 }

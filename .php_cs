@@ -5,7 +5,8 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->in(__DIR__ . '/spec')
     ->in(__DIR__ . '/bin')
     ->in(__DIR__ . '/view')
-    ->in(__DIR__ . '/config');
+    ->in(__DIR__ . '/config')
+    ->notName('atlassian-ide-plugin.xml');
 $config = Symfony\CS\Config\Config::create();
 $config->fixers(Symfony\CS\FixerInterface::PSR2_LEVEL);
 $config->finder($finder);
