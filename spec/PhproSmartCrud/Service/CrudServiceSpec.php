@@ -156,12 +156,12 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
     }
 
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     */
-    public function it_should_have_fluent_interfaces($serviceManager)
+    public function it_should_have_fluent_interfaces()
     {
         parent::it_should_have_fluent_interfaces();
+
+        $prophet = new Prophet();
+        $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
 
         $dummy = Argument::any();
         $this->setServiceManager($serviceManager)->shouldReturn($this);
