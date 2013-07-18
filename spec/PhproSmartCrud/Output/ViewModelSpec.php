@@ -19,12 +19,12 @@ use Prophecy\Argument;
  */
 class ViewModelSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Output\ViewModel');
     }
 
-    function it_should_extend_Zend_View_ViewModel()
+    public function it_should_extend_Zend_View_ViewModel()
     {
         $this->shouldBeAnInstanceOf('Zend\View\Model\ViewModel');
     }

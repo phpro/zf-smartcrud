@@ -19,7 +19,7 @@ use Prophecy\Argument;
  */
 class SmartCrudExceptionSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Exception\SmartCrudException');
     }

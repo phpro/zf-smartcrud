@@ -19,12 +19,12 @@ use Prophecy\Argument;
  */
 class ZendDbCrudGatewaySpec extends AbstractCrudGatewaySpec
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Gateway\ZendDbCrudGateway');
     }
 
-    function it_should_extend_PhproSmartCrud_AbstractGateway()
+    public function it_should_extend_PhproSmartCrud_AbstractGateway()
     {
         $this->shouldBeAnInstanceOf('PhproSmartCrud\Gateway\AbstractCrudGateway');
     }

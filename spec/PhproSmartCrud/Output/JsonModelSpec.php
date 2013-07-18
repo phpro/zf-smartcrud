@@ -19,12 +19,12 @@ use Prophecy\Argument;
  */
 class JsonModelSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Output\JsonModel');
     }
 
-    function it_should_extend_Zend_View_JsonModel()
+    public function it_should_extend_Zend_View_JsonModel()
     {
         $this->shouldBeAnInstanceOf('Zend\View\Model\JsonModel');
     }
