@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PhproSmartCrud" default="build">
-    <target name="travis" depends="tests-parallel,show-test-results" />
+    <target name="travis" depends="run-validation-tests,show-test-results" />
 
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="${basedir}/build"/>
@@ -9,10 +9,6 @@
     <target name="prepare" depends="clean" description="Prepare for build">
         <mkdir dir="${basedir}/build/test-results"/>
         <mkdir dir="${basedir}/build/cs-results"/>
-    </target>
-
-    <target name="get-cs-fixer" depends="clean" description="Get coding standards fixer">
-        <get src="http://cs.sensiolabs.org/get/php-cs-fixer.phar" dest="${basedir}/php-cs-fixer.phar"/>
     </target>
 
     <target name="composer-install" description="Installs dependencies via composer install">
@@ -33,8 +29,8 @@
     </target>
 
     <target
-            name="tests-parallel"
-            depends="prepare,composer-install,get-cs-fixer"
+            name="run-validation-tests"
+            depends="prepare,composer-install"
             description="Run tests for the various components in parallel"
             >
         <parallel threadCount="2">
@@ -54,7 +50,7 @@
         <sequential>
             <echo output="${basedir}/build/test-results/bdd.log" level="debug">
 
-                Business logica tests
+                Validating Business logica
 
             </echo>
             <exec
@@ -74,22 +70,21 @@
         <sequential>
             <echo output="${basedir}/build/cs-results/check-cs.log" level="debug">
 
-                Coding standards
+                Validating Coding standards
 
             </echo>
-            <exec
-                    executable="php"
-                    output="${basedir}/build/cs-results/check-cs.log"
-                    error="${basedir}/build/cs-results/check-cs.log"
-                    failonerror="true"
-                    append="true"
-                    />
-            <arg value="${basedir}/php-cs-fixer.phar" />
-            <arg value="fix" />
-            <arg value="-v" />
-            <arg value="--dry-run" />
-            <arg value="--level=psr2" />
-            <arg value="." />
+            <exec executable="${basedir}/vendor/bin/phpcs"
+                  output="${basedir}/build/test-results/phpspec.log"
+                  error="${basedir}/build/test-results/phpspec.log"
+                  failonerror="true"
+                  append="true">
+                <arg value="--standard=PSR2" />
+                <arg value="--level=psr2" />
+                <arg value="--report=full" />
+                <arg value="--dry-run" />
+                <arg value="-v" />
+                <arg value="${basedir}" />
+            </exec>
         </sequential>
     </macrodef>
 </project>
