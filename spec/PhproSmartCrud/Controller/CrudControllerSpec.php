@@ -44,7 +44,6 @@ class CrudControllerSpec extends ObjectBehavior
         $dummy = Argument::any();
         $this->setServiceManager($serviceManager)->shouldReturn($this);
         $this->setForm($dummy)->shouldReturn($this);
-        $this->setGateway($dummy)->shouldReturn($this);
         $this->setEntity($dummy)->shouldReturn($this);
     }
 
@@ -64,15 +63,6 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $this->setForm($form);
         $this->getForm()->shouldReturn($form);
-    }
-
-    /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
-     */
-    public function it_should_have_a_gateway($gateway)
-    {
-        $this->setGateway($gateway);
-        $this->getGateway()->shouldReturn($gateway);
     }
 
     /**
@@ -100,19 +90,17 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_have_a_default_crud_service($serviceManager, $crudService)
     {
         $this->setServiceManager($serviceManager);
-        $serviceManager->get('phpro.smartcrud.crud')->willReturn($crudService);
+        $serviceManager->get('phpro.smartcrud')->willReturn($crudService);
 
         // mock methods to prevent errors
         $dummy = Argument::any();
         $crudService->setParameters($dummy)->willReturn($crudService);
-        $crudService->setGateway($dummy)->willReturn($crudService);
         $crudService->setForm($dummy)->willReturn($crudService);
         $crudService->setEntity($dummy)->willReturn($crudService);
 
         // validate:
         $this->getCrudService()->shouldReturn($crudService);
         $crudService->setParameters($dummy)->shouldBeCalled();
-        $crudService->setGateway($dummy)->shouldBeCalled();
         $crudService->setForm($dummy)->shouldBeCalled();
         $crudService->setEntity($dummy)->shouldBeCalled();
     }

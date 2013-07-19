@@ -43,11 +43,6 @@ class CrudController extends AbstractActionController implements ServiceManagerA
     protected $entity;
 
     /**
-     * @var CrudGatewayInterface
-     */
-    protected $gateway;
-
-    /**
      * @return ViewModel
      */
     public function listAction()
@@ -129,10 +124,9 @@ class CrudController extends AbstractActionController implements ServiceManagerA
     {
         if (!$this->crudService) {
             /** @var \PhproSmartCrud\Service\CrudService $crudService  */
-            $crudService = $this->getServiceManager()->get('phpro.smartcrud.crud');
+            $crudService = $this->getServiceManager()->get('phpro.smartcrud');
             $crudService
                 ->setParameters(array_merge($this->params()->fromQuery(), $this->params()->fromPost()))
-                ->setGateway($this->getGateway())
                 ->setForm($this->getForm())
                 ->setEntity($this->getEntity());
             $this->crudService = $crudService;
@@ -174,25 +168,6 @@ class CrudController extends AbstractActionController implements ServiceManagerA
     public function getEntity()
     {
         return $this->entity;
-    }
-
-    /**
-     * @param $gateway
-     *
-     * @return $this
-     */
-    public function setGateway($gateway)
-    {
-        $this->gateway = $gateway;
-        return $this;
-    }
-
-    /**
-     * @return \PhproSmartCrud\Gateway\CrudGatewayInterface
-     */
-    public function getGateway()
-    {
-        return $this->gateway;
     }
 
 }

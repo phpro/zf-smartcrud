@@ -1,6 +1,9 @@
 <?php
 return array(
     'service_manager' => array(
+        'factories' => array(
+            'phpro.smartcrud'           => 'PhproSmartCrud\Service\CrudServiceFactory',
+        ),
         'invokables' => array(
             'phpro.smartcrud.crud'      => 'PhproSmartCrud\Service\CrudService',
             'phpro.smartcrud.list'      => 'PhproSmartCrud\Service\ListService',
@@ -10,6 +13,7 @@ return array(
             'phpro.smartcrud.delete'    => 'PhproSmartCrud\Service\DeleteService',
             'phpro.smartcrud.gateway.doctrine'  => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
             'phpro.smartcrud.gateway.zenddb'    => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
+            'phpro.smartcrud.listener.flashmessenger'   => 'PhproSmartCrud\Listener\FlashMessenger'
         ),
     ),
     'view_manager' => array(
