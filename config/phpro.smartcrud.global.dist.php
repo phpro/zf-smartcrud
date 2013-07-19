@@ -15,7 +15,8 @@ return array(
          * Add default listeners to the smartcrud
          */
         'listeners' => array(
-            'phpro.smartcrud.listener.flashmessenger'
+            'phpro.smartcrud.listener.flashmessenger',
+            'phpro.smartcrud.listener.bjyauthorize',
         ),
     ),
 

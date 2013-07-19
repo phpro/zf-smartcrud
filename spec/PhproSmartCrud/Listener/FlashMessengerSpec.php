@@ -12,7 +12,7 @@ use Prophecy\Prophet;
  *
  * @package spec\PhproSmartCrud\Listener
  */
-class FlashMessengerSpec extends ObjectBehavior
+class FlashMessengerSpec extends AbstractListenerSpec
 {
 
     /**
@@ -36,23 +36,9 @@ class FlashMessengerSpec extends ObjectBehavior
         $this->shouldHaveType('PhproSmartCrud\Listener\FlashMessenger');
     }
 
-    public function it_should_implement_zend_ListenerAggregate()
+    public function it_should_extend_abstract_listener()
     {
-        $this->shouldImplement('Zend\EventManager\ListenerAggregateInterface');
-    }
-
-    public function it_should_implement_zend_ServiceManagerAwareInterface()
-    {
-        $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     */
-    public function it_should_have_a_servicemanager($serviceManager)
-    {
-        $this->setServiceManager($serviceManager);
-        $this->getServiceManager()->shouldReturn($serviceManager);
+        $this->shouldBeAnInstanceOf('PhproSmartCrud\Listener\AbstractListener');
     }
 
     /**
@@ -71,9 +57,10 @@ class FlashMessengerSpec extends ObjectBehavior
     {
         $this->attach($events);
         $callback = Argument::type('array');
-        $events->attach(CrudEvent::AFTER_CREATE, $callback)->shouldBeCalled();
-        $events->attach(CrudEvent::AFTER_UPDATE, $callback)->shouldBeCalled();
-        $events->attach(CrudEvent::AFTER_DELETE, $callback)->shouldBeCalled();
+        $priority = Argument::type('int');
+        $events->attach(CrudEvent::AFTER_CREATE, $callback, $priority)->shouldBeCalled();
+        $events->attach(CrudEvent::AFTER_UPDATE, $callback, $priority)->shouldBeCalled();
+        $events->attach(CrudEvent::AFTER_DELETE, $callback, $priority)->shouldBeCalled();
     }
 
     /**
@@ -83,9 +70,10 @@ class FlashMessengerSpec extends ObjectBehavior
     {
         $this->attach($events);
         $callback = Argument::type('array');
-        $events->attach(CrudEvent::INVALID_CREATE, $callback)->shouldBeCalled();
-        $events->attach(CrudEvent::INVALID_UPDATE, $callback)->shouldBeCalled();
-        $events->attach(CrudEvent::INVALID_DELETE, $callback)->shouldBeCalled();
+        $priority = Argument::type('int');
+        $events->attach(CrudEvent::INVALID_CREATE, $callback, $priority)->shouldBeCalled();
+        $events->attach(CrudEvent::INVALID_UPDATE, $callback, $priority)->shouldBeCalled();
+        $events->attach(CrudEvent::INVALID_DELETE, $callback, $priority)->shouldBeCalled();
     }
 
     /**

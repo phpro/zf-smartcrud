@@ -31,9 +31,13 @@
     },
     "require-dev": {
         "phpspec/phpspec":                   "2.0.*@dev",
+        "fabpot/PHP-CS-Fixer":               "*",
+
         "doctrine/doctrine-orm-module":      "0.8.*@dev",
         "zendframework/zend-db":             "2.*",
-        "fabpot/PHP-CS-Fixer":               "*"
+
+        "zendframework/zend-permissions-acl":"2.*",
+        "bjyoungblood/bjy-authorize": "1.3.*"
     },
     "suggest": {
         "doctrine/doctrine-orm-module":      "If you want to use the Doctrine Gateway",

@@ -4,23 +4,20 @@ namespace PhproSmartCrud\Listener;
 
 use PhproSmartCrud\Event\CrudEvent;
 use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
 use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class FlashMessenger
  *
  * @package PhproSmartCrud
  */
-class FlashMessenger
-    implements  ListenerAggregateInterface, ServiceManagerAwareInterface
+class FlashMessenger extends AbstractListener
 {
 
     /**
-     * @var array
+     * Set the priority of the listeners
      */
-    protected $listeners = array();
+    const PRIORITY = -9999;
 
     /**
      * @var \Zend\Mvc\Controller\Plugin\FlashMessenger
@@ -28,49 +25,17 @@ class FlashMessenger
     protected $flashMessenger;
 
     /**
-     * @var ServiceManager
-     */
-    protected $serviceManager;
-
-    /**
      * @inheritDoc
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(CrudEvent::AFTER_CREATE, array($this, 'createSucceeded'));
-        $this->listeners[] = $events->attach(CrudEvent::AFTER_UPDATE, array($this, 'updateSucceeded'));
-        $this->listeners[] = $events->attach(CrudEvent::AFTER_DELETE, array($this, 'deleteSucceeded'));
+        $this->listeners[] = $events->attach(CrudEvent::AFTER_CREATE, array($this, 'createSucceeded'), self::PRIORITY);
+        $this->listeners[] = $events->attach(CrudEvent::AFTER_UPDATE, array($this, 'updateSucceeded'), self::PRIORITY);
+        $this->listeners[] = $events->attach(CrudEvent::AFTER_DELETE, array($this, 'deleteSucceeded'), self::PRIORITY);
 
-        $this->listeners[] = $events->attach(CrudEvent::INVALID_CREATE, array($this, 'createFailed'));
-        $this->listeners[] = $events->attach(CrudEvent::INVALID_UPDATE, array($this, 'updateFailed'));
-        $this->listeners[] = $events->attach(CrudEvent::INVALID_DELETE, array($this, 'deleteFailed'));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $listener) {
-            $events->detach($listener);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-        return $this;
-    }
-
-    /**
-     * @return \Zend\ServiceManager\ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
+        $this->listeners[] = $events->attach(CrudEvent::INVALID_CREATE, array($this, 'createFailed'), self::PRIORITY);
+        $this->listeners[] = $events->attach(CrudEvent::INVALID_UPDATE, array($this, 'updateFailed'), self::PRIORITY);
+        $this->listeners[] = $events->attach(CrudEvent::INVALID_DELETE, array($this, 'deleteFailed'), self::PRIORITY);
     }
 
     /**
@@ -133,6 +98,5 @@ class FlashMessenger
     {
         $this->getFlashMessenger()->addErrorMessage('Could not delete the record.');
     }
-
 
 }
