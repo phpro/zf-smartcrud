@@ -19,6 +19,14 @@ use Prophecy\Argument;
  */
 class SmartCrudRouterSpec extends ObjectBehavior
 {
+
+    const TEST_ROUTE_NAME = 'smartcrudroute';
+
+    public function let()
+    {
+        $this->beConstructedWith(self::TEST_ROUTE_NAME);
+    }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Router\SmartCrudRouter');
@@ -26,7 +34,7 @@ class SmartCrudRouterSpec extends ObjectBehavior
 
     public function it_should_extend_Zend_RouteInterface()
     {
-        $this->shouldBeAnInstanceOf('Zend\Mvc\Router\Http\RouteInterface');
+        $this->shouldBeAnInstanceOf('Zend\Mvc\Router\Http\Segment');
     }
 
 }

@@ -8,64 +8,52 @@
  */
 
 namespace PhproSmartCrud\Router;
-
-use Zend\Stdlib\RequestInterface as Request;
-use Zend\Mvc\Router\Http\RouteInterface;
-use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Mvc\Router\Http\Segment;
 
 /**
  * Class SmartCrudRouter
  *
  * @package PhproSmartCrud\Router
  */
-class SmartCrudRouter implements RouteInterface
+class SmartCrudRouter extends Segment
 {
+
     /**
-     * Create a new route with given options.
-     *
-     * @param  array|\Traversable $options
-     *
-     * @return void
+     * @param string $route
+     * @param array  $constraints
+     * @param array  $defaults
      */
-    public static function factory($options = array())
+    public function __construct($route, array $constraints = array(), array $defaults = array())
     {
-        // TODO: Implement factory() method.
+        $constraints = array_merge($this->getDefaultConstraints(), $constraints);
+        $defaults = array_merge($this->getDefaultParams(), $defaults);
+        parent::__construct($route, $constraints, $defaults);
     }
 
     /**
-     * Match a given request.
-     *
-     * @param  Request $request
-     *
-     * @return RouteMatch|null
-     */
-    public function match(Request $request)
-    {
-        // TODO: Implement match() method.
-        return new RouteMatch(array());
-    }
-
-    /**
-     * Assemble the route.
-     *
-     * @param  array $params
-     * @param  array $options
-     *
-     * @return mixed
-     */
-    public function assemble(array $params = array(), array $options = array())
-    {
-        // TODO: Implement assemble() method.
-    }
-
-    /**
-     * Get a list of parameters used while assembling.
-     *
      * @return array
      */
-    public function getAssembledParams()
+    protected function getDefaultParams()
     {
-        // TODO: Implement getAssembledParams() method.
+        return array(
+            'controller' => 'phpro.smartcrud',
+            'service' => 'phpro.smartcrud.crud',
+            'action' => 'list',
+            'entity' => null,
+            'form' => null,
+            'id' => null,
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultConstraints()
+    {
+        return array(
+            'action' => 'list|create|read|update|delete',
+            'id' => '[0-9]*',
+        );
     }
 
 }

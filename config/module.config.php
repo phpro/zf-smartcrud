@@ -18,7 +18,7 @@ return array(
             'phpro.smartcrud.gateway.zenddb'    => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
 
             // Listeners
-            'phpro.smartcrud.listener.bjyauthorize'        => 'PhproSmartCrud\Listener\BjyAuthorize',
+            'phpro.smartcrud.listener.bjyauthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
             'phpro.smartcrud.listener.flashmessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
         ),
     ),
