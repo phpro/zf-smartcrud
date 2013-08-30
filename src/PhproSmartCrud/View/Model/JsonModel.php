@@ -7,7 +7,7 @@
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace PhproSmartCrud\Output;
+namespace PhproSmartCrud\View\Model;
 
 use Zend\View\Model\JsonModel as ZendJsonModel;
 
