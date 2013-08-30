@@ -64,10 +64,10 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
     {
         $arguments = Argument::cetera();
 
-        $gateway->update($arguments)->willReturn(true);
+        $gateway->update($arguments, array())->willReturn(true);
         $this->update()->shouldReturn(true);
 
-        $gateway->update($arguments)->willReturn(false);
+        $gateway->update($arguments, array())->willReturn(false);
         $this->update()->shouldReturn(false);
     }
 

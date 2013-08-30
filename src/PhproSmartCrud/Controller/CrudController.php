@@ -8,10 +8,11 @@
  */
 
 namespace PhproSmartCrud\Controller;
-use PhproSmartCrud\Gateway\CrudGatewayInterface;
 use PhproSmartCrud\Output\ViewModel;
 use PhproSmartCrud\Service\CrudService;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Exception;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Form\Form;
@@ -19,7 +20,8 @@ use Zend\Form\Form;
 /**
  * Class CrudController
  */
-class CrudController extends AbstractActionController implements ServiceManagerAwareInterface
+class CrudController extends AbstractActionController
+    implements ServiceManagerAwareInterface
 {
 
     /**
@@ -41,6 +43,39 @@ class CrudController extends AbstractActionController implements ServiceManagerA
      * @var mixed
      */
     protected $entity;
+
+    /**
+     * Inject parameters from the router directly in the controller
+     *
+     * @param MvcEvent $e
+     *
+     * @return mixed
+     * @throws \Zend\Mvc\Exception\DomainException
+     */
+    public function onDispatch(MvcEvent $e)
+    {
+        $routeMatch = $e->getRouteMatch();
+        if (!$routeMatch) {
+            throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
+        }
+
+        $id = $routeMatch->getParam('id', null);
+
+        // Add entity
+        if ($entityKey = $routeMatch->getParam('entity', false)) {
+            $entity = $this->getCrudService()->loadEntity($entityKey, $id);
+            $this->setEntity($entity);
+        }
+
+        // Add form
+        if ($formKey = $routeMatch->getParam('form', false)) {
+            $form = $this->getServiceManager()->get($formKey);
+            $this->setForm($form);
+        }
+
+        return parent::onDispatch($e);
+    }
+
 
     /**
      * @return ViewModel
@@ -136,6 +171,8 @@ class CrudController extends AbstractActionController implements ServiceManagerA
 
     /**
      * @param \Zend\Form\Form $form
+     *
+     * @return $this
      */
     public function setForm($form)
     {

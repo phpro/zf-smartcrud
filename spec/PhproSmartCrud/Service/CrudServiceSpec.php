@@ -187,6 +187,17 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
     }
 
     /**
+     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     */
+    public function it_should_load_entity($gateway)
+    {
+        $this->setGateway($gateway);
+        $this->loadEntity('stdClass', 1);
+
+        $gateway->loadEntity('stdClass', 1)->shouldBeCalled();
+    }
+
+    /**
      * @param \Zend\EventManager\EventManager $eventManager
      * @param \Zend\EventManager\ResponseCollection $eventResponseCollection
      */

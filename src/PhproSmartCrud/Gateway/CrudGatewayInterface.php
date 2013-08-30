@@ -18,6 +18,14 @@ interface CrudGatewayInterface
 {
 
     /**
+     * @param      $entityKey
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function loadEntity($entityKey, $id = null);
+
+    /**
      * @param $entity
      * @param $parameters
      *

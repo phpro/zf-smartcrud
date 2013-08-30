@@ -63,10 +63,10 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
     public function it_should_return_gateway_return_value($gateway)
     {
         $arguments = Argument::cetera();
-        $gateway->create($arguments)->willReturn(true);
+        $gateway->create($arguments, array())->willReturn(true);
         $this->create()->shouldReturn(true);
 
-        $gateway->create($arguments)->willReturn(false);
+        $gateway->create($arguments, array())->willReturn(false);
         $this->create()->shouldReturn(false);
     }
 }

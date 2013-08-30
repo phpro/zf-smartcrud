@@ -37,7 +37,6 @@ class SmartCrudRouter extends Segment
     {
         return array(
             'controller' => 'phpro.smartcrud',
-            'service' => 'phpro.smartcrud.crud',
             'action' => 'list',
             'entity' => null,
             'form' => null,

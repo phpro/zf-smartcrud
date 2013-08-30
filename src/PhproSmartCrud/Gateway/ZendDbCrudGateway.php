@@ -16,6 +16,18 @@ namespace PhproSmartCrud\Gateway;
  */
 class ZendDbCrudGateway extends  AbstractCrudGateway
 {
+
+    /**
+     * @param      $entityKey
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function loadEntity($entityKey, $id = null)
+    {
+        // TODO: Implement getEntity() method.
+    }
+
     /***
      * @param $entity
      * @param $parameters

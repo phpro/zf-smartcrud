@@ -20,6 +20,24 @@ use PhproSmartCrud\Exception\SmartCrudException;
  */
 class DoctrineCrudGateway extends  AbstractCrudGateway
 {
+
+    /**
+     * @param      $entityKey
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function loadEntity($entityKey, $id = null)
+    {
+        if ($id) {
+            $entity = $this->getRepository($entityKey)->find($id);
+        } else {
+            $rc = new \ReflectionClass($entityKey);
+            $entity = $rc->newInstance();
+        }
+        return $entity;
+    }
+
     /**
      * @param $entity
      * @param $parameters
@@ -120,7 +138,8 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
      */
     public function getRepository($entity)
     {
-        return $this->getEntityManager()->getRepository(get_class($entity));
+        $entityKey = is_string($entity) ? $entity : get_class($entity);
+        return $this->getEntityManager()->getRepository($entityKey);
     }
 
 }

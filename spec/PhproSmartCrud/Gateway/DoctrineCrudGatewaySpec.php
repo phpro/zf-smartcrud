@@ -88,7 +88,27 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
     public function it_should_load_entity_repositories($repository, $entity)
     {
         $this->mockEntityRepository($repository->getWrappedObject());
+
+        // Load string
+        $this->getRepository('stdClass')->shouldReturn($repository);
+
+        // Load object
         $this->getRepository($entity)->shouldReturn($repository);
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityRepository $repository
+     */
+    public function it_should_load_an_entity($repository, $entity)
+    {
+        $this->mockEntityRepository($repository->getWrappedObject());
+
+        // With no ID
+        $this->loadEntity('stdClass', null)->shouldBeAnInstanceOf('stdClass');
+
+        // With ID
+        $this->loadEntity('entityClass', 1);
+        $repository->find(1)->shouldBeCalled();
     }
 
     /**

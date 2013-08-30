@@ -37,6 +37,17 @@ class CrudService extends AbstractCrudService
     protected $form;
 
     /**
+     * @param      $entityKey
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function loadEntity($entityKey, $id = null)
+    {
+        return $this->getGateway()->loadEntity($entityKey, $id);
+    }
+
+    /**
      * @return array|\Traversable
      */
     public function getList()
