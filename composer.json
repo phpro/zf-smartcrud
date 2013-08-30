@@ -22,6 +22,7 @@
         "zendframework/zend-mvc":            "2.*",
         "zendframework/zend-http":           "2.*",
         "zendframework/zend-eventmanager":   "2.*",
+        "zendframework/zend-modulemanager":  "2.*",
         "zendframework/zend-stdlib":         "2.*",
         "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-session":        "2.*",
