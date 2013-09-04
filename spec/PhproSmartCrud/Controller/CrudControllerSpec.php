@@ -245,15 +245,12 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
      */
-    public function it_should_load_service_manager_from_controller_manager($controllerManager, $serviceManager)
+    public function it_should_load_service_manager_from_controller_manager($serviceManager)
     {
-        $controllerManager->getServiceLocator()->willReturn($serviceManager);
-        $this->setServiceLocator($controllerManager);
-
-        $this->getServiceManager->shouldReturn($serviceManager);
+        $this->setServiceLocator($serviceManager);
+        $this->getServiceManager()->shouldReturn($serviceManager);
     }
 
     /**
