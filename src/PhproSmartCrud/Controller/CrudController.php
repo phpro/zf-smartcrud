@@ -198,6 +198,12 @@ class CrudController extends AbstractActionController
      */
     public function getServiceManager()
     {
+        // Load from \Zend\Mvc\Controller\ControllerManager
+        if (!$this->serviceManager) {
+            $sm = $this->getServiceLocator()->getServiceLocator();
+            $this->setServiceManager($sm);
+        }
+
         return $this->serviceManager;
     }
 
