@@ -74,11 +74,12 @@ class CrudServiceFactory
     public function getConfig($key = null)
     {
         $serviceLocator = $this->getServiceLocator();
-        if (!$serviceLocator->has(self::CONFIG_KEY)) {
+        $globalConfig = $serviceLocator->get('Config');
+        if (!isset($globalConfig[self::CONFIG_KEY])) {
             throw new SmartCrudException('No smartcrud config provided');
         }
 
-        $config = $serviceLocator->get(self::CONFIG_KEY);
+        $config = $globalConfig[self::CONFIG_KEY];
         if ($key) {
             return array_key_exists($key, $config) ? $config[$key] : null;
         }

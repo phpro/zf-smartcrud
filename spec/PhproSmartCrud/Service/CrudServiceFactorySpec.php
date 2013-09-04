@@ -29,15 +29,21 @@ class CrudServiceFactorySpec extends ObjectBehavior
         $listener = $prophet->prophesize('\Zend\EventManager\ListenerAggregateInterface');
         $gateway = $prophet->prophesize('\PhproSmartCrud\Gateway\AbstractCrudGateway');
 
-        // Mock config:
+        // Configurate configuration
+        if ($hasConfig) {
+            $this->mockConfiguration($serviceLocator, array(
+                    'gateway' => 'service.gateway',
+                    'listeners' => array(
+                       'service.listener',
+                    )
+                )
+            );
+        } else {
+            $serviceLocator->get('Config')->willReturn(array());
+        }
+
+        // Mock service locator:
         $this->setServiceLocator($serviceLocator->reveal());
-        $serviceLocator->has(CrudServiceFactory::CONFIG_KEY)->willReturn($hasConfig);
-        $serviceLocator->get(CrudServiceFactory::CONFIG_KEY)->willReturn(array(
-            'gateway' => 'service.gateway',
-            'listeners' => array(
-                'service.listener',
-            ),
-        ));
 
         // Mock crud service:
         $serviceLocator->has('phpro.smartcrud.crud')->willReturn(true);
@@ -50,6 +56,17 @@ class CrudServiceFactorySpec extends ObjectBehavior
         // Mock listener
         $serviceLocator->has('service.listener')->willReturn(true);
         $serviceLocator->get('service.listener')->willReturn($listener->reveal());
+    }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param array $config
+     */
+    protected function mockConfiguration($serviceLocator, $config)
+    {
+        $serviceLocator->get('Config')->willReturn(array(
+            CrudServiceFactory::CONFIG_KEY => $config
+        ));
     }
 
     public function let()
@@ -120,8 +137,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
     public function it_should_throw_exception_on_invalid_gateway($serviceLocator, $crudService)
     {
         $this->setServiceLocator($serviceLocator);
-        $serviceLocator->has(CrudServiceFactory::CONFIG_KEY)->willReturn(true);
-        $serviceLocator->get(CrudServiceFactory::CONFIG_KEY)->willReturn(array('gateway' => 'service.gateway'));
+        $this->mockConfiguration($serviceLocator, array('gateway' => 'service.gateway'));
         $serviceLocator->has('service.gateway')->willReturn(false);
 
         $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringConfigureGateway($crudService);
@@ -149,8 +165,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
     public function it_should_throw_exception_on_invalid_listener($serviceLocator, $crudService, $eventManager)
     {
         $this->setServiceLocator($serviceLocator);
-        $serviceLocator->has(CrudServiceFactory::CONFIG_KEY)->willReturn(true);
-        $serviceLocator->get(CrudServiceFactory::CONFIG_KEY)->willReturn(array('listeners' => array('service.listener')));
+        $this->mockConfiguration($serviceLocator, array('listeners' => array('service.listener')));
         $serviceLocator->has('service.listener')->willReturn(false);
 
         $crudService->getEventManager()->willReturn($eventManager);
@@ -165,15 +180,14 @@ class CrudServiceFactorySpec extends ObjectBehavior
     public function it_should_not_add_listeners_on_invalid_config($serviceLocator, $crudService)
     {
         $this->setServiceLocator($serviceLocator);
-        $serviceLocator->has(CrudServiceFactory::CONFIG_KEY)->willReturn(true);
 
-        $serviceLocator->get(CrudServiceFactory::CONFIG_KEY)->willReturn(array('listeners' => null));
+        $this->mockConfiguration($serviceLocator, array('listeners' => null));
         $this->configureListeners($crudService)->shouldReturn($this);
 
-        $serviceLocator->get(CrudServiceFactory::CONFIG_KEY)->willReturn(array('listeners' => array()));
+        $this->mockConfiguration($serviceLocator, array('listeners' => array()));
         $this->configureListeners($crudService)->shouldReturn($this);
 
-        $serviceLocator->get(CrudServiceFactory::CONFIG_KEY)->willReturn(array('listeners' => 'key'));
+        $this->mockConfiguration($serviceLocator, array('listeners' => 'key'));
         $this->configureListeners($crudService)->shouldReturn($this);
     }
 
@@ -195,10 +209,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
      */
     public function it_should_create_crudservice_object($serviceLocator, $crudService, $dummy)
     {
-        $serviceLocator->has(CrudServiceFactory::CONFIG_KEY)->willReturn(true);
-        $serviceLocator->get(CrudServiceFactory::CONFIG_KEY)->willReturn(array(
-            'gateway' => 'service.gateway',
-        ));
+        $this->mockConfiguration($serviceLocator, array('gateway' => 'service.gateway'));
         $serviceLocator->has('phpro.smartcrud.crud')->willReturn(true);
         $serviceLocator->get('phpro.smartcrud.crud')->willReturn($crudService);
         $serviceLocator->has('service.gateway')->willReturn(true);
