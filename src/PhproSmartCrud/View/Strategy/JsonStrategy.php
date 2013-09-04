@@ -11,6 +11,7 @@ namespace PhproSmartCrud\View\Strategy;
 
 
 use PhproSmartCrud\View\Model\JsonModel;
+use Zend\Form\Form;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ModelInterface;
@@ -26,7 +27,7 @@ class JsonStrategy extends AbstractStrategy
     /**
      * @var int
      */
-    protected $priority = -9000;
+    protected $priority = 100000;
 
     /**
      * @param ModelInterface $model
@@ -42,13 +43,21 @@ class JsonStrategy extends AbstractStrategy
      * @param MvcEvent       $e
      * @param ModelInterface $model
      *
-     * @return Response
+     * @return Response|null
      */
     protected function renderModel(MvcEvent $e, ModelInterface $model)
     {
-        $request   = $e->getRequest();
-        $response  = $e->getResponse();
-        return $response;
+        $result = $model->getVariable('result', false);
+        $form = $model->getVariable('form');
+
+        $json = new \Zend\View\Model\JsonModel();
+        $json->setVariable('result', $result);
+        if (!$result && ($form instanceof Form)) {
+            $json->setVariable('messages', $form->getMessages());
+        }
+
+        $e->setViewModel($json);
+        return null;
     }
 
 }

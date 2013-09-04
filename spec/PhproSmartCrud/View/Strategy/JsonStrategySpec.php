@@ -11,6 +11,7 @@ namespace spec\PhproSmartCrud\View\Strategy;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Prophecy\Prophet;
 
 /**
  * Class JsonStrategySpec
@@ -38,7 +39,7 @@ class JsonStrategySpec extends AbstractStrategySpec
     public function it_should_render_on_json_model($mvcEvent, $model, $request, $response)
     {
         $this->mockMvcEvent($mvcEvent, $model, $request, $response);
-        $this->render($mvcEvent)->shouldReturn($response);
+        $this->render($mvcEvent)->shouldReturn(null);
     }
 
 }

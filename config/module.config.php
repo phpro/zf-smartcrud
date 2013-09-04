@@ -25,6 +25,10 @@ return array(
             'phpro.smartcrud.view.model.json'       =>  'PhproSmartCrud\View\Model\JsonModel',
             'phpro.smartcrud.view.model.redirect'   =>  'PhproSmartCrud\View\Model\RedirectModel',
             'phpro.smartcrud.view.model.view'       =>  'PhproSmartCrud\View\Model\ViewModel',
+
+            // View strategies
+            'phpro.smartcrud.view.strategy.json'        =>  'PhproSmartCrud\View\Strategy\JsonStrategy',
+            'phpro.smartcrud.view.strategy.redirect'    =>  'PhproSmartCrud\View\Strategy\RedirectStrategy',
         ),
         // Make sure to generate new instances ...
         'shared' => array(
@@ -37,5 +41,9 @@ return array(
         'template_path_stack' => array(
             'phpro-smartcrud' => __DIR__ . '/../view',
         ),
+        'strategies' => array(
+            'phpro.smartcrud.view.strategy.json',
+            'phpro.smartcrud.view.strategy.redirect',
+       )
     ),
 );

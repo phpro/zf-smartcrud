@@ -36,6 +36,8 @@ abstract class AbstractStrategySpec extends ObjectBehavior
         $mvcEvent->getRequest()->willReturn($request);
         $mvcEvent->getResponse()->willReturn($response);
 
+        $mvcEvent->setViewModel(Argument::any())->willReturn($mvcEvent);
+
         return $mvcEvent;
     }
 

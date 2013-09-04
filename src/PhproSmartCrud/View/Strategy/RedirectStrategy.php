@@ -24,7 +24,7 @@ class RedirectStrategy extends AbstractStrategy
     /**
      * @var int
      */
-    protected $priority = -9000;
+    protected $priority = 10000;
 
     /**
      * @param ModelInterface $model
@@ -44,8 +44,14 @@ class RedirectStrategy extends AbstractStrategy
      */
     protected function renderModel(MvcEvent $e, ModelInterface $model)
     {
-        $request   = $e->getRequest();
+        /** @var \Zend\Http\PhpEnvironment\Response $response  */
         $response  = $e->getResponse();
+        $headers = $response->getHeaders();
+
+        $headers->clearHeaders();
+        $headers->addHeaderLine(sprintf('Location', $model->getVariable('action')));
+        $response->setContent(null);
+
         return $response;
     }
 

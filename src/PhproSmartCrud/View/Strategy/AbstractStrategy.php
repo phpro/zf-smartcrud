@@ -77,7 +77,7 @@ abstract class AbstractStrategy extends AbstractListenerAggregate
      * @param MvcEvent $e
      * @param ModelInterface $model
      *
-     * @return Response
+     * @return Response|null
      */
     abstract protected function renderModel(MvcEvent $e, ModelInterface $model);
 

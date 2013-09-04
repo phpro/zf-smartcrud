@@ -11,6 +11,7 @@ namespace spec\PhproSmartCrud\View\Strategy;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Prophecy\Prophet;
 
 /**
  * Class RedirectStrategySpec
@@ -38,6 +39,16 @@ class RedirectStrategySpec extends AbstractStrategySpec
      */
     public function it_should_render_on_redirect_model($mvcEvent, $model, $request, $response)
     {
+        // Mock response object
+        $prophet = new Prophet();
+        /** @var \Zend\Http\Headers $headers  */
+        $headers = $prophet->prophesize('\Zend\Http\Headers');
+        $headers->clearHeaders()->willReturn($headers);
+        $headers->addHeaderLine(Argument::any())->willReturn($headers);
+        $response->getHeaders()->willReturn($headers);
+        $response->setContent(Argument::any())->willReturn($response);
+
+        // Run test
         $this->mockMvcEvent($mvcEvent, $model, $request, $response);
         $this->render($mvcEvent)->shouldReturn($response);
     }
