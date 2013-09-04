@@ -156,6 +156,7 @@ class CrudControllerSpec extends ObjectBehavior
         // create routematch
         /** @var \Zend\Mvc\Router\Routematch $routeMatch  */
         $routeMatch = $prophet->prophesize('\Zend\Mvc\Router\Routematch');
+        $routeMatch->setParam(Argument::any(), Argument::any())->willReturn($routeMatch);
         foreach ($routeParams as $key => $value) {
             $routeMatch->getParam($key, Argument::cetera())->willReturn($value);
         }
@@ -370,6 +371,20 @@ class CrudControllerSpec extends ObjectBehavior
         $this->mockControllerAction($routeParams, $request, $crudService);
 
         $this->listAction()->shouldBeAnInstanceOf('\PhproSmartCrud\View\Model\JsonModel');
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_throw_exception_when_output_model_is_not_configured($request, $crudService)
+    {
+        $routeParams = $this->mergeRouteParams(array('action' => 'does-not-exist-in-output-array'));
+        $crudService->getList()->willReturn(array());
+        $request->isXmlHttpRequest()->willReturn(false);
+        $this->mockControllerAction($routeParams, $request, $crudService);
+
+        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringListAction();
     }
 
 }
