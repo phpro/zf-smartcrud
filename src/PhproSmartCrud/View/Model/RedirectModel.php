@@ -9,12 +9,14 @@
 
 namespace PhproSmartCrud\View\Model;
 
+use Zend\View\Model\ViewModel as ZendViewModel;
+
 /**
  * Class RedirectModel
  *
  * @package PhproSmartCrud\Output
  */
-class RedirectModel
+class RedirectModel extends ZendViewModel
 {
 
 }

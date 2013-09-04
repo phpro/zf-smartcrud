@@ -23,4 +23,9 @@ class RedirectModelSpec extends ObjectBehavior
     {
         $this->shouldHaveType('PhproSmartCrud\View\Model\RedirectModel');
     }
+
+    public function it_should_extend_Zend_View_ViewModel()
+    {
+        $this->shouldBeAnInstanceOf('Zend\View\Model\ViewModel');
+    }
 }
