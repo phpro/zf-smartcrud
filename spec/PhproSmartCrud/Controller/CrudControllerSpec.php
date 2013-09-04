@@ -200,6 +200,7 @@ class CrudControllerSpec extends ObjectBehavior
         $this->onDispatch($mvcEvent);
         $crudService->loadEntity('stdClass', null)->shouldBeCalled();
         $this->getEntity()->shouldBe($entity);
+        $crudService->setEntity($entity)->shouldBeCalled();
     }
 
     /**
@@ -222,6 +223,7 @@ class CrudControllerSpec extends ObjectBehavior
         $this->onDispatch($mvcEvent);
         $serviceManager->get('ServiceFormKey')->shouldBeCalled();
         $this->getForm()->shouldBe($form);
+        $crudService->setForm($form)->shouldBeCalled();
     }
 
     /**

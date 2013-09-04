@@ -66,12 +66,14 @@ class CrudController extends AbstractActionController
         if ($entityKey = $routeMatch->getParam('entity', false)) {
             $entity = $this->getCrudService()->loadEntity($entityKey, $id);
             $this->setEntity($entity);
+            $this->getCrudService()->setEntity($entity);
         }
 
         // Add form
         if ($formKey = $routeMatch->getParam('form', false)) {
             $form = $this->getServiceManager()->get($formKey);
             $this->setForm($form);
+            $this->getCrudService()->setForm($form);
         }
 
         return parent::onDispatch($e);
