@@ -41,6 +41,15 @@ class SmartCrudRouter extends Segment
             'entity' => null,
             'form' => null,
             'id' => null,
+            'output' => array(
+                'list' => '\PhproSmartCrud\View\Model\ViewModel',
+                'create' => '\PhproSmartCrud\View\Model\ViewModel',
+                'post-create' => '\PhproSmartCrud\View\Model\RedirectModel',
+                'read' => '\PhproSmartCrud\View\Model\ViewModel',
+                'update' => '\PhproSmartCrud\View\Model\ViewModel',
+                'post-update' => '\PhproSmartCrud\View\Model\RedirectModel',
+                'delete' => '\PhproSmartCrud\View\Model\ViewModel',
+            ),
         );
     }
 

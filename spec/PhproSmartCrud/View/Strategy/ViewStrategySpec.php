@@ -24,7 +24,7 @@ class ViewStrategySpec extends AbstractStrategySpec
         $this->shouldBeAnInstanceOf('PhproSmartCrud\View\Strategy\AbstractStrategy');
     }
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\View\Strategy\ViewStrategy');
     }

@@ -8,8 +8,9 @@
  */
 
 namespace PhproSmartCrud\Controller;
-use PhproSmartCrud\Output\ViewModel;
+use PhproSmartCrud\Exception\SmartCrudException;
 use PhproSmartCrud\Service\CrudService;
+use PhproSmartCrud\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Exception;
@@ -83,11 +84,7 @@ class CrudController extends AbstractActionController
     public function listAction()
     {
         $result = $this->getCrudService()->getList();
-
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('smartcrud/crud/list.phtml');
-        $viewModel->setVariable('entities', $result);
-        return $result;
+        return $this->createModel($result);
     }
 
     /**
@@ -96,6 +93,7 @@ class CrudController extends AbstractActionController
     public function createAction()
     {
         $result = $this->getCrudService()->create();
+        return $this->createModel($result);
     }
 
     /**
@@ -104,6 +102,7 @@ class CrudController extends AbstractActionController
     public function updateAction()
     {
         $result = $this->getCrudService()->update();
+        return $this->createModel($result);
     }
 
     /**
@@ -112,6 +111,7 @@ class CrudController extends AbstractActionController
     public function readAction()
     {
         $result = $this->getCrudService()->read();
+        return $this->createModel($result);
     }
 
     /**
@@ -120,7 +120,32 @@ class CrudController extends AbstractActionController
     public function deleteAction()
     {
         $result = $this->getCrudService()->delete();
+        return $this->createModel($result);
     }
+
+    /**
+     * @param $result
+     */
+    protected function createModel($result)
+    {
+        $event = $this->getEvent();
+        $router = $event->getRouteMatch();
+        $action = $router->getParam('action');
+        $models = $router->getParam('output', array());
+
+        if (!isset($models[$action])) {
+            throw new SmartCrudException('No output models are configured to the current route.');
+        }
+
+        $modelKey = $models[$action];
+        if (!$this->getServiceManager()->has($modelKey)) {
+            throw new SmartCrudException('Invalid view model key registered: ' . $modelKey);
+        }
+
+        $model = $this->getServiceManager()->get($modelKey);
+
+    }
+
 
     /**
      * @param ServiceManager $serviceManager
