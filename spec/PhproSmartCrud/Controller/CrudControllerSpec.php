@@ -71,6 +71,106 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
+     * @param $mvcEvent
+     */
+    protected function mockMvcEvent($mvcEvent)
+    {
+        $mvcEvent->setRequest(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResponse(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setTarget(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setName(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->stopPropagation(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->propagationIsStopped(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResult(Argument::any())->willReturn($mvcEvent);
+        $this->setEvent($mvcEvent);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param array $paramsValues
+     */
+    protected function mockRequest($request, $paramsValues)
+    {
+        $prophet = new Prophet();
+        $params = $prophet->prophesize('Zend\Stdlib\Parameters');
+        $params->toArray()->willReturn($paramsValues);
+
+        $request->getQuery(Argument::cetera())->willReturn($params);
+        $request->getPost(Argument::cetera())->willReturn($params);
+        $this->dispatch($request);
+    }
+
+    /**
+     * @param $serviceManager
+     */
+    protected function mockViewModel($serviceManager)
+    {
+        $prophet = new Prophet();
+        $viewModel = $prophet->prophesize('\Zend\View\Model\ModelInterface');
+        $jsonModel = $prophet->prophesize('\PhproSmartCrud\View\Model\JsonModel');
+
+        $serviceManager->get('ViewModelInterface')->willReturn($viewModel);
+        $serviceManager->get('phpro.smartcrud.view.model.json')->willReturn($jsonModel);
+    }
+
+    /**
+     * @param array $routeParams
+     *
+     * @return array
+     */
+    protected function mergeRouteParams($routeParams)
+    {
+        $defaults = array(
+            'action' => '',
+            'entity' => null,
+            'form' => null,
+            'id' => null,
+            'output' => array(
+                'list' => 'ViewModelInterface',
+                'create' => 'ViewModelInterface',
+                'post-create' => 'ViewModelInterface',
+                'read' => 'ViewModelInterface',
+                'update' => 'ViewModelInterface',
+                'post-update' => 'ViewModelInterface',
+                'delete' => 'ViewModelInterface',
+            )
+        );
+
+        return array_merge($defaults, $routeParams);
+    }
+
+    /**
+     * @param array $routeParams
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    protected function mockControllerAction($routeParams, $request, $crudService)
+    {
+        // Mock services:
+        $prophet = new Prophet();
+        $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
+        $this->mockServiceManager($serviceManager, $crudService);
+        $this->mockViewModel($serviceManager);
+        $this->setCrudService($crudService);
+
+        // create routematch
+        /** @var \Zend\Mvc\Router\Routematch $routeMatch  */
+        $routeMatch = $prophet->prophesize('\Zend\Mvc\Router\Routematch');
+        foreach ($routeParams as $key => $value) {
+            $routeMatch->getParam($key, Argument::cetera())->willReturn($value);
+        }
+
+        // Configure mvc Event
+        /** @var \Zend\Mvc\MvcEvent $mvcEvent  */
+        $mvcEvent = $prophet->prophesize('\Zend\Mvc\MvcEvent');
+        $mvcEvent->getRouteMatch()->willReturn($routeMatch);
+        $this->mockMvcEvent($mvcEvent);
+
+        // Configure request
+        $this->mockRequest($request, array());
+    }
+
+    /**
      * @param \Zend\Mvc\MvcEvent  $mvcEvent
      */
     public function it_should_throw_exception_on_invalid_route($mvcEvent)
@@ -184,6 +284,92 @@ class CrudControllerSpec extends ObjectBehavior
         $crudService->setParameters($dummy)->shouldBeCalled();
         $crudService->setForm($dummy)->shouldBeCalled();
         $crudService->setEntity($dummy)->shouldBeCalled();
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_handle_list_action($request, $crudService)
+    {
+        $routeParams = $this->mergeRouteParams(array('action' => 'list'));
+        $crudService->getList()->willReturn(array());
+        $request->isXmlHttpRequest()->willReturn(false);
+        $this->mockControllerAction($routeParams, $request, $crudService);
+
+        $this->listAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_handle_create_action($request, $crudService)
+    {
+        $routeParams = $this->mergeRouteParams(array('action' => 'create'));
+        $crudService->create()->willReturn(true);
+        $request->isXmlHttpRequest()->willReturn(false);
+        $request->isPost()->willReturn(true);
+        $this->mockControllerAction($routeParams, $request, $crudService);
+
+        $this->createAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_handle_read_action($request, $crudService)
+    {
+        $routeParams = $this->mergeRouteParams(array('action' => 'read'));
+        $crudService->read()->willReturn(true);
+        $request->isXmlHttpRequest()->willReturn(false);
+        $this->mockControllerAction($routeParams, $request, $crudService);
+
+        $this->readAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_handle_update_action($request, $crudService)
+    {
+        $routeParams = $this->mergeRouteParams(array('action' => 'update'));
+        $crudService->update()->willReturn(true);
+        $request->isXmlHttpRequest()->willReturn(false);
+        $request->isPost()->willReturn(true);
+        $this->mockControllerAction($routeParams, $request, $crudService);
+
+        $this->updateAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_handle_delete_action($request, $crudService)
+    {
+        $routeParams = $this->mergeRouteParams(array('action' => 'delete'));
+        $crudService->delete()->willReturn(true);
+        $request->isXmlHttpRequest()->willReturn(true);
+        $this->mockControllerAction($routeParams, $request, $crudService);
+
+        $this->deleteAction()->shouldBeAnInstanceOf('\PhproSmartCrud\View\Model\JsonModel');
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_return_json_model_on_ajax($request, $crudService)
+    {
+        $routeParams = $this->mergeRouteParams(array('action' => 'list'));
+        $crudService->getList()->willReturn(array());
+        $request->isXmlHttpRequest()->willReturn(true);
+        $this->mockControllerAction($routeParams, $request, $crudService);
+
+        $this->listAction()->shouldBeAnInstanceOf('\PhproSmartCrud\View\Model\JsonModel');
     }
 
 }

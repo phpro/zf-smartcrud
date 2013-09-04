@@ -31,6 +31,8 @@ class SmartCrudRouter extends Segment
     }
 
     /**
+     * Notice: when the page is requested with ajax, a json model will be used!
+     *
      * @return array
      */
     protected function getDefaultParams()
@@ -42,13 +44,13 @@ class SmartCrudRouter extends Segment
             'form' => null,
             'id' => null,
             'output' => array(
-                'list' => '\PhproSmartCrud\View\Model\ViewModel',
-                'create' => '\PhproSmartCrud\View\Model\ViewModel',
-                'post-create' => '\PhproSmartCrud\View\Model\RedirectModel',
-                'read' => '\PhproSmartCrud\View\Model\ViewModel',
-                'update' => '\PhproSmartCrud\View\Model\ViewModel',
-                'post-update' => '\PhproSmartCrud\View\Model\RedirectModel',
-                'delete' => '\PhproSmartCrud\View\Model\ViewModel',
+                'list' => 'phpro.smartcrud.view.model.view',
+                'create' => 'phpro.smartcrud.view.model.view',
+                'post-create' => 'phpro.smartcrud.view.model.redirect',
+                'read' => 'phpro.smartcrud.view.model.view',
+                'update' => 'phpro.smartcrud.view.model.view',
+                'post-update' => 'phpro.smartcrud.view.model.redirect',
+                'delete' => 'phpro.smartcrud.view.model.view',
             ),
         );
     }

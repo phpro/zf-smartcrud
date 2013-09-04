@@ -10,13 +10,13 @@
 namespace PhproSmartCrud\Controller;
 use PhproSmartCrud\Exception\SmartCrudException;
 use PhproSmartCrud\Service\CrudService;
-use PhproSmartCrud\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Exception;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Form\Form;
+use Zend\View\Model\ModelInterface;
 
 /**
  * Class CrudController
@@ -79,7 +79,7 @@ class CrudController extends AbstractActionController
 
 
     /**
-     * @return ViewModel
+     * @return ModelInterface
      */
     public function listAction()
     {
@@ -88,25 +88,33 @@ class CrudController extends AbstractActionController
     }
 
     /**
-     *
+     * @return ModelInterface
      */
     public function createAction()
     {
+        if (!$this->getRequest()->isPost()) {
+            return $this->createModel(null);
+        }
+
         $result = $this->getCrudService()->create();
-        return $this->createModel($result);
+        return $this->createModel($result, 'post-create');
     }
 
     /**
-     *
+     * @return ModelInterface
      */
     public function updateAction()
     {
+        if (!$this->getRequest()->isPost()) {
+            return $this->createModel(null);
+        }
+
         $result = $this->getCrudService()->update();
-        return $this->createModel($result);
+        return $this->createModel($result, 'post-update');
     }
 
     /**
-     *
+     * @return ModelInterface
      */
     public function readAction()
     {
@@ -115,7 +123,7 @@ class CrudController extends AbstractActionController
     }
 
     /**
-     *
+     * @return ModelInterface
      */
     public function deleteAction()
     {
@@ -124,28 +132,53 @@ class CrudController extends AbstractActionController
     }
 
     /**
-     * @param $result
+     * @param mixed $result
+     * @param string $action
+     *
+     * @return ModelInterface
+     * @throws \PhproSmartCrud\Exception\SmartCrudException
      */
-    protected function createModel($result)
+    protected function createModel($result ,$action = null)
     {
         $event = $this->getEvent();
         $router = $event->getRouteMatch();
-        $action = $router->getParam('action');
+        $action = $action ? $action : $router->getParam('action');
         $models = $router->getParam('output', array());
 
+        // Validate params
         if (!isset($models[$action])) {
-            throw new SmartCrudException('No output models are configured to the current route.');
+            throw new SmartCrudException('No output models are configured for the current route.');
         }
 
+        // Get right model type
         $modelKey = $models[$action];
-        if (!$this->getServiceManager()->has($modelKey)) {
-            throw new SmartCrudException('Invalid view model key registered: ' . $modelKey);
-        }
+        $model = $this->getModelType($modelKey);
 
-        $model = $this->getServiceManager()->get($modelKey);
+        // Set model parameters:
+        $model->setVariable('result', $result);
+        $model->setVariable('form', $this->getForm());
+        $model->setVariable('entity', $this->getEntity());
+        $model->setTemplate(sprintf('phpro-smartcrud/%s', $router->getParam('action')));
 
+        return $model;
     }
 
+    /**
+     * @param $modelKey
+     *
+     * @return ModelInterface
+     * @throws \Zend\ServiceManager\Exception\ServiceNotFoundException
+     */
+    protected function getModelType($modelKey)
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $model = $this->getServiceManager()->get('phpro.smartcrud.view.model.json');
+        } else {
+            $model = $this->getServiceManager()->get($modelKey);
+        }
+
+        return $model;
+    }
 
     /**
      * @param ServiceManager $serviceManager

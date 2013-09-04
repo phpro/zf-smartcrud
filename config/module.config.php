@@ -20,6 +20,17 @@ return array(
             // Listeners
             'phpro.smartcrud.listener.bjyauthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
             'phpro.smartcrud.listener.flashmessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
+
+            // View models
+            'phpro.smartcrud.view.model.json'       =>  'PhproSmartCrud\View\Model\JsonModel',
+            'phpro.smartcrud.view.model.redirect'   =>  'PhproSmartCrud\View\Model\RedirectModel',
+            'phpro.smartcrud.view.model.view'       =>  'PhproSmartCrud\View\Model\ViewModel',
+        ),
+        // Make sure to generate new instances ...
+        'shared' => array(
+            'phpro.smartcrud.view.model.json'       =>  false,
+            'phpro.smartcrud.view.model.redirect'   =>  false,
+            'phpro.smartcrud.view.model.view'       =>  false,
         ),
     ),
     'view_manager' => array(
