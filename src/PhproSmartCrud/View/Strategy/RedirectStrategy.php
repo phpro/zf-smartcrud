@@ -38,7 +38,7 @@ class RedirectStrategy extends AbstractStrategy
 
     /**
      * @param MvcEvent       $e
-     * @param ModelInterface $model
+     * @param RedirectModel $model
      *
      * @return Response
      */
@@ -48,8 +48,12 @@ class RedirectStrategy extends AbstractStrategy
         $response  = $e->getResponse();
         $headers = $response->getHeaders();
 
+        // set redirect:
+        $redirect = '/';    // TODO: find the best way to add the route to model
+
+        // Set response
         $headers->clearHeaders();
-        $headers->addHeaderLine(sprintf('Location', $model->getVariable('action')));
+        $headers->addHeaderLine(sprintf('Location', $redirect));
         $response->setContent(null);
 
         return $response;

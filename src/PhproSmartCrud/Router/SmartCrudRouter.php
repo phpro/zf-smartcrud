@@ -50,7 +50,7 @@ class SmartCrudRouter extends Segment
                 'read' => 'phpro.smartcrud.view.model.view',
                 'update' => 'phpro.smartcrud.view.model.view',
                 'post-update' => 'phpro.smartcrud.view.model.redirect',
-                'delete' => 'phpro.smartcrud.view.model.view',
+                'delete' => 'phpro.smartcrud.view.model.redirect',
             ),
         );
     }

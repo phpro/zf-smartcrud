@@ -142,7 +142,8 @@ class CrudController extends AbstractActionController
     {
         $event = $this->getEvent();
         $router = $event->getRouteMatch();
-        $action = $action ? $action : $router->getParam('action');
+        $controllerAction = $router->getParam('action');
+        $action = $action ? $action : $controllerAction;
         $models = $router->getParam('output', array());
 
         // Validate params
@@ -155,10 +156,11 @@ class CrudController extends AbstractActionController
         $model = $this->getModelType($modelKey);
 
         // Set model parameters:
+        $model->setVariable('action', $controllerAction);
         $model->setVariable('result', $result);
         $model->setVariable('form', $this->getForm());
         $model->setVariable('entity', $this->getEntity());
-        $model->setTemplate(sprintf('phpro-smartcrud/%s', $router->getParam('action')));
+        $model->setTemplate(sprintf('phpro-smartcrud/%s', $controllerAction));
 
         return $model;
     }
