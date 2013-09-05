@@ -37,6 +37,11 @@ return array(
             'phpro.smartcrud.view.model.view'       =>  false,
         ),
     ),
+    'controllers' => array(
+        'invokables' => array(
+            'phpro.smartcrud.controller' => 'PhproSmartCrud\Controller\CrudController'
+        ),
+    ),
     'view_manager' => array(
         'template_path_stack' => array(
             'phpro-smartcrud' => __DIR__ . '/../view',

@@ -38,7 +38,7 @@ class SmartCrudRouter extends Segment
     protected function getDefaultParams()
     {
         return array(
-            'controller' => 'phpro.smartcrud',
+            'controller' => 'phpro.smartcrud.controller',
             'action' => 'list',
             'entity' => null,
             'form' => null,
