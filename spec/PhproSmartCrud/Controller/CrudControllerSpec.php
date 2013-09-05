@@ -45,11 +45,18 @@ class CrudControllerSpec extends ObjectBehavior
         $this->setServiceManager($serviceManager);
         $serviceManager->get('phpro.smartcrud')->willReturn($crudService);
 
+        // Default route config
+        $prophet = new Prophet();
+        $entity = $prophet->prophesize('stdClass');
+        $serviceManager->get('stdClass')->willReturn($entity);
+        $serviceManager->get('Zend\Form\Form')->willReturn($prophet->prophesize('Zend\Form\Form'));
+
         // mock methods to prevent errors
         $dummy = Argument::any();
         $crudService->setParameters($dummy)->willReturn($crudService);
         $crudService->setForm($dummy)->willReturn($crudService);
         $crudService->setEntity($dummy)->willReturn($crudService);
+        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
     }
 
     /**
@@ -122,8 +129,8 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $defaults = array(
             'action' => '',
-            'entity' => null,
-            'form' => null,
+            'entity' => 'stdClass',
+            'form' => 'Zend\Form\Form',
             'id' => null,
             'output' => array(
                 'list' => 'ViewModelInterface',
@@ -190,11 +197,14 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_configure_entity_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
     {
         // Configure routematch
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array('entity' => 'stdClass', 'form' => false));
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+            'entity' => 'stdClass',
+            'form' => 'Zend\Form\Form'
+        ));
 
         // Configure service
-        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
         $this->mockServiceManager($serviceManager, $crudService);
+        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
 
         // Test
         $this->onDispatch($mvcEvent);
@@ -213,7 +223,10 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_configure_form_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $crudService, $form)
     {
         // Configure routematch
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array('entity' => false, 'form' => 'ServiceFormKey'));
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+            'entity' => 'stdClass',
+            'form' => 'ServiceFormKey'
+        ));
 
         // Configure service
         $serviceManager->get('ServiceFormKey')->willReturn($form);
@@ -223,7 +236,39 @@ class CrudControllerSpec extends ObjectBehavior
         $this->onDispatch($mvcEvent);
         $serviceManager->get('ServiceFormKey')->shouldBeCalled();
         $this->getForm()->shouldBe($form);
+
+        // Service config
         $crudService->setForm($form)->shouldBeCalled();
+
+        // Form config:
+        $form->bind(Argument::type('stdClass'))->shouldBeCalled();
+        $form->setBindOnValidate(true)->shouldBeCalled();
+    }
+
+    /**
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     */
+    public function it_should_throw_smartCrudException_when_no_entity_is_configured($mvcEvent, $routeMatch)
+    {
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+            'entity' => null,
+            'form' => 'ServiceFormKey',
+        ));
+        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringOnDispatch($mvcEvent);
+    }
+
+    /**
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     */
+    public function it_should_throw_smartCrudException_when_no_form_is_configured($mvcEvent, $routeMatch)
+    {
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+            'entity' => 'stdClass',
+            'form' => null,
+        ));
+        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringOnDispatch($mvcEvent);
     }
 
     /**

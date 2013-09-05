@@ -126,7 +126,7 @@ class CrudService extends AbstractCrudService
             return false;
         }
 
-        $this->getForm()->setData($this->getParameters());
+        $this->getForm()->bindValues($this->getParameters());
         $valid = $this->getForm()->isValid();
         if (!$valid) {
             return false;

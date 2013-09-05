@@ -113,7 +113,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
 
         // Form validation:
         $this->setForm($form);
-        $form->setData(Argument::any())->willReturn($form);
+        $form->bindValues(Argument::any())->willReturn($form);
         $form->isValid()->willReturn($returnValue);
 
         return $this;

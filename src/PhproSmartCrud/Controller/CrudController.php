@@ -52,6 +52,7 @@ class CrudController extends AbstractActionController
      *
      * @return mixed
      * @throws \Zend\Mvc\Exception\DomainException
+     * @throws SmartCrudException
      */
     public function onDispatch(MvcEvent $e)
     {
@@ -61,20 +62,29 @@ class CrudController extends AbstractActionController
         }
 
         $id = $routeMatch->getParam('id', null);
+        $entityKey = $routeMatch->getParam('entity', false);
+        $formKey = $routeMatch->getParam('form', false);
+
+        if (!$entityKey) {
+            throw new SmartCrudException('There was no entity type configured to the router');
+        }
+
+        if (!$formKey) {
+            throw new SmartCrudException('There was no form configured to the router');
+        }
 
         // Add entity
-        if ($entityKey = $routeMatch->getParam('entity', false)) {
-            $entity = $this->getCrudService()->loadEntity($entityKey, $id);
-            $this->setEntity($entity);
-            $this->getCrudService()->setEntity($entity);
-        }
+        $entity = $this->getCrudService()->loadEntity($entityKey, $id);
+        $this->setEntity($entity);
+        $this->getCrudService()->setEntity($entity);
 
         // Add form
-        if ($formKey = $routeMatch->getParam('form', false)) {
-            $form = $this->getServiceManager()->get($formKey);
-            $this->setForm($form);
-            $this->getCrudService()->setForm($form);
-        }
+        /** @var \Zend\Form\Form $form  */
+        $form = $this->getServiceManager()->get($formKey);
+        $form->bind($this->getEntity());
+        $form->setBindOnValidate(true);
+        $this->setForm($form);
+        $this->getCrudService()->setForm($form);
 
         return parent::onDispatch($e);
     }
