@@ -8,6 +8,7 @@ layer.
 
 Todo
 ============
+* paramtersService: use routematch controller in combination with the controller loader from the servicemanager to load controller.
 * refactor: Make getParameters() link to the right parameters + service in the crudservice classes
 * The router should have a variabele 'listeners' which configures the crudservice
 * Implement list view (Based on form hydrator)
