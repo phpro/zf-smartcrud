@@ -5,6 +5,23 @@ Master: [![Build Status](https://secure.travis-ci.org/veewee/PhproSmartCrud.png?
 Module providing a SmartCrud for working with the [Zend Framework 2](https://github.com/zendframework/zf2) MVC
 layer.
 
+
+Todo
+============
+* Create Parameter service (mapping to Params controller plugin)
+* Make getParameters() link to the parameters service in the crudservice classes + refactor
+* The router should have a variabele 'listeners' which configures the crudservice
+* Implement list view (Based on form hydrator)
+* Implement read view (Based on form hydrator)
+* Add better redirect funcitonality to the RedirectModel
+* Add extra triggers while creating the list (to inject filtering, sorting, pagination)
+* Use iterator on lists to prevent memory issues?
+* improve view model / strategy / renderer logica
+* Create CLI generator with Symfony CLI
+* Create Zend Console routers which map to the symfony cli app.
+* implement zend db gateway
+* Create some nice documentation!
+
 Installation
 ============
-
+TODO ...
