@@ -8,8 +8,7 @@ layer.
 
 Todo
 ============
-* Create Parameter service (mapping to Params controller plugin)
-* Make getParameters() link to the parameters service in the crudservice classes + refactor
+* refactor: Make getParameters() link to the right parameters + service in the crudservice classes
 * The router should have a variabele 'listeners' which configures the crudservice
 * Implement list view (Based on form hydrator)
 * Implement read view (Based on form hydrator)

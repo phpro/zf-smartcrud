@@ -12,6 +12,7 @@ return array(
             'phpro.smartcrud.read'      => 'PhproSmartCrud\Service\ReadService',
             'phpro.smartcrud.update'    => 'PhproSmartCrud\Service\UpdateService',
             'phpro.smartcrud.delete'    => 'PhproSmartCrud\Service\DeleteService',
+            'phpro.smartcrud.params'    => 'PhproSmartCrud\Service\ParametersService',
 
             // Gateways
             'phpro.smartcrud.gateway.doctrine'  => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
