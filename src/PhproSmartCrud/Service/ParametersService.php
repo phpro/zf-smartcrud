@@ -11,7 +11,9 @@ namespace PhproSmartCrud\Service;
 
 use Zend\Mvc\Application;
 use Zend\Mvc\Controller\AbstractController;
+use Zend\Mvc\Controller\ControllerManager;
 use Zend\Mvc\Controller\Plugin\Params;
+use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -47,7 +49,10 @@ class ParametersService implements FactoryInterface
         }
 
         // Validate controller
-        $controller = $event->getController();
+        /** @var ControllerManager $controllerManager  */
+        $controllerManager = $serviceLocator->get('controllerLoader');
+        $routeMatch = $event->getRouteMatch();
+        $controller = $controllerManager->get($routeMatch->getParam('controller'));
         if (!($controller instanceof AbstractController)) {
             return $this;
         }

@@ -35,8 +35,18 @@ class ParametersServiceSpec extends ObjectBehavior
             $controller = $controller->getWrappedObject();
         }
 
-        $event->getController()->willReturn($controller);
+        // mock routeMatch
+        $routeMatch = $prophet->prophesize('Zend\Mvc\Router\Http\RouteMatch');
+        $routeMatch->getParam('controller')->willReturn('DummyControllerSlag');
+
+        // Mock controller manager
+        $controllerManager = $prophet->prophesize('Zend\Mvc\Controller\ControllerManager');
+        $controllerManager->get('DummyControllerSlag')->willReturn($controller);
+        $serviceLocator->get('controllerLoader')->willReturn($controllerManager);
+
+        // Add application data to mvc event
         $event->getRequest()->willReturn($request->getWrappedObject());
+        $event->getRouteMatch()->willReturn($routeMatch);
         $app->getMvcEvent()->willReturn($event);
         $serviceLocator->get('application')->willReturn($app);
     }
@@ -78,7 +88,6 @@ class ParametersServiceSpec extends ObjectBehavior
         $this->mockServiceLocator($serviceLocator, $request, null, null);
         $this->createService($serviceLocator)->shouldReturn($this);
 
-        // Todo: add controller to mock method --> find a valid interface to use
         $controller->plugin('params')->shouldNotBeCalled();
     }
 
