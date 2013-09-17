@@ -54,7 +54,7 @@ class DeleteServiceSpec extends AbstractCrudServiceSpec
     public function it_should_call_delete_function_on_gateway($gateway)
     {
         $this->delete();
-        $gateway->delete(Argument::type('stdClass'), Argument::exact(array()))->shouldBeCalled();
+        $gateway->delete(Argument::type('stdClass'), 1)->shouldBeCalled();
     }
 
     /**
@@ -63,10 +63,10 @@ class DeleteServiceSpec extends AbstractCrudServiceSpec
     public function it_should_return_gateway_return_value($gateway)
     {
         $arguments = Argument::cetera();
-        $gateway->delete($arguments)->willReturn(true);
+        $gateway->delete($arguments, 1)->willReturn(true);
         $this->delete()->shouldReturn(true);
 
-        $gateway->delete($arguments)->willReturn(false);
+        $gateway->delete($arguments, 1)->willReturn(false);
         $this->delete()->shouldReturn(false);
     }
 

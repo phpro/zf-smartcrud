@@ -56,6 +56,31 @@ class CrudServiceFactorySpec extends ObjectBehavior
         // Mock listener
         $serviceLocator->has('service.listener')->willReturn(true);
         $serviceLocator->get('service.listener')->willReturn($listener->reveal());
+
+        // Mock parameters
+        $this->mockParams($serviceLocator, array());
+    }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param array $paramsData
+     *
+     * @return \PhproSmartCrud\Service\ParametersService
+     */
+    protected function mockParams($serviceLocator, array $paramsData)
+    {
+        $prophet = new Prophet();
+        /** @var \PhproSmartCrud\Service\ParametersService $params  */
+        $params = $prophet->prophesize('PhproSmartCrud\Service\ParametersService');
+        $params->fromRoute()->willReturn($paramsData);
+        $params->fromPost()->willReturn($paramsData);
+        $params->fromQuery()->willReturn($paramsData);
+        $params->fromRoute('id', Argument::any())->willReturn(1);
+
+        $params = $params->reveal();
+        $serviceLocator->has('phpro.smartcrud.params')->willReturn(true);
+        $serviceLocator->get('phpro.smartcrud.params')->willReturn($params);
+        return $params;
     }
 
     /**
@@ -205,6 +230,27 @@ class CrudServiceFactorySpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_configure_smartcrud_parameters($serviceLocator, $crudService)
+    {
+        $this->mockParams($serviceLocator, array());
+        $this->configureParameters($crudService);
+        $crudService->setParameters(Argument::type('\PhproSmartCrud\Service\ParametersService'))->shouldBeCalled();
+    }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     */
+    public function it_should_have_fluent_interfaces_after_configuring_smartcrud_parameters($serviceLocator, $crudService)
+    {
+        $this->mockParams($serviceLocator, array());
+        $this->configureParameters($crudService)->shouldReturn($this);
+    }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param \PhproSmartCrud\Service\CrudService $crudService
      * @param \stdClass $dummy
      */
     public function it_should_create_crudservice_object($serviceLocator, $crudService, $dummy)
@@ -214,6 +260,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
         $serviceLocator->get('phpro.smartcrud.crud')->willReturn($crudService);
         $serviceLocator->has('service.gateway')->willReturn(true);
         $serviceLocator->get('service.gateway')->willReturn($dummy);
+        $this->mockParams($serviceLocator, array());
 
         $this->createService($serviceLocator)->shouldReturn($crudService);
     }

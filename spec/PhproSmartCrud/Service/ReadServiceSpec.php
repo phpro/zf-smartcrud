@@ -54,7 +54,7 @@ class ReadServiceSpec extends AbstractCrudServiceSpec
     public function it_should_call_read_function_on_gateway($gateway)
     {
         $this->read();
-        $gateway->read(Argument::type('stdClass'), Argument::exact(array()))->shouldBeCalled();
+        $gateway->read(Argument::type('stdClass'), 1)->shouldBeCalled();
     }
 
     /**
@@ -65,10 +65,10 @@ class ReadServiceSpec extends AbstractCrudServiceSpec
         $arguments = Argument::cetera();
         $data = array('column1' => 'value1', 'column2' => 'value2');
 
-        $gateway->read($arguments)->willReturn($data);
+        $gateway->read($arguments, 1)->willReturn($data);
         $this->read()->shouldReturn($data);
 
-        $gateway->read($arguments)->willReturn(null);
+        $gateway->read($arguments, 1)->willReturn(null);
         $this->read()->shouldReturn(null);
     }
 

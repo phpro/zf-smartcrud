@@ -11,6 +11,7 @@ namespace spec\PhproSmartCrud\Service;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Prophecy\Prophet;
 
 /**
  * Class AbstractCrudActionServiceSpec
@@ -19,6 +20,26 @@ use Prophecy\Argument;
  */
 abstract class AbstractCrudServiceSpec extends ObjectBehavior
 {
+
+    /**
+     * @param array $paramsData
+     *
+     * @return \PhproSmartCrud\Service\ParametersService
+     */
+    protected function mockParams(array $paramsData)
+    {
+        $prophet = new Prophet();
+        /** @var \PhproSmartCrud\Service\ParametersService $params  */
+        $params = $prophet->prophesize('PhproSmartCrud\Service\ParametersService');
+        $params->fromRoute()->willReturn($paramsData);
+        $params->fromPost()->willReturn($paramsData);
+        $params->fromQuery()->willReturn($paramsData);
+        $params->fromRoute('id', Argument::any())->willReturn(1);
+
+        $this->setParameters($params->reveal());
+
+        return $params;
+    }
 
     /**
      * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
@@ -30,7 +51,7 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
         $this->setGateway($gateway);
         $this->setEventManager($eventManager);
         $this->setEntity($entity);
-        $this->setParameters(array());
+        $this->mockParams(array());
     }
 
     public function it_should_have_fluent_interfaces()
@@ -44,9 +65,8 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
 
     public function it_should_have_parameters()
     {
-        $params = array('param1' => 'value1', 'param2' => 'value2');
-        $this->setParameters($params);
-        $this->getParameters()->shouldReturn($params);
+        $paramsService = $this->mockParams(array('param1' => 'value1', 'param2' => 'value2'));
+        $this->getParameters()->shouldReturn($paramsService);
     }
 
     /**
@@ -86,7 +106,7 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
         $crudEvent->shouldBeAnInstanceOf('PhproSmartCrud\Event\CrudEvent');
         $crudEvent->getName()->shouldReturn($eventName);
         $crudEvent->getTarget()->shouldReturn($entity);
-        $crudEvent->getParams()->shouldReturn(array());
+        $crudEvent->getParams()->shouldReturn($this->getParameters());
     }
 
 }

@@ -28,7 +28,7 @@ class UpdateService extends AbstractCrudService
         $em->trigger($this->createEvent(CrudEvent::BEFORE_UPDATE));
 
         $gateway = $this->getGateway();
-        $result = $gateway->update($this->getEntity(), $this->getParameters());
+        $result = $gateway->update($this->getEntity(), $this->getParameters()->fromPost());
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_UPDATE));
         return $result;

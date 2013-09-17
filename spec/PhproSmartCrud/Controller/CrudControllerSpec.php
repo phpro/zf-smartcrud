@@ -53,7 +53,6 @@ class CrudControllerSpec extends ObjectBehavior
 
         // mock methods to prevent errors
         $dummy = Argument::any();
-        $crudService->setParameters($dummy)->willReturn($crudService);
         $crudService->setForm($dummy)->willReturn($crudService);
         $crudService->setEntity($dummy)->willReturn($crudService);
         $crudService->loadEntity(Argument::cetera())->willReturn($entity);
@@ -90,21 +89,6 @@ class CrudControllerSpec extends ObjectBehavior
         $mvcEvent->propagationIsStopped(Argument::any())->willReturn($mvcEvent);
         $mvcEvent->setResult(Argument::any())->willReturn($mvcEvent);
         $this->setEvent($mvcEvent);
-    }
-
-    /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param array $paramsValues
-     */
-    protected function mockRequest($request, $paramsValues)
-    {
-        $prophet = new Prophet();
-        $params = $prophet->prophesize('Zend\Stdlib\Parameters');
-        $params->toArray()->willReturn($paramsValues);
-
-        $request->getQuery(Argument::cetera())->willReturn($params);
-        $request->getPost(Argument::cetera())->willReturn($params);
-        $this->dispatch($request);
     }
 
     /**
@@ -174,8 +158,26 @@ class CrudControllerSpec extends ObjectBehavior
         $mvcEvent->getRouteMatch()->willReturn($routeMatch);
         $this->mockMvcEvent($mvcEvent);
 
-        // Configure request
-        $this->mockRequest($request, array());
+        // Configure and dispatch request
+        $this->mockParams($serviceManager, array());
+        $this->dispatch($request);
+    }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param array $paramsData
+     */
+    protected function mockParams($serviceManager, array $paramsData)
+    {
+        $prophet = new Prophet();
+        /** @var \PhproSmartCrud\Service\ParametersService $params  */
+        $params = $prophet->prophesize('PhproSmartCrud\Service\ParametersService');
+        $params->fromRoute()->willReturn($paramsData);
+        $params->fromPost()->willReturn($paramsData);
+        $params->fromQuery()->willReturn($paramsData);
+        $params->fromRoute('id', Argument::any())->willReturn(1);
+
+        $serviceManager->get('phpro.smartcrud.params')->willReturn($params);
     }
 
     /**
@@ -338,7 +340,6 @@ class CrudControllerSpec extends ObjectBehavior
 
         // validate:
         $this->getCrudService()->shouldReturn($crudService);
-        $crudService->setParameters($dummy)->shouldBeCalled();
         $crudService->setForm($dummy)->shouldBeCalled();
         $crudService->setEntity($dummy)->shouldBeCalled();
     }

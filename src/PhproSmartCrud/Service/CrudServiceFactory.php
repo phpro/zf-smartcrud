@@ -55,8 +55,10 @@ class CrudServiceFactory
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->setServiceLocator($serviceLocator);
+        /** @var CrudService $smartCrud  */
         $smartCrud = $serviceLocator->get('phpro.smartcrud.crud');
 
+        $this->configureParameters($smartCrud);
         $this->configureGateway($smartCrud);
         $this->configureListeners($smartCrud);
 
@@ -85,6 +87,20 @@ class CrudServiceFactory
         }
 
         return $config;
+    }
+
+    /**
+     * @param CrudService $smartCrud
+     *
+     * @return $this
+     */
+    public function configureParameters($smartCrud)
+    {
+        $serviceLocator = $this->getServiceLocator();
+        $parameterService = $serviceLocator->get('phpro.smartcrud.params');
+        $smartCrud->setParameters($parameterService);
+
+        return $this;
     }
 
     /**

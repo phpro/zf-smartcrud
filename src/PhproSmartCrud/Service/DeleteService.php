@@ -28,7 +28,7 @@ class DeleteService extends AbstractCrudService
         $em->trigger($this->createEvent(CrudEvent::BEFORE_DELETE));
 
         $gateway = $this->getGateway();
-        $result = $gateway->delete($this->getEntity(), $this->getParameters());
+        $result = $gateway->delete($this->getEntity(), $this->getParameters()->fromRoute('id', 0));
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_DELETE));
         return $result;

@@ -239,7 +239,6 @@ class CrudController extends AbstractActionController
             /** @var \PhproSmartCrud\Service\CrudService $crudService  */
             $crudService = $this->getServiceManager()->get('phpro.smartcrud');
             $crudService
-                ->setParameters(array_merge($this->params()->fromQuery(), $this->params()->fromPost()))
                 ->setForm($this->getForm())
                 ->setEntity($this->getEntity());
             $this->crudService = $crudService;

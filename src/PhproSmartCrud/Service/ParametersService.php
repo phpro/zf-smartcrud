@@ -13,7 +13,6 @@ use Zend\Mvc\Application;
 use Zend\Mvc\Controller\AbstractController;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\Mvc\Controller\Plugin\Params;
-use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
