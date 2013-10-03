@@ -1,6 +1,7 @@
 .idea
 atlassian-ide-plugin.xml
 vendor
+bin/phpspec
 nbproject
 .idea
 .buildpath
