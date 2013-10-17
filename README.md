@@ -1,16 +1,13 @@
-Zend SmartCrud [WIP]
-====================
+#Zend SmartCrud [WIP]
 Master: [![Build Status](https://secure.travis-ci.org/veewee/PhproSmartCrud.png?branch=master)](http://travis-ci.org/veewee/PhproSmartCrud)
 
 Module providing a SmartCrud for working with the [Zend Framework 2](https://github.com/zendframework/zf2) MVC
 layer.
 
-WIP
-============
+##WIP
 * feature: The router should have a variabele 'listeners' which configures the crudservice
 
-Todo
-============
+##Todo
 
 * improvement: Use MvcEvent to add the onBootstrap actions of the controller
 * improvement: Implement list view (Based on form hydrator)
@@ -29,6 +26,20 @@ Todo
 * feature: implement other db gateways: mongoDB, propel, API's, ...
 
 
-Installation
-============
-TODO ...
+## Installation
+
+Installation of this module uses composer. For composer documentation, please refer to
+[getcomposer.org](http://getcomposer.org/).
+
+```sh
+php composer.phar require phpro/smartcrud
+# (When asked for a version, type `dev-master`)
+```
+
+Then add `PhproSmartCrud` to your `config/application.config.php`.
+
+Installation without composer is not officially supported and requires you to manually install all dependencies
+that are listed in `composer.json`
+
+## Usage
+Todo...
