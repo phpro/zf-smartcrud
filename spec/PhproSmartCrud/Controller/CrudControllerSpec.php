@@ -263,27 +263,20 @@ class CrudControllerSpec extends ObjectBehavior
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
                                                            'entity' => 'stdClass',
                                                            'form' => 'Zend\Form\Form',
-                                                           'listeners' => array('listener1', 'listener2')
+                                                           'listeners' => array('listener1')
                                                       ));
         $dummy = Argument::cetera();
 
         $this->mockServiceManager($serviceManager, $crudService);
         $serviceManager->has('listener1')->willReturn(true);
         $serviceManager->get('listener1')->willReturn('listener1');
-        $serviceManager->has('listener2')->willReturn(true);
-        $serviceManager->get('listener2')->willReturn('listener2');
-
 
         $crudService->getEventManager()->willReturn($eventManager);
 
-
         $serviceManager->has('listener1')->shouldBeCalled();
         $serviceManager->get('listener1')->shouldBeCalled();
-        $serviceManager->has('listener2')->shouldBeCalled();
-        $serviceManager->get('listener2')->shouldBeCalled();
         $crudService->getEventManager()->shouldBeCalled();
         $eventManager->attach('listener1')->shouldBeCalled();
-        $eventManager->attach('listener2')->shouldBeCalled();
         $this->onDispatch($mvcEvent);
     }
 
