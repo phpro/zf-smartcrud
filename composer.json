@@ -42,8 +42,7 @@
     },
     "suggest": {
         "doctrine/doctrine-orm-module":      "If you want to use the Doctrine Gateway",
-        "zendframework/zend-db":             "If you want to use the Zend DB Gateway",
-        "phpspec/phpspec":                   "If you want to run the tests, use phpspec 2.0.*@dev"
+        "zendframework/zend-db":             "If you want to use the Zend DB Gateway"
     },
     "autoload": {
         "psr-0": {
