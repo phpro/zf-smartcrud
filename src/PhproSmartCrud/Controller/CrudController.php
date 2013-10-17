@@ -72,6 +72,17 @@ class CrudController extends AbstractActionController
         if (!$formKey) {
             throw new SmartCrudException('There was no form configured to the router');
         }
+        
+        // Add listeners
+        $RouteListeners = $routeMatch->getParam('listeners', array());
+        foreach ($RouteListeners as $listener) {
+            if (!$this->getServiceManager()->has($listener)) {
+                throw new SmartCrudException(sprintf('The route listener class %s could not be found', $listener));
+            }
+
+            $eventListener = $this->getServiceManager()->get($listener);
+            $this->getCrudService()->getEventManager()->attach($eventListener);
+        }
 
         // Add entity
         $entity = $this->getCrudService()->loadEntity($entityKey, $id);
