@@ -294,18 +294,19 @@ class CrudControllerSpec extends ObjectBehavior
      * @param \PhproSmartCrud\Service\CrudService $crudService
      * @param \stdClass $entity
      */
-    public function it_should_throw_exception_when_listeners_are_not_configured($mvcEvent, $routeMatch,$serviceManager,  $crudService, $entity)
+    public function it_should_throw_exception_when_listeners_are_not_configured($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
     {
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-                                                           'entity' => 'stdClass',
-                                                           'form' => 'Zend\Form\Form',
-                                                           'listeners' => array('listener1')
-                                                      ));
+           'entity' => 'stdClass',
+           'form' => 'Zend\Form\Form',
+           'listeners' => array('listener1')
+        ));
         $this->mockServiceManager($serviceManager, $crudService);
         $serviceManager->has('listener1')->willReturn(false);
         $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringOnDispatch($mvcEvent);
     }
+
     /**
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch

@@ -74,8 +74,8 @@ class CrudController extends AbstractActionController
         }
 
         // Add listeners
-        $RouteListeners = $routeMatch->getParam('listeners', array());
-        foreach ($RouteListeners as $listener) {
+        $routeListeners = $routeMatch->getParam('listeners', array());
+        foreach ($routeListeners as $listener) {
             if (!$this->getServiceManager()->has($listener)) {
                 throw new SmartCrudException(sprintf('The route listener class %s could not be found', $listener));
             }
