@@ -5,10 +5,13 @@ Master: [![Build Status](https://secure.travis-ci.org/veewee/PhproSmartCrud.png?
 Module providing a SmartCrud for working with the [Zend Framework 2](https://github.com/zendframework/zf2) MVC
 layer.
 
+WIP
+============
+* feature: The router should have a variabele 'listeners' which configures the crudservice
 
 Todo
 ============
-* feature: The router should have a variabele 'listeners' which configures the crudservice
+
 * improvement: Implement list view (Based on form hydrator)
 * improvement: Implement read view (Based on form hydrator)
 * improvement: Add better redirect funcitonality to the RedirectModel
