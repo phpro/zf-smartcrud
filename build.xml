@@ -88,10 +88,10 @@
                   failonerror="true"
                   append="true"
                   >
-                <arg value="--level=psr2" />
-                <arg value="--dry-run" />
-                <arg value="-v" />
                 <arg value="fix" />
+                <arg value="--level=psr2" />
+                <arg value="-v" />
+                <arg value="--dry-run" />
                 <arg value="${basedir}" />
             </exec>
 
