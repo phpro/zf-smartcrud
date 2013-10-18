@@ -70,7 +70,7 @@ class CrudControllerSpec extends ObjectBehavior
         $mvcEvent->setResult(Argument::any())->willReturn ($mvcEvent);
         $routeMatch->getParam('action', Argument::any())->willReturn('index');
         $routeMatch->getParam('id', Argument::any())->willReturn(null);
-
+        $routeMatch->getParam('listeners', Argument::any())->willReturn(array());
         foreach ($params as $key => $value) {
             $routeMatch->getParam($key, Argument::any())->willReturn($value);
         }
@@ -116,6 +116,7 @@ class CrudControllerSpec extends ObjectBehavior
             'entity' => 'stdClass',
             'form' => 'Zend\Form\Form',
             'id' => null,
+            'listeners' => array(),
             'output' => array(
                 'list' => 'ViewModelInterface',
                 'create' => 'ViewModelInterface',
@@ -201,7 +202,7 @@ class CrudControllerSpec extends ObjectBehavior
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
             'entity' => 'stdClass',
-            'form' => 'Zend\Form\Form'
+            'form' => 'Zend\Form\Form',
         ));
 
         // Configure service
@@ -245,6 +246,58 @@ class CrudControllerSpec extends ObjectBehavior
         // Form config:
         $form->bind(Argument::type('stdClass'))->shouldBeCalled();
         $form->setBindOnValidate(true)->shouldBeCalled();
+    }
+
+    /**
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \stdClass $entity
+     * @param \Zend\EventManager\EventManager $eventManager
+     */
+    public function it_should_configure_listeners_in_the_crud_service_on_dispatch($mvcEvent, $routeMatch,
+        $serviceManager, $crudService, $entity, $eventManager)
+    {
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'entity' => 'stdClass',
+                                                           'form' => 'Zend\Form\Form',
+                                                           'listeners' => array('listener1')
+                                                      ));
+        $dummy = Argument::cetera();
+
+        $this->mockServiceManager($serviceManager, $crudService);
+        $serviceManager->has('listener1')->willReturn(true);
+        $serviceManager->get('listener1')->willReturn('listener1');
+
+        $crudService->getEventManager()->willReturn($eventManager);
+
+        $serviceManager->has('listener1')->shouldBeCalled();
+        $serviceManager->get('listener1')->shouldBeCalled();
+        $crudService->getEventManager()->shouldBeCalled();
+        $eventManager->attach('listener1')->shouldBeCalled();
+        $this->onDispatch($mvcEvent);
+    }
+
+    /**
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \stdClass $entity
+     */
+    public function it_should_throw_exception_when_listeners_are_not_configured($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
+    {
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+           'entity' => 'stdClass',
+           'form' => 'Zend\Form\Form',
+           'listeners' => array('listener1')
+        ));
+        $this->mockServiceManager($serviceManager, $crudService);
+        $serviceManager->has('listener1')->willReturn(false);
+        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringOnDispatch($mvcEvent);
     }
 
     /**
