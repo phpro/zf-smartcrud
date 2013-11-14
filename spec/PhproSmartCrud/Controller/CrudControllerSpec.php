@@ -31,11 +31,6 @@ class CrudControllerSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Zend\Mvc\Controller\AbstractActionController');
     }
 
-    public function it_should_implement_Zend_ServiceLocatorInterface()
-    {
-        $this->shouldBeAnInstanceOf('Zend\ServiceManager\ServiceLocatorAwareInterface');
-    }
-
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
      * @param \PhproSmartCrud\Service\CrudService $crudService
@@ -402,27 +397,8 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_have_fluent_interfaces($serviceManager)
     {
         $dummy = Argument::any();
-        $this->setServiceLocator($serviceManager)->shouldReturn(null); // because it is like that in the default serviceLocator trait
         $this->setForm($dummy)->shouldReturn($this);
         $this->setEntity($dummy)->shouldReturn($this);
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     */
-    public function it_should_have_a_service_manager($serviceManager)
-    {
-        $this->setServiceLocator($serviceManager);
-        $this->getServiceLocator()->shouldReturn($serviceManager);
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     */
-    public function it_should_load_service_manager_from_controller_manager($serviceManager)
-    {
-        $this->setServiceLocator($serviceManager);
-        $this->getServiceLocator()->shouldReturn($serviceManager);
     }
 
     /**
