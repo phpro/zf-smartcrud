@@ -46,8 +46,8 @@ class CrudServiceFactorySpec extends ObjectBehavior
         $this->setServiceLocator($serviceLocator->reveal());
 
         // Mock crud service:
-        $serviceLocator->has('phpro.smartcrud.crud')->willReturn(true);
-        $serviceLocator->get('phpro.smartcrud.crud')->willReturn($crudService->reveal());
+        $serviceLocator->has('PhproSmartCrud\Service\CrudService')->willReturn(true);
+        $serviceLocator->get('PhproSmartCrud\Service\CrudService')->willReturn($crudService->reveal());
 
         // Mock gateway
         $serviceLocator->has('service.gateway')->willReturn(true);
@@ -256,8 +256,8 @@ class CrudServiceFactorySpec extends ObjectBehavior
     public function it_should_create_crudservice_object($serviceLocator, $crudService, $dummy)
     {
         $this->mockConfiguration($serviceLocator, array('gateway' => 'service.gateway'));
-        $serviceLocator->has('phpro.smartcrud.crud')->willReturn(true);
-        $serviceLocator->get('phpro.smartcrud.crud')->willReturn($crudService);
+        $serviceLocator->has('PhproSmartCrud\Service\CrudService')->willReturn(true);
+        $serviceLocator->get('PhproSmartCrud\Service\CrudService')->willReturn($crudService);
         $serviceLocator->has('service.gateway')->willReturn(true);
         $serviceLocator->get('service.gateway')->willReturn($dummy);
         $this->mockParams($serviceLocator, array());
