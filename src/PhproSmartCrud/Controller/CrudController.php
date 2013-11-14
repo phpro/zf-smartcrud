@@ -61,7 +61,8 @@ class CrudController extends AbstractActionController
             throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
         }
 
-        $id = $routeMatch->getParam('id', null);
+        $identifierName = $routeMatch->getParam('identifier-name', 'id');
+        $id = $routeMatch->getParam($identifierName, null);
         $entityKey = $routeMatch->getParam('entity', false);
         $formKey = $routeMatch->getParam('form', false);
 

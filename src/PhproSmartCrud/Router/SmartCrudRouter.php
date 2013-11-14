@@ -42,7 +42,7 @@ class SmartCrudRouter extends Segment
             'action' => 'list',
             'entity' => null,
             'form' => null,
-            'id' => null,
+            'identifier-name' => 'id',
             'listeners' => array(),
             'output' => array(
                 'list' => 'phpro.smartcrud.view.model.view',

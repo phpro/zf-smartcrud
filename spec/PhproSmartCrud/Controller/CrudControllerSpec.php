@@ -69,7 +69,19 @@ class CrudControllerSpec extends ObjectBehavior
         $mvcEvent->getRouteMatch()->willReturn($routeMatch);
         $mvcEvent->setResult(Argument::any())->willReturn ($mvcEvent);
         $routeMatch->getParam('action', Argument::any())->willReturn('index');
-        $routeMatch->getParam('id', Argument::any())->willReturn(null);
+        if(array_key_exists('identifier-name',$params)) {
+            $identifierName = $params['identifier-name'];
+            $routeMatch->getParam('identifier-name', Argument::any())->willReturn($identifierName);
+            if (array_key_exists($identifierName, $params)) {
+                $routeMatch->getParam($identifierName, Argument::any())->willReturn($params[$identifierName]);
+            } else {
+                $routeMatch->getParam($identifierName, Argument::any())->willReturn(null);
+            }
+        } else {
+            $routeMatch->getParam('identifier-name', Argument::any())->willReturn('id');
+            $routeMatch->getParam('id', Argument::any())->willReturn(null);
+        }
+
         $routeMatch->getParam('listeners', Argument::any())->willReturn(array());
         foreach ($params as $key => $value) {
             $routeMatch->getParam($key, Argument::any())->willReturn($value);
@@ -115,7 +127,8 @@ class CrudControllerSpec extends ObjectBehavior
             'action' => '',
             'entity' => 'stdClass',
             'form' => 'Zend\Form\Form',
-            'id' => null,
+            'identifier-name' => 'id',
+            'id' => '',
             'listeners' => array(),
             'output' => array(
                 'list' => 'ViewModelInterface',
@@ -176,6 +189,7 @@ class CrudControllerSpec extends ObjectBehavior
         $params->fromRoute()->willReturn($paramsData);
         $params->fromPost()->willReturn($paramsData);
         $params->fromQuery()->willReturn($paramsData);
+        $params->fromRoute('identifier-name', Argument::any())->willReturn('id');
         $params->fromRoute('id', Argument::any())->willReturn(1);
 
         $serviceManager->get('phpro.smartcrud.params')->willReturn($params);
@@ -214,6 +228,62 @@ class CrudControllerSpec extends ObjectBehavior
         $crudService->loadEntity('stdClass', null)->shouldBeCalled();
         $this->getEntity()->shouldBe($entity);
         $crudService->setEntity($entity)->shouldBeCalled();
+    }
+
+    /**
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \stdClass $entity
+     */
+    public function it_should_use_the_identifier_name_to_match_the_entity_id_in_the_route($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
+    {
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'identifier-name' => 'a-custom-identifier',
+                                                           'a-custom-identifier' => '15',
+                                                           'entity' => 'stdClass',
+                                                           'form' => 'Zend\Form\Form',
+                                                      ));
+
+        // Configure service
+        $this->mockServiceManager($serviceManager, $crudService);
+        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
+
+        // Test
+        $this->onDispatch($mvcEvent);
+        $routeMatch->getParam('identifier-name', 'id')->shouldBeCalled();
+        $routeMatch->getParam('id', null)->shouldNotBeCalled();
+        $routeMatch->getParam('a-custom-identifier', null)->shouldBeCalled();
+        $crudService->loadEntity('stdClass', 15)->shouldBeCalled();
+    }
+
+    /**
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \stdClass $entity
+     */
+    public function it_should_use_id_as_default_identifier_name($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
+    {
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'id' => '15',
+                                                           'entity' => 'stdClass',
+                                                           'form' => 'Zend\Form\Form',
+                                                      ));
+
+        // Configure service
+        $this->mockServiceManager($serviceManager, $crudService);
+        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
+
+        // Test
+        $this->onDispatch($mvcEvent);
+        $routeMatch->getParam('identifier-name', 'id')->shouldBeCalled();
+        $routeMatch->getParam('id', null)->shouldBeCalled();
+        $crudService->loadEntity('stdClass', 15)->shouldBeCalled();
     }
 
     /**
