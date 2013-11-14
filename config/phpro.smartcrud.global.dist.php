@@ -9,14 +9,14 @@ return array(
         /**
          * Default gateway object
          */
-        'gateway' => 'phpro.smartcrud.gateway.doctrine',
+        'gateway' => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
 
         /**
          * Add default listeners to the smartcrud
          */
         'listeners' => array(
-            'phpro.smartcrud.listener.flashmessenger',
-            'phpro.smartcrud.listener.bjyauthorize',
+            'PhproSmartCrud\Listener\FlashMessenger',
+             'PhproSmartCrud\Listener\BjyAuthorize',
         ),
     ),
 

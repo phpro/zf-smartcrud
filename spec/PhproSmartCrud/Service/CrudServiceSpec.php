@@ -321,7 +321,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_fetch_a_list($listService)
     {
-        $this->mockActionService('phpro.smartcrud.list', $listService);
+        $this->mockActionService('PhproSmartCrud\Service\ListService', $listService);
 
         $data = array('param1' => 'value1', 'param2' => 'value2');
         $listService->getList()->willReturn($data);
@@ -333,7 +333,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_create_a_valid_entity($createService)
     {
-        $this->mockActionService('phpro.smartcrud.create', $createService);
+        $this->mockActionService('PhproSmartCrud\Service\CreateService', $createService);
         $this->mockValidation(true);
 
         // Test the create
@@ -346,7 +346,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_not_create_an_invalid_entity($createService)
     {
-        $this->mockActionService('phpro.smartcrud.create', $createService);
+        $this->mockActionService('PhproSmartCrud\Service\CreateService', $createService);
         $this->mockValidation(false);
 
         // Test the create
@@ -359,7 +359,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_invalid_create_event($eventManager, $createService)
     {
-        $this->mockActionService('phpro.smartcrud.create', $createService);
+        $this->mockActionService('PhproSmartCrud\Service\CreateService', $createService);
         $this->mockValidation(true);
         $this->mockEventManager($eventManager);
         $createService->create()->willReturn(false);
@@ -373,7 +373,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_read_an_entity($readService)
     {
-        $this->mockActionService('phpro.smartcrud.read', $readService);
+        $this->mockActionService('PhproSmartCrud\Service\ReadService', $readService);
 
         // Test the read
         $entity = new \stdClass();
@@ -386,7 +386,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_update_a_valid_entity($updateService)
     {
-        $this->mockActionService('phpro.smartcrud.update', $updateService);
+        $this->mockActionService('PhproSmartCrud\Service\UpdateService', $updateService);
         $this->mockValidation(true);
 
         // Test the update
@@ -399,7 +399,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_not_update_an_invalid_entity($updateService)
     {
-        $this->mockActionService('phpro.smartcrud.update', $updateService);
+        $this->mockActionService('PhproSmartCrud\Service\UpdateService', $updateService);
         $this->mockValidation(false);
 
         // Test the update
@@ -412,7 +412,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_invalid_update_event($eventManager, $updateService)
     {
-        $this->mockActionService('phpro.smartcrud.update', $updateService);
+        $this->mockActionService('PhproSmartCrud\Service\UpdateService', $updateService);
         $this->mockValidation(true);
         $this->mockEventManager($eventManager);
         $updateService->update()->willReturn(false);
@@ -426,7 +426,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_delete_an_entity($deleteService)
     {
-        $this->mockActionService('phpro.smartcrud.delete', $deleteService);
+        $this->mockActionService('PhproSmartCrud\Service\DeleteService', $deleteService);
         $this->mockValidation(true);
 
         // Test the update
@@ -440,7 +440,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_invalid_delete_event($eventManager, $deleteService)
     {
-        $this->mockActionService('phpro.smartcrud.delete', $deleteService);
+        $this->mockActionService('PhproSmartCrud\Service\DeleteService', $deleteService);
         $this->mockEventManager($eventManager);
         $deleteService->delete()->willReturn(false);
 

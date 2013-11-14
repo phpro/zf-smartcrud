@@ -189,7 +189,7 @@ class CrudController extends AbstractActionController
     protected function getModelType($modelKey)
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
-            $model = $this->getServiceLocator()->get('phpro.smartcrud.view.model.json');
+            $model = $this->getServiceLocator()->get('PhproSmartCrud\View\Model\JsonModel');
         } else {
             $model = $this->getServiceLocator()->get($modelKey);
         }
@@ -215,7 +215,7 @@ class CrudController extends AbstractActionController
     {
         if (!$this->crudService) {
             /** @var \PhproSmartCrud\Service\CrudService $crudService  */
-            $crudService = $this->getServiceLocator()->get('phpro.smartcrud');
+            $crudService = $this->getServiceLocator()->get('PhproSmartCrud\Service\CrudServiceFactory');
             $crudService
                 ->setForm($this->getForm())
                 ->setEntity($this->getEntity());

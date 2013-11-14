@@ -97,7 +97,7 @@ class CrudServiceFactory
     public function configureParameters($smartCrud)
     {
         $serviceLocator = $this->getServiceLocator();
-        $parameterService = $serviceLocator->get('phpro.smartcrud.params');
+        $parameterService = $serviceLocator->get('PhproSmartCrud\Service\ParametersService');
         $smartCrud->setParameters($parameterService);
 
         return $this;

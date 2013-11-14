@@ -52,7 +52,7 @@ class CrudService extends AbstractCrudService
      */
     public function getList()
     {
-        $service = $this->getActionService('phpro.smartcrud.list');
+        $service = $this->getActionService('PhproSmartCrud\Service\ListService');
         return $service->getList();
     }
 
@@ -63,7 +63,7 @@ class CrudService extends AbstractCrudService
     {
         $result = false;
         if ($this->isValid()) {
-            $service = $this->getActionService('phpro.smartcrud.create');
+            $service = $this->getActionService('PhproSmartCrud\Service\CreateService');
             $result = $service->create();
         }
 
@@ -79,7 +79,7 @@ class CrudService extends AbstractCrudService
      */
     public function read()
     {
-        $service = $this->getActionService('phpro.smartcrud.read');
+        $service = $this->getActionService('PhproSmartCrud\Service\ReadService');
         return $service->read();
     }
 
@@ -90,7 +90,7 @@ class CrudService extends AbstractCrudService
     {
         $result = false;
         if ($this->isValid()) {
-            $service = $this->getActionService('phpro.smartcrud.update');
+            $service = $this->getActionService('PhproSmartCrud\Service\UpdateService');
             $result = $service->update();
         }
 
@@ -106,7 +106,7 @@ class CrudService extends AbstractCrudService
      */
     public function delete()
     {
-        $service = $this->getActionService('phpro.smartcrud.delete');
+        $service = $this->getActionService('PhproSmartCrud\Service\DeleteService');
         $result = $service->delete();
 
         if (!$result) {

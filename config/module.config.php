@@ -2,45 +2,45 @@
 return array(
     'service_manager' => array(
         'factories' => array(
-            'phpro.smartcrud'           => 'PhproSmartCrud\Service\CrudServiceFactory',
-            'phpro.smartcrud.params'    => 'PhproSmartCrud\Service\ParametersService',
+            'PhproSmartCrud\Service\CrudServiceFactory'   => 'PhproSmartCrud\Service\CrudServiceFactory',
+            'PhproSmartCrud\Service\ParametersService'    => 'PhproSmartCrud\Service\ParametersService',
         ),
         'invokables' => array(
             // Services
-            'phpro.smartcrud.crud'      => 'PhproSmartCrud\Service\CrudService',
-            'phpro.smartcrud.list'      => 'PhproSmartCrud\Service\ListService',
-            'phpro.smartcrud.create'    => 'PhproSmartCrud\Service\CreateService',
-            'phpro.smartcrud.read'      => 'PhproSmartCrud\Service\ReadService',
-            'phpro.smartcrud.update'    => 'PhproSmartCrud\Service\UpdateService',
-            'phpro.smartcrud.delete'    => 'PhproSmartCrud\Service\DeleteService',
+            'PhproSmartCrud\Service\CrudService'     => 'PhproSmartCrud\Service\CrudService',
+            'PhproSmartCrud\Service\ListService'     => 'PhproSmartCrud\Service\ListService',
+            'PhproSmartCrud\Service\CreateService'   => 'PhproSmartCrud\Service\CreateService',
+            'PhproSmartCrud\Service\ReadService'     => 'PhproSmartCrud\Service\ReadService',
+            'PhproSmartCrud\Service\UpdateService'   => 'PhproSmartCrud\Service\UpdateService',
+            'PhproSmartCrud\Service\DeleteService'   => 'PhproSmartCrud\Service\DeleteService',
 
             // Gateways
-            'phpro.smartcrud.gateway.doctrine'  => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
-            'phpro.smartcrud.gateway.zenddb'    => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
+            'PhproSmartCrud\Gateway\DoctrineCrudGateway'  => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
+            'PhproSmartCrud\Gateway\ZendDbCrudGateway'    => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
 
             // Listeners
-            'phpro.smartcrud.listener.bjyauthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
-            'phpro.smartcrud.listener.flashmessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
+            'PhproSmartCrud\Listener\BjyAuthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
+            'PhproSmartCrud\Listener\FlashMessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
 
             // View models
-            'phpro.smartcrud.view.model.json'       =>  'PhproSmartCrud\View\Model\JsonModel',
-            'phpro.smartcrud.view.model.redirect'   =>  'PhproSmartCrud\View\Model\RedirectModel',
-            'phpro.smartcrud.view.model.view'       =>  'PhproSmartCrud\View\Model\ViewModel',
+            'PhproSmartCrud\View\Model\JsonModel'       =>  'PhproSmartCrud\View\Model\JsonModel',
+            'PhproSmartCrud\View\Model\RedirectModel'   =>  'PhproSmartCrud\View\Model\RedirectModel',
+            'PhproSmartCrud\View\Model\ViewModel'       =>  'PhproSmartCrud\View\Model\ViewModel',
 
             // View strategies
-            'phpro.smartcrud.view.strategy.json'        =>  'PhproSmartCrud\View\Strategy\JsonStrategy',
-            'phpro.smartcrud.view.strategy.redirect'    =>  'PhproSmartCrud\View\Strategy\RedirectStrategy',
+            'PhproSmartCrud\View\Strategy\JsonStrategy'        =>  'PhproSmartCrud\View\Strategy\JsonStrategy',
+            'PhproSmartCrud\View\Strategy\RedirectStrategy'    =>  'PhproSmartCrud\View\Strategy\RedirectStrategy',
         ),
         // Make sure to generate new instances ...
         'shared' => array(
-            'phpro.smartcrud.view.model.json'       =>  false,
-            'phpro.smartcrud.view.model.redirect'   =>  false,
-            'phpro.smartcrud.view.model.view'       =>  false,
+            'PhproSmartCrud\View\Model\JsonModel'       =>  false,
+            'PhproSmartCrud\View\Model\RedirectModel'   =>  false,
+            'PhproSmartCrud\View\Model\ViewModel'       =>  false,
         ),
     ),
     'controllers' => array(
         'invokables' => array(
-            'phpro.smartcrud.controller' => 'PhproSmartCrud\Controller\CrudController'
+            'PhproSmartCrud\Controller\CrudController' => 'PhproSmartCrud\Controller\CrudController'
         ),
     ),
     'view_manager' => array(
@@ -48,8 +48,8 @@ return array(
             'phpro-smartcrud' => __DIR__ . '/../view',
         ),
         'strategies' => array(
-            'phpro.smartcrud.view.strategy.json',
-            'phpro.smartcrud.view.strategy.redirect',
+            'PhproSmartCrud\View\Strategy\JsonStrategy',
+            'PhproSmartCrud\View\Strategy\RedirectStrategy',
        )
     ),
 );

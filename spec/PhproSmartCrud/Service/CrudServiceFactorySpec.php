@@ -78,8 +78,8 @@ class CrudServiceFactorySpec extends ObjectBehavior
         $params->fromRoute('id', Argument::any())->willReturn(1);
 
         $params = $params->reveal();
-        $serviceLocator->has('phpro.smartcrud.params')->willReturn(true);
-        $serviceLocator->get('phpro.smartcrud.params')->willReturn($params);
+        $serviceLocator->has('PhproSmartCrud\Service\ParametersService')->willReturn(true);
+        $serviceLocator->get('PhproSmartCrud\Service\ParametersService')->willReturn($params);
         return $params;
     }
 

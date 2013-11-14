@@ -43,7 +43,7 @@ class CrudControllerSpec extends ObjectBehavior
     protected function mockServiceManager($serviceManager, $crudService)
     {
         $this->setServiceLocator($serviceManager);
-        $serviceManager->get('phpro.smartcrud')->willReturn($crudService);
+        $serviceManager->get('PhproSmartCrud\Service\CrudServiceFactory')->willReturn($crudService);
 
         // Default route config
         $prophet = new Prophet();
@@ -113,7 +113,7 @@ class CrudControllerSpec extends ObjectBehavior
         $jsonModel = $prophet->prophesize('\PhproSmartCrud\View\Model\JsonModel');
 
         $serviceManager->get('ViewModelInterface')->willReturn($viewModel);
-        $serviceManager->get('phpro.smartcrud.view.model.json')->willReturn($jsonModel);
+        $serviceManager->get('PhproSmartCrud\View\Model\JsonModel')->willReturn($jsonModel);
     }
 
     /**
@@ -192,7 +192,7 @@ class CrudControllerSpec extends ObjectBehavior
         $params->fromRoute('identifier-name', Argument::any())->willReturn('id');
         $params->fromRoute('id', Argument::any())->willReturn(1);
 
-        $serviceManager->get('phpro.smartcrud.params')->willReturn($params);
+        $serviceManager->get('PhproSmartCrud\Service\ParametersService')->willReturn($params);
     }
 
     /**
