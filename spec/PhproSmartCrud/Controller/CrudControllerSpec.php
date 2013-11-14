@@ -31,9 +31,9 @@ class CrudControllerSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Zend\Mvc\Controller\AbstractActionController');
     }
 
-    public function it_should_implement_Zend_ServiceManagerInterface()
+    public function it_should_implement_Zend_ServiceLocatorInterface()
     {
-        $this->shouldBeAnInstanceOf('Zend\ServiceManager\ServiceManagerAwareInterface');
+        $this->shouldBeAnInstanceOf('Zend\ServiceManager\ServiceLocatorAwareInterface');
     }
 
     /**
@@ -42,7 +42,7 @@ class CrudControllerSpec extends ObjectBehavior
      */
     protected function mockServiceManager($serviceManager, $crudService)
     {
-        $this->setServiceManager($serviceManager);
+        $this->setServiceLocator($serviceManager);
         $serviceManager->get('phpro.smartcrud')->willReturn($crudService);
 
         // Default route config
@@ -402,7 +402,7 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_have_fluent_interfaces($serviceManager)
     {
         $dummy = Argument::any();
-        $this->setServiceManager($serviceManager)->shouldReturn($this);
+        $this->setServiceLocator($serviceManager)->shouldReturn(null); // because it is like that in the default serviceLocator trait
         $this->setForm($dummy)->shouldReturn($this);
         $this->setEntity($dummy)->shouldReturn($this);
     }
@@ -412,8 +412,8 @@ class CrudControllerSpec extends ObjectBehavior
      */
     public function it_should_have_a_service_manager($serviceManager)
     {
-        $this->setServiceManager($serviceManager);
-        $this->getServiceManager()->shouldReturn($serviceManager);
+        $this->setServiceLocator($serviceManager);
+        $this->getServiceLocator()->shouldReturn($serviceManager);
     }
 
     /**
@@ -422,7 +422,7 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_load_service_manager_from_controller_manager($serviceManager)
     {
         $this->setServiceLocator($serviceManager);
-        $this->getServiceManager()->shouldReturn($serviceManager);
+        $this->getServiceLocator()->shouldReturn($serviceManager);
     }
 
     /**
