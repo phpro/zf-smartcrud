@@ -28,14 +28,82 @@ class CrudController extends AbstractActionController
     protected $crudService;
 
     /**
-     * @var Form
+     * @var mixed
      */
-    protected $form;
+    protected $entity;
 
     /**
      * @var mixed
      */
-    protected $entity;
+    protected $entityId;
+
+    /**
+     * @var string
+     */
+    protected $entityKey;
+
+    /**
+     * @var string
+     */
+    protected $formKey;
+
+    /**
+     * @param mixed $entityId
+     */
+    public function setEntityId($entityId)
+    {
+        $this->entityId = $entityId;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntityId()
+    {
+        return $this->entityId;
+    }
+
+    /**
+     * @param string $formKey
+     */
+    public function setFormKey($formKey)
+    {
+        if (!$formKey) {
+            throw new SmartCrudException('There was no form configured to the router');
+        }
+        $this->formKey = $formKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormKey()
+    {
+        return $this->formKey;
+    }
+
+    /**
+     * @param string $entityKey
+     */
+    public function setEntityKey($entityKey)
+    {
+        if (!$entityKey) {
+            throw new SmartCrudException('There was no entity type configured to the router');
+        }
+        $this->entityKey = $entityKey;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityKey()
+    {
+        return $this->entityKey;
+    }
 
     /**
      * Inject parameters from the router directly in the controller
@@ -54,17 +122,10 @@ class CrudController extends AbstractActionController
         }
 
         $identifierName = $routeMatch->getParam('identifier-name', 'id');
-        $id = $routeMatch->getParam($identifierName, null);
-        $entityKey = $routeMatch->getParam('entity', false);
-        $formKey = $routeMatch->getParam('form', false);
 
-        if (!$entityKey) {
-            throw new SmartCrudException('There was no entity type configured to the router');
-        }
-
-        if (!$formKey) {
-            throw new SmartCrudException('There was no form configured to the router');
-        }
+        $this->setEntityId($routeMatch->getParam($identifierName, null));
+        $this->setEntityKey($routeMatch->getParam('entity', false));
+        $this->setFormKey($routeMatch->getParam('form', false));
 
         // Add listeners
         $routeListeners = $routeMatch->getParam('listeners', array());
@@ -77,17 +138,9 @@ class CrudController extends AbstractActionController
         }
 
         // Add entity
-        $entity = $this->getCrudService()->loadEntity($entityKey, $id);
-        $this->setEntity($entity);
-        $this->getCrudService()->setEntity($entity);
-
+        $this->getCrudService()->setEntityKey($this->getEntityKey());
         // Add form
-        /** @var \Zend\Form\Form $form  */
-        $form = $this->getServiceLocator()->get($formKey);
-        $form->bind($this->getEntity());
-        $form->setBindOnValidate(true);
-        $this->setForm($form);
-        $this->getCrudService()->setForm($form);
+        $this->getCrudService()->setFormKey($this->getFormKey());
 
         return parent::onDispatch($e);
     }
@@ -173,8 +226,8 @@ class CrudController extends AbstractActionController
         // Set model parameters:
         $model->setVariable('action', $controllerAction);
         $model->setVariable('result', $result);
-        $model->setVariable('form', $this->getForm());
-        $model->setVariable('entity', $this->getEntity());
+        $model->setVariable('form',  $this->getCrudService()->getForm($this->getEntityId()));
+        $model->setVariable('entity', $this->getCrudService()->loadEntity($this->getEntityId()));
         $model->setTemplate(sprintf('phpro-smartcrud/%s', $controllerAction));
 
         return $model;
@@ -216,50 +269,9 @@ class CrudController extends AbstractActionController
         if (!$this->crudService) {
             /** @var \PhproSmartCrud\Service\CrudService $crudService  */
             $crudService = $this->getServiceLocator()->get('PhproSmartCrud\Service\CrudServiceFactory');
-            $crudService
-                ->setForm($this->getForm())
-                ->setEntity($this->getEntity());
             $this->crudService = $crudService;
         }
         return $this->crudService;
-    }
-
-    /**
-     * @param \Zend\Form\Form $form
-     *
-     * @return $this
-     */
-    public function setForm($form)
-    {
-        $this->form = $form;
-        return $this;
-    }
-
-    /**
-     * @return \Zend\Form\Form
-     */
-    public function getForm()
-    {
-        return $this->form;
-    }
-
-    /**
-     * @param $entity
-     *
-     * @return $this
-     */
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEntity()
-    {
-        return $this->entity;
     }
 
 }

@@ -34,8 +34,9 @@ class CrudControllerSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
      * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \Zend\Form\Form $form
      */
-    protected function mockServiceManager($serviceManager, $crudService)
+    protected function mockServiceManager($serviceManager, $crudService, $form = null)
     {
         $this->setServiceLocator($serviceManager);
         $serviceManager->get('PhproSmartCrud\Service\CrudServiceFactory')->willReturn($crudService);
@@ -44,10 +45,16 @@ class CrudControllerSpec extends ObjectBehavior
         $prophet = new Prophet();
         $entity = $prophet->prophesize('stdClass');
         $serviceManager->get('stdClass')->willReturn($entity);
-        $serviceManager->get('Zend\Form\Form')->willReturn($prophet->prophesize('Zend\Form\Form'));
+
+        if($form == null) {
+            $form = $prophet->prophesize('\Zend\Form\Form');
+        }
 
         // mock methods to prevent errors
         $dummy = Argument::any();
+        $crudService->setEntityKey($dummy)->willReturn($crudService);
+        $crudService->setFormKey($dummy)->willReturn($crudService);
+        $crudService->getForm($dummy)->willReturn($form);
         $crudService->setForm($dummy)->willReturn($crudService);
         $crudService->setEntity($dummy)->willReturn($crudService);
         $crudService->loadEntity(Argument::cetera())->willReturn($entity);
@@ -206,23 +213,22 @@ class CrudControllerSpec extends ObjectBehavior
      * @param \PhproSmartCrud\Service\CrudService $crudService
      * @param \stdClass $entity
      */
-    public function it_should_configure_entity_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
+    public function it_should_configure_entity_and_form_key_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
     {
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-            'entity' => 'stdClass',
-            'form' => 'Zend\Form\Form',
-        ));
+                                                           'entity' => 'stdClass',
+                                                           'form' => 'Zend\Form\Form',
+                                                      ));
 
         // Configure service
         $this->mockServiceManager($serviceManager, $crudService);
-        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
 
         // Test
         $this->onDispatch($mvcEvent);
-        $crudService->loadEntity('stdClass', null)->shouldBeCalled();
-        $this->getEntity()->shouldBe($entity);
-        $crudService->setEntity($entity)->shouldBeCalled();
+        $crudService->setEntityKey('stdClass')->shouldBeCalled();
+        $crudService->setFormKey('Zend\Form\Form')->shouldBeCalled();
+
     }
 
     /**
@@ -251,7 +257,6 @@ class CrudControllerSpec extends ObjectBehavior
         $routeMatch->getParam('identifier-name', 'id')->shouldBeCalled();
         $routeMatch->getParam('id', null)->shouldNotBeCalled();
         $routeMatch->getParam('a-custom-identifier', null)->shouldBeCalled();
-        $crudService->loadEntity('stdClass', 15)->shouldBeCalled();
     }
 
     /**
@@ -278,39 +283,6 @@ class CrudControllerSpec extends ObjectBehavior
         $this->onDispatch($mvcEvent);
         $routeMatch->getParam('identifier-name', 'id')->shouldBeCalled();
         $routeMatch->getParam('id', null)->shouldBeCalled();
-        $crudService->loadEntity('stdClass', 15)->shouldBeCalled();
-    }
-
-    /**
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     * @param \Zend\Form\Form $form
-     */
-    public function it_should_configure_form_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $crudService, $form)
-    {
-        // Configure routematch
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-            'entity' => 'stdClass',
-            'form' => 'ServiceFormKey'
-        ));
-
-        // Configure service
-        $serviceManager->get('ServiceFormKey')->willReturn($form);
-        $this->mockServiceManager($serviceManager, $crudService);
-
-        // Test
-        $this->onDispatch($mvcEvent);
-        $serviceManager->get('ServiceFormKey')->shouldBeCalled();
-        $this->getForm()->shouldBe($form);
-
-        // Service config
-        $crudService->setForm($form)->shouldBeCalled();
-
-        // Form config:
-        $form->bind(Argument::type('stdClass'))->shouldBeCalled();
-        $form->setBindOnValidate(true)->shouldBeCalled();
     }
 
     /**
@@ -397,26 +369,9 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_have_fluent_interfaces($serviceManager)
     {
         $dummy = Argument::any();
-        $this->setForm($dummy)->shouldReturn($this);
-        $this->setEntity($dummy)->shouldReturn($this);
-    }
-
-    /**
-     * @param \Zend\Form\Form $form
-     */
-    public function it_should_have_a_form($form)
-    {
-        $this->setForm($form);
-        $this->getForm()->shouldReturn($form);
-    }
-
-    /**
-     * @param \stdClass $entity
-     */
-    public function it_should_have_an_entity($entity)
-    {
-        $this->setEntity($entity);
-        $this->getEntity()->shouldReturn($entity);
+        $this->setEntityId($dummy)->shouldReturn($this);
+        $this->setEntityKey($dummy)->shouldReturn($this);
+        $this->setFormKey($dummy)->shouldReturn($this);
     }
 
     /**
@@ -439,8 +394,6 @@ class CrudControllerSpec extends ObjectBehavior
 
         // validate:
         $this->getCrudService()->shouldReturn($crudService);
-        $crudService->setForm($dummy)->shouldBeCalled();
-        $crudService->setEntity($dummy)->shouldBeCalled();
     }
 
     /**
@@ -543,4 +496,21 @@ class CrudControllerSpec extends ObjectBehavior
         $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringListAction();
     }
 
+    public function it_should_have_an_entity_key()
+    {
+        $this->setEntityKey('stdClass');
+        $this->getEntityKey()->shouldReturn('stdClass');
+    }
+
+    public function it_should_have_a_form_key()
+    {
+        $this->setFormKey('stdClass');
+        $this->getFormKey()->shouldReturn('stdClass');
+    }
+
+    public function it_should_have_an_entity_id()
+    {
+        $this->setEntityId(10);
+        $this->getEntityId()->shouldReturn(10);
+    }
 }

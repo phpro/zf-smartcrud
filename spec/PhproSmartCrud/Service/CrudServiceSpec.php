@@ -166,6 +166,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $dummy = Argument::any();
         $this->setServiceManager($serviceManager)->shouldReturn($this);
         $this->setForm($dummy)->shouldReturn($this);
+        $this->setEntityKey('StdClass')->shouldReturn($this);
     }
 
     /**
@@ -177,13 +178,37 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $this->getServiceManager()->shouldReturn($serviceManager);
     }
 
+    public function it_should_have_an_entity_key()
+    {
+        $this->setEntityKey('stdClass');
+        $this->getEntityKey()->shouldReturn('stdClass');
+    }
+
+
+    public function it_should_have_a_form_key()
+    {
+        $this->setFormKey('stdClass');
+        $this->getFormKey()->shouldReturn('stdClass');
+    }
+
     /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
      * @param \Zend\Form\Form $form
      */
-    public function it_should_have_a_form($form)
+    public function it_should_have_a_form($serviceManager, $form)
     {
-        $this->setForm($form);
-        $this->getForm()->shouldReturn($form);
+        $formKey = '\Zend\Form\Form';
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->setBindOnValidate(Argument::any())->shouldBeCalled();
+
+        $serviceManager->get($formKey)->willReturn($form);
+        $serviceManager->get($formKey)->shouldBeCalled();
+
+        $this->setServiceManager($serviceManager);
+        $this->setFormKey($formKey);
+
+        $this->setForm(null);
+        $this->getForm(Argument::any())->shouldReturn($form);
     }
 
     /**
@@ -191,8 +216,9 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_load_entity($gateway)
     {
+        $this->setEntityKey('stdClass');
         $this->setGateway($gateway);
-        $this->loadEntity('stdClass', 1);
+        $this->loadEntity( 1);
 
         $gateway->loadEntity('stdClass', 1)->shouldBeCalled();
     }
@@ -448,5 +474,18 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldBeCalled();
 
     }
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     */
+    public function it_should_load_the_correct_action_configuration($serviceManager)
+    {
+        $serviceManager->get('Config')->willReturn(array('stdClass' => array('update' => array('listeners' => array('test')))));
+        $this->setServiceManager($serviceManager);
+        $this->setEntityKey('stdClass');
+        $this->getActionServiceConfiguration('update')->shouldBeArray();
+        $this->getActionServiceConfiguration('update')->shouldHaveKey('listeners');
+    }
+
 
 }

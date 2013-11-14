@@ -11,8 +11,6 @@ namespace PhproSmartCrud\Service;
 
 use PhproSmartCrud\Event\CrudEvent;
 use PhproSmartCrud\Exception\SmartCrudException;
-use PhproSmartCrud\Gateway\CrudGatewayInterface;
-use Zend\EventManager\EventManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Form\Form;
@@ -37,14 +35,58 @@ class CrudService extends AbstractCrudService
     protected $form;
 
     /**
+     * @var string
+     */
+    protected $entityKey;
+
+    /**
+     * @var string
+     */
+    protected $formKey;
+
+    /**
+     * @param string $formKey
+     */
+    public function setFormKey($formKey)
+    {
+        $this->formKey = $formKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormKey()
+    {
+        return $this->formKey;
+    }
+
+    /**
+     * @param string $entityKey
+     */
+    public function setEntityKey($entityKey)
+    {
+        $this->entityKey = $entityKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityKey()
+    {
+        return $this->entityKey;
+    }
+
+    /**
      * @param      $entityKey
      * @param null $id
      *
      * @return mixed
      */
-    public function loadEntity($entityKey, $id = null)
+    public function loadEntity($id = null)
     {
-        return $this->getGateway()->loadEntity($entityKey, $id);
+        return $this->getGateway()->loadEntity($this->getEntityKey(), $id);
     }
 
     /**
@@ -218,9 +260,44 @@ class CrudService extends AbstractCrudService
     /**
      * @return \Zend\Form\Form
      */
-    public function getForm()
+    public function getForm($id = null)
     {
+        if (empty($this->form)) {
+            $form = $this->getServiceManager()->get($this->getFormKey());
+            $form->bind($this->loadEntity($id));
+            $form->setBindOnValidate(true);
+            $this->form = $form;
+        }
+
         return $this->form;
     }
 
+
+    /**
+     * Loads action configuration based on the entity-key
+     *
+     * @param $action
+     *
+     * @return array
+     */
+    public function getActionServiceConfiguration($action)
+    {
+        $globalConfig = $this->getGlobalConfig();
+        $configKey    = $this->getEntityKey();
+        $config       = array();
+        if (isset($globalConfig[$configKey][$action])) {
+            $config = $globalConfig[$configKey][$action];
+
+        }
+        return $config;
+    }
+
+    /**
+     * @return array|object
+     */
+    public function getGlobalConfig()
+    {
+        $serviceLocator = $this->getServiceManager();
+        return $serviceLocator->get('Config');
+    }
 }
