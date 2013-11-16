@@ -13,8 +13,6 @@ use PhproSmartCrud\Service\CrudService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Exception;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
 use Zend\Form\Form;
 use Zend\View\Model\ModelInterface;
 
@@ -22,13 +20,7 @@ use Zend\View\Model\ModelInterface;
  * Class CrudController
  */
 class CrudController extends AbstractActionController
-    implements ServiceManagerAwareInterface
 {
-
-    /**
-     * @var ServiceManager
-     */
-    protected $serviceManager;
 
     /**
      * @var CrudService
@@ -61,7 +53,8 @@ class CrudController extends AbstractActionController
             throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
         }
 
-        $id = $routeMatch->getParam('id', null);
+        $identifierName = $routeMatch->getParam('identifier-name', 'id');
+        $id = $routeMatch->getParam($identifierName, null);
         $entityKey = $routeMatch->getParam('entity', false);
         $formKey = $routeMatch->getParam('form', false);
 
@@ -76,10 +69,10 @@ class CrudController extends AbstractActionController
         // Add listeners
         $routeListeners = $routeMatch->getParam('listeners', array());
         foreach ($routeListeners as $listener) {
-            if (!$this->getServiceManager()->has($listener)) {
+            if (!$this->getServiceLocator()->has($listener)) {
                 throw new SmartCrudException(sprintf('The route listener class %s could not be found', $listener));
             }
-            $eventListener = $this->getServiceManager()->get($listener);
+            $eventListener = $this->getServiceLocator()->get($listener);
             $this->getCrudService()->getEventManager()->attach($eventListener);
         }
 
@@ -90,7 +83,7 @@ class CrudController extends AbstractActionController
 
         // Add form
         /** @var \Zend\Form\Form $form  */
-        $form = $this->getServiceManager()->get($formKey);
+        $form = $this->getServiceLocator()->get($formKey);
         $form->bind($this->getEntity());
         $form->setBindOnValidate(true);
         $this->setForm($form);
@@ -196,37 +189,12 @@ class CrudController extends AbstractActionController
     protected function getModelType($modelKey)
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
-            $model = $this->getServiceManager()->get('phpro.smartcrud.view.model.json');
+            $model = $this->getServiceLocator()->get('PhproSmartCrud\View\Model\JsonModel');
         } else {
-            $model = $this->getServiceManager()->get($modelKey);
+            $model = $this->getServiceLocator()->get($modelKey);
         }
 
         return $model;
-    }
-
-    /**
-     * @param ServiceManager $serviceManager
-     *
-     * @return $this
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-        return $this;
-    }
-
-    /**
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        // ServiceManager injected from \Zend\Mvc\Controller\ControllerManager
-        if (!$this->serviceManager) {
-            $sm = $this->getServiceLocator();
-            $this->setServiceManager($sm);
-        }
-
-        return $this->serviceManager;
     }
 
     /**
@@ -247,7 +215,7 @@ class CrudController extends AbstractActionController
     {
         if (!$this->crudService) {
             /** @var \PhproSmartCrud\Service\CrudService $crudService  */
-            $crudService = $this->getServiceManager()->get('phpro.smartcrud');
+            $crudService = $this->getServiceLocator()->get('PhproSmartCrud\Service\CrudServiceFactory');
             $crudService
                 ->setForm($this->getForm())
                 ->setEntity($this->getEntity());

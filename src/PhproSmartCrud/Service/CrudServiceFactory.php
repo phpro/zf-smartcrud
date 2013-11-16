@@ -56,7 +56,7 @@ class CrudServiceFactory
     {
         $this->setServiceLocator($serviceLocator);
         /** @var CrudService $smartCrud  */
-        $smartCrud = $serviceLocator->get('phpro.smartcrud.crud');
+        $smartCrud = $serviceLocator->get('PhproSmartCrud\Service\CrudService');
 
         $this->configureParameters($smartCrud);
         $this->configureGateway($smartCrud);
@@ -97,7 +97,7 @@ class CrudServiceFactory
     public function configureParameters($smartCrud)
     {
         $serviceLocator = $this->getServiceLocator();
-        $parameterService = $serviceLocator->get('phpro.smartcrud.params');
+        $parameterService = $serviceLocator->get('PhproSmartCrud\Service\ParametersService');
         $smartCrud->setParameters($parameterService);
 
         return $this;

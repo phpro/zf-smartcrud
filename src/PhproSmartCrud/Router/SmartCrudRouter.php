@@ -38,20 +38,20 @@ class SmartCrudRouter extends Segment
     protected function getDefaultParams()
     {
         return array(
-            'controller' => 'phpro.smartcrud.controller',
+            'controller' => 'PhproSmartCrud\Controller\CrudController',
             'action' => 'list',
             'entity' => null,
             'form' => null,
-            'id' => null,
+            'identifier-name' => 'id',
             'listeners' => array(),
             'output' => array(
-                'list' => 'phpro.smartcrud.view.model.view',
-                'create' => 'phpro.smartcrud.view.model.view',
-                'post-create' => 'phpro.smartcrud.view.model.redirect',
-                'read' => 'phpro.smartcrud.view.model.view',
-                'update' => 'phpro.smartcrud.view.model.view',
-                'post-update' => 'phpro.smartcrud.view.model.redirect',
-                'delete' => 'phpro.smartcrud.view.model.redirect',
+                'list' => 'PhproSmartCrud\View\Model\ViewModel',
+                'create' => 'PhproSmartCrud\View\Model\ViewModel',
+                'post-create' => 'PhproSmartCrud\View\Model\RedirectModel',
+                'read' => 'PhproSmartCrud\View\Model\ViewModel',
+                'update' => 'PhproSmartCrud\View\Model\ViewModel',
+                'post-update' => 'PhproSmartCrud\View\Model\RedirectModel',
+                'delete' => 'PhproSmartCrud\View\Model\RedirectModel',
             ),
         );
     }
