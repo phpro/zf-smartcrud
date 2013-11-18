@@ -35,7 +35,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_before_create_event($eventManager)
     {
-        $this->create();
+        $this->create($this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldBeCalled();
     }
 
@@ -44,7 +44,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_after_create_event($eventManager)
     {
-        $this->create();
+        $this->create($this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_CREATE))->shouldBeCalled();
     }
 
@@ -53,8 +53,9 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_call_create_function_on_gateway($gateway)
     {
-        $this->create();
-        $gateway->create(Argument::type('stdClass'), Argument::exact(array()))->shouldBeCalled();
+        $data = $this->getMockPostData();
+        $this->create($data);
+        $gateway->create(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
     }
 
     /**
@@ -63,10 +64,16 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
     public function it_should_return_gateway_return_value($gateway)
     {
         $arguments = Argument::cetera();
+        $data = $this->getMockPostData();
         $gateway->create($arguments, array())->willReturn(true);
-        $this->create()->shouldReturn(true);
+        $this->create($data)->shouldReturn(true);
 
         $gateway->create($arguments, array())->willReturn(false);
-        $this->create()->shouldReturn(false);
+        $this->create($data)->shouldReturn(false);
+    }
+
+    protected function getMockPostData()
+    {
+        return array('property' => 'value');
     }
 }

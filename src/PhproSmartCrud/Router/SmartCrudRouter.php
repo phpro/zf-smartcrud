@@ -35,31 +35,56 @@ class SmartCrudRouter extends Segment
      *
      * @return array
      */
-    protected function getDefaultParams()
+    public function getDefaultParams()
     {
         return array(
             'controller' => 'PhproSmartCrud\Controller\CrudController',
             'action' => 'list',
             'entity' => null,
             'form' => null,
-            'identifier-name' => 'id',
-            'listeners' => array(),
-            'output' => array(
-                'list' => 'PhproSmartCrud\View\Model\ViewModel',
-                'create' => 'PhproSmartCrud\View\Model\ViewModel',
-                'post-create' => 'PhproSmartCrud\View\Model\RedirectModel',
-                'read' => 'PhproSmartCrud\View\Model\ViewModel',
-                'update' => 'PhproSmartCrud\View\Model\ViewModel',
-                'post-update' => 'PhproSmartCrud\View\Model\RedirectModel',
-                'delete' => 'PhproSmartCrud\View\Model\RedirectModel',
+            'create' => array(
+                'service'   => 'PhproSmartCrud\Service\CreateServiceFactory' ,
+                'entity'    => null,
+                'form'      => null,
+                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
+                'listeners' => array() ,
             ),
+            'update' => array(
+              'service'     => 'PhproSmartCrud\Service\UpdateServiceFactory' ,
+              'entity'    => null,
+              'form'      => null,
+              'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
+              'listeners'   => array() ,
+            ),
+            'delete' => array(
+                'service'   => 'PhproSmartCrud\Service\DeleteServiceFactory' ,
+                'entity'    => null,
+                'form'      => null,
+                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
+                'listeners' => array() ,
+            ),
+            'read' => array(
+                'service' => 'PhproSmartCrud\Service\ReadServiceFactory' ,
+                'entity'    => null,
+                'form'      => null,
+                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
+                'listeners' => array() ,
+            ),
+            'list' => array(
+                'service' => 'PhproSmartCrud\Service\ListServiceFactory' ,
+                'entity'    => null,
+                'form'      => null,
+                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
+                'listeners' => array() ,
+            ),
+            'identifier-name' => 'id',
         );
     }
 
     /**
      * @return array
      */
-    protected function getDefaultConstraints()
+    public function getDefaultConstraints()
     {
         return array(
             'action' => 'list|create|read|update|delete',

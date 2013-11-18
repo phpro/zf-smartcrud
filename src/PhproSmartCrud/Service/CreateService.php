@@ -22,13 +22,13 @@ class CreateService extends AbstractCrudService
     /**
      * @return bool
      */
-    public function create()
+    public function create($data)
     {
         $em = $this->getEventManager();
         $em->trigger($this->createEvent(CrudEvent::BEFORE_CREATE));
 
         $gateway = $this->getGateway();
-        $result = $gateway->create($this->getEntity(), $this->getParameters()->fromPost());
+        $result = $gateway->create($this->getEntity(), $data);
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_CREATE));
         return $result;

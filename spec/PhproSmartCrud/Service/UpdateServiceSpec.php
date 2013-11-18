@@ -35,7 +35,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_before_update_event($eventManager)
     {
-        $this->update();
+        $this->update(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldBeCalled();
     }
 
@@ -44,17 +44,24 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_after_update_event($eventManager)
     {
-        $this->update();
+        $this->update(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_UPDATE))->shouldBeCalled();
     }
 
     /**
      * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \StdClass $entity
      */
-    public function it_should_call_update_function_on_gateway($gateway)
+    public function it_should_call_update_function_on_gateway($gateway, $entity)
     {
-        $this->update();
-        $gateway->update(Argument::type('stdClass'), Argument::exact(array()))->shouldBeCalled();
+        $data = $this->getMockPostData();
+        $this->setEntityKey('stdClass');
+        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->shouldBeCalled();
+        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->willReturn($entity);
+        $gateway->update(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
+
+        $this->update(1, $data);
+        $gateway->update(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
     }
 
     /**
@@ -62,13 +69,19 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_return_gateway_return_value($gateway)
     {
-        $arguments = Argument::cetera();
+        $data = $this->getMockPostData();
 
+        $arguments = Argument::cetera();
+        $gateway->loadEntity($arguments, Argument::exact(1))->shouldBeCalled();
         $gateway->update($arguments, array())->willReturn(true);
-        $this->update()->shouldReturn(true);
+        $this->update(1, $data)->shouldReturn(true);
 
         $gateway->update($arguments, array())->willReturn(false);
-        $this->update()->shouldReturn(false);
+        $this->update(1, $data)->shouldReturn(false);
     }
 
+    protected function getMockPostData()
+    {
+        return array('property' => 'value');
+    }
 }

@@ -42,6 +42,54 @@ abstract class AbstractCrudService
     protected $eventManager;
 
     /**
+     * @var Form
+     */
+    protected $form;
+
+    /**
+     * @var string
+     */
+    protected $entityKey;
+
+    /**
+     * @var string
+     */
+    protected $formKey;
+
+    /**
+     * @param string $formKey
+     */
+    public function setFormKey($formKey)
+    {
+        $this->formKey = $formKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormKey()
+    {
+        return $this->formKey;
+    }
+
+    /**
+     * @param string $entityKey
+     */
+    public function setEntityKey($entityKey)
+    {
+        $this->entityKey = $entityKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityKey()
+    {
+        return $this->entityKey;
+    }
+    /**
      * @param mixed $entity
      *
      * @return $this
@@ -58,6 +106,17 @@ abstract class AbstractCrudService
     public function getEntity()
     {
         return $this->entity;
+    }
+
+    /**
+     * @param      $entityKey
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function loadEntity($id = null)
+    {
+        return $this->getGateway()->loadEntity($this->getEntityKey(), $id);
     }
 
     /**
@@ -118,6 +177,32 @@ abstract class AbstractCrudService
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * @param \Zend\Form\Form $form
+     *
+     * @return $this
+     */
+    public function setForm($form)
+    {
+        $this->form = $form;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Form\Form
+     */
+    public function getForm($id = null)
+    {
+        if (empty($this->form)) {
+            $form = $this->getServiceManager()->get($this->getFormKey());
+            $form->bind($this->loadEntity($id));
+            $form->setBindOnValidate(true);
+            $this->form = $form;
+        }
+
+        return $this->form;
     }
 
     /**

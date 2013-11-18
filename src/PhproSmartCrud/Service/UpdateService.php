@@ -22,13 +22,13 @@ class UpdateService extends AbstractCrudService
     /**
      * @return bool
      */
-    public function update()
+    public function update($id, $data)
     {
         $em = $this->getEventManager();
         $em->trigger($this->createEvent(CrudEvent::BEFORE_UPDATE));
 
         $gateway = $this->getGateway();
-        $result = $gateway->update($this->getEntity(), $this->getParameters()->fromPost());
+        $result = $gateway->update($this->loadEntity($id), $data);
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_UPDATE));
         return $result;
