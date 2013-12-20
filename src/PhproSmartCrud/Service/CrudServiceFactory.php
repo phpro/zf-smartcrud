@@ -132,8 +132,21 @@ class CrudServiceFactory
 
         // Configure gateway
         if (is_array($options) && count($options)) {
+
             foreach ($options as $key => $value) {
-                // Todo add options to gateway, e.g.: ObjectManager
+                $method = preg_replace_callback('/_([a-z0-9])/', function ($matches) { return strtoupper($matches[1]); }, $key);
+                $setter = 'set' . ucfirst($method);
+
+                if (!method_exists($gateway, $setter)) {
+                    continue;
+                }
+
+                // Try to load value from servicelocator
+                if ($serviceLocator->has($value)) {
+                    $value = $serviceLocator->get($value);
+                }
+
+                $gateway->$setter($value);
             }
         }
 
