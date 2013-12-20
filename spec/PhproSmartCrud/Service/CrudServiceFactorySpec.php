@@ -27,7 +27,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
         $serviceLocator = $prophet->prophesize('\Zend\ServiceManager\ServiceLocatorInterface');
         $crudService = $prophet->prophesize('\PhproSmartCrud\Service\CrudService');
         $listener = $prophet->prophesize('\Zend\EventManager\ListenerAggregateInterface');
-        $gateway = $prophet->prophesize('\PhproSmartCrud\Gateway\AbstractCrudGateway');
+        $gateway = $prophet->prophesize('\PhproSmartCrud\Gateway\CrudGatewayInterface');
 
         // Configurate configuration
         if ($hasConfig) {
@@ -144,7 +144,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
         $crudService->setGateway(Argument::any())->willReturn($crudService);
 
         $this->configureGateway($crudService);
-        $crudService->setGateway(Argument::type('\PhproSmartCrud\Gateway\AbstractCrudGateway'))->shouldBeCalled();
+        $crudService->setGateway(Argument::type('\PhproSmartCrud\Gateway\CrudGatewayInterface'))->shouldBeCalled();
     }
 
     /**

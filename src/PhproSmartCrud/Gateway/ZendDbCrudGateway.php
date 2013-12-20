@@ -14,7 +14,7 @@ namespace PhproSmartCrud\Gateway;
  *
  * @package PhproSmartCrud\Gateway
  */
-class ZendDbCrudGateway extends  AbstractCrudGateway
+class ZendDbCrudGateway implements CrudGatewayInterface
 {
 
     /**

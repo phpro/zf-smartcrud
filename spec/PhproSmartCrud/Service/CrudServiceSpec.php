@@ -21,7 +21,7 @@ use Prophecy\Prophet;
 class CrudServiceSpec extends AbstractCrudServiceSpec
 {
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      * @param \Zend\EventManager\EventManager $eventManager
      * @param \stdClass $entity
      */
@@ -69,7 +69,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $service->getEntity()->willReturn($prophet->prophesize('\stdClass')->reveal());
         $service->getEventManager()->willReturn($prophet->prophesize('\Zend\EventManager\EventManager')->reveal());
         $service->getParameters()->willReturn(array());
-        $service->getGateway()->willReturn($prophet->prophesize('\PhproSmartCrud\Gateway\AbstractCrudGateway')->reveal());
+        $service->getGateway()->willReturn($prophet->prophesize('\PhproSmartCrud\Gateway\CrudGatewayInterface')->reveal());
 
         return $this;
     }
@@ -187,7 +187,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
     }
 
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_load_entity($gateway)
     {
@@ -313,7 +313,7 @@ class CrudServiceSpec extends AbstractCrudServiceSpec
         $service->getEntity()->shouldReturnAnInstanceOf('\stdClass');
         $service->getEventManager()->shouldReturnAnInstanceOf('\Zend\EventManager\EventManager');
         $service->getParameters()->shouldReturn(array());
-        $service->getGateway()->shouldReturnAnInstanceOf('\PhproSmartCrud\Gateway\AbstractCrudGateway');
+        $service->getGateway()->shouldReturnAnInstanceOf('\PhproSmartCrud\Gateway\CrudGatewayInterface');
     }
 
     /**

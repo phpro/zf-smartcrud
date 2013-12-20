@@ -49,7 +49,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
     }
 
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_call_update_function_on_gateway($gateway)
     {
@@ -58,7 +58,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
     }
 
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_return_gateway_return_value($gateway)
     {

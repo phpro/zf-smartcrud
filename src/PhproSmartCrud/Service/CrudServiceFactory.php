@@ -113,12 +113,31 @@ class CrudServiceFactory
     {
         $config = $this->getConfig('gateway');
         $serviceLocator = $this->getServiceLocator();
+        $options = array();
+        $type = $config;
 
-        if (!$serviceLocator->has($config)) {
-            throw new SmartCrudException(sprintf('The smartcrud gateway class %s could not be found', $config));
+        // Configure as array:
+        if (is_array($config)) {
+            $type = $config['type'];
+            if (isset($config['options'])) {
+                $options = $config['options'];
+            }
         }
 
-        $gateway = $serviceLocator->get($config);
+        // Create gateway
+        if (!$serviceLocator->has($type)) {
+            throw new SmartCrudException(sprintf('The smartcrud gateway class %s could not be found', $type));
+        }
+        $gateway = $serviceLocator->get($type);
+
+        // Configure gateway
+        if (is_array($options) && count($options)) {
+            foreach ($options as $key => $value) {
+                // Todo add options to gateway, e.g.: ObjectManager
+            }
+        }
+
+        // Add to smartcrud service
         $smartCrud->setGateway($gateway);
         return $this;
     }

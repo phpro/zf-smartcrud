@@ -9,7 +9,12 @@ return array(
         /**
          * Default gateway object
          */
-        'gateway' => 'phpro.smartcrud.gateway.doctrine',
+        'gateway' => array(
+            'type' => 'phpro.smartcrud.gateway.doctrine',
+            'options' => array(
+                'object_manager' => 'Doctrine\ORM\EntityManager',
+            ),
+        ),
 
         /**
          * Add default listeners to the smartcrud

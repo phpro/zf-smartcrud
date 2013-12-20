@@ -42,7 +42,7 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
     }
 
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      * @param \Zend\EventManager\EventManager $eventManager
      * @param \stdClass $entity
      */
@@ -70,7 +70,7 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
     }
 
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_have_a_gateway($gateway)
     {
