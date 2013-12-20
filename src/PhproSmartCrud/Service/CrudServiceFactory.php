@@ -111,46 +111,14 @@ class CrudServiceFactory
      */
     public function configureGateway($smartCrud)
     {
-        $config = $this->getConfig('gateway');
+        $type = $this->getConfig('gateway');
         $serviceLocator = $this->getServiceLocator();
-        $options = array();
-        $type = $config;
-
-        // Configure as array:
-        if (is_array($config)) {
-            $type = $config['type'];
-            if (isset($config['options'])) {
-                $options = $config['options'];
-            }
-        }
 
         // Create gateway
         if (!$serviceLocator->has($type)) {
             throw new SmartCrudException(sprintf('The smartcrud gateway class %s could not be found', $type));
         }
         $gateway = $serviceLocator->get($type);
-
-        // Configure gateway
-        if (is_array($options) && count($options)) {
-
-            foreach ($options as $key => $value) {
-                $method = preg_replace_callback('/_([a-z0-9])/', function ($matches) { return strtoupper($matches[1]); }, $key);
-                $setter = 'set' . ucfirst($method);
-
-                if (!method_exists($gateway, $setter)) {
-                    continue;
-                }
-
-                // Try to load value from servicelocator
-                if ($serviceLocator->has($value)) {
-                    $value = $serviceLocator->get($value);
-                }
-
-                $gateway->$setter($value);
-            }
-        }
-
-        // Add to smartcrud service
         $smartCrud->setGateway($gateway);
         return $this;
     }

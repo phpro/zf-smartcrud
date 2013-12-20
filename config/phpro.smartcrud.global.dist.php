@@ -9,12 +9,7 @@ return array(
         /**
          * Default gateway object
          */
-        'gateway' => array(
-            'type' => 'phpro.smartcrud.gateway.doctrine',
-            'options' => array(
-                'object_manager' => 'Doctrine\ORM\EntityManager',
-            ),
-        ),
+        'gateway' => 'custom.doctrine.gateway',
 
         /**
          * Add default listeners to the smartcrud
@@ -23,6 +18,18 @@ return array(
             'phpro.smartcrud.listener.flashmessenger',
             'phpro.smartcrud.listener.bjyauthorize',
         ),
+    ),
+
+    /**
+     * Configure custom gateways
+     */
+    'phpro-smartcrud-gateway' => array(
+        'custom.doctrine.gateway' => array(
+            'type' => 'phpro.smartcrud.gateway.doctrine',
+            'options' => array(
+                'object_manager' => 'Doctrine\ORM\EntityManager',
+            ),
+        )
     ),
 
 );

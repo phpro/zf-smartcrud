@@ -1,6 +1,9 @@
 <?php
 return array(
     'service_manager' => array(
+        'abstract_factories' => array(
+            'PhproSmartCrud\Factory\AbstractCrudFactory',
+        ),
         'factories' => array(
             'phpro.smartcrud'           => 'PhproSmartCrud\Service\CrudServiceFactory',
             'phpro.smartcrud.params'    => 'PhproSmartCrud\Service\ParametersService',
@@ -33,6 +36,8 @@ return array(
         ),
         // Make sure to generate new instances ...
         'shared' => array(
+            'phpro.smartcrud.gateway.doctrine'      =>  false,
+            'phpro.smartcrud.gateway.zenddb'        =>  false,
             'phpro.smartcrud.view.model.json'       =>  false,
             'phpro.smartcrud.view.model.redirect'   =>  false,
             'phpro.smartcrud.view.model.view'       =>  false,

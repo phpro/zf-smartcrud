@@ -32,12 +32,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
         // Configurate configuration
         if ($hasConfig) {
             $this->mockConfiguration($serviceLocator, array(
-                    'gateway' => array(
-                        'type' => 'service.gateway',
-                        'options' => array(
-                            'object_manager' => 'service.objectmanager',
-                        ),
-                    ),
+                    'gateway' => 'service.gateway',
                     'listeners' => array(
                        'service.listener',
                     )
@@ -57,9 +52,6 @@ class CrudServiceFactorySpec extends ObjectBehavior
         // Mock gateway
         $serviceLocator->has('service.gateway')->willReturn(true);
         $serviceLocator->get('service.gateway')->willReturn($gateway->reveal());
-
-        // Mock gateway options
-        $serviceLocator->has('service.objectmanager')->willReturn(false);
 
         // Mock listener
         $serviceLocator->has('service.listener')->willReturn(true);
@@ -139,7 +131,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     public function it_should_find_config_by_key()
     {
-        $this->getConfig('gateway')->shouldBeArray();
+        $this->getConfig('gateway')->shouldBeString();
         $this->getConfig('listeners')->shouldBeArray();
         $this->getConfig('InvalidKey')->shouldBeNull();
     }
