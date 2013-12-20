@@ -1,9 +1,8 @@
 <?php
 
-namespace PhproSmartCrud\Factory;
+namespace PhproSmartCrud\Gateway;
 
 use PhproSmartCrud\Exception\SmartCrudException;
-use PhproSmartCrud\Gateway\CrudGatewayInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorInterface;

@@ -2,7 +2,7 @@
 return array(
     'service_manager' => array(
         'abstract_factories' => array(
-            'PhproSmartCrud\Factory\AbstractCrudFactory',
+            'PhproSmartCrud\Gateway\AbstractCrudFactory',
         ),
         'factories' => array(
             'phpro.smartcrud'           => 'PhproSmartCrud\Service\CrudServiceFactory',

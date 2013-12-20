@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\PhproSmartCrud\Factory;
+namespace spec\PhproSmartCrud\Gateway;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -19,7 +19,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('PhproSmartCrud\Factory\AbstractGatewayFactory');
+        $this->shouldHaveType('PhproSmartCrud\Gateway\AbstractGatewayFactory');
     }
 
     /**
