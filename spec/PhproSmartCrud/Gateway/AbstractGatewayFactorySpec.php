@@ -17,7 +17,7 @@ use Prophecy\Prophet;
  */
 class AbstractGatewayFactorySpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('PhproSmartCrud\Gateway\AbstractGatewayFactory');
     }
@@ -62,7 +62,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    function it_should_be_able_to_create_gateway_services($serviceLocator)
+    public function it_should_be_able_to_create_gateway_services($serviceLocator)
     {
 
         $this->mockConfiguration($serviceLocator);
@@ -73,7 +73,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    function it_should_not_be_able_to_create_other_objects($serviceLocator)
+    public function it_should_not_be_able_to_create_other_objects($serviceLocator)
     {
         $this->mockConfiguration($serviceLocator);
         $name = 'other-object';
@@ -84,7 +84,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
-    function it_should_create_gateway_services($serviceLocator, $gateway)
+    public function it_should_create_gateway_services($serviceLocator, $gateway)
     {
         $this->mockConfiguration($serviceLocator);
         $this->mockBaseGateway($serviceLocator, $gateway);
@@ -97,7 +97,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
-    function it_should_throw_exception_when_base_gateway_does_not_exist($serviceLocator, $gateway)
+    public function it_should_throw_exception_when_base_gateway_does_not_exist($serviceLocator, $gateway)
     {
         $this->mockConfiguration($serviceLocator);
         $this->mockBaseGateway($serviceLocator, $gateway);
