@@ -10,7 +10,7 @@ layer.
 
 ##Todo
 
-* improvement: Use MvcEvent to add the onBootstrap actions of the controller
+* improvement: Move configuration from router to an abstract factory of the controller
 * improvement: Implement list view (Based on form hydrator)
 * improvement: Implement read view (Based on form hydrator)
 * improvement: Add better redirect funcitonality to the RedirectModel
