@@ -44,7 +44,7 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
     /**
      * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
      * @param \Zend\EventManager\EventManager $eventManager
-     * @param \stdClass $entity
+     * @param \Zend\Form\Form $form
      */
     public function let($gateway, $eventManager, $entity)
     {
@@ -102,7 +102,7 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
     public function it_should_create_crud_event($entity)
     {
         $eventName = 'test-event-name';
-        $crudEvent = $this->createEvent($eventName);
+        $crudEvent = $this->createEvent($eventName, $entity);
         $crudEvent->shouldBeAnInstanceOf('PhproSmartCrud\Event\CrudEvent');
         $crudEvent->getName()->shouldReturn($eventName);
         $crudEvent->getTarget()->shouldReturn($entity);

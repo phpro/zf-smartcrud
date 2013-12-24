@@ -221,13 +221,15 @@ class CrudController extends AbstractActionController
             $model->setVariable('result', $service);
             $model->setTerminal(true);
         } else {
+            $entity = $service->loadEntity($this->getEntityId());
             $model->setVariable('action', $action);
             $model->setVariable('result', $service);
-            $model->setVariable('form',  $service->getForm($this->getEntityId()));
-            $model->setVariable('entity',$service->loadEntity($this->getEntityId()));
+            $model->setVariable('form',  $service->getForm($entity));
+            $model->setVariable('entity',$entity);
             $model->setTemplate(sprintf('phpro-smartcrud/%s', $action));
         }
         $this->getEventManager()->trigger('view-model-ready-for-dispatch', $model, $service);
+
         return $model;
     }
 

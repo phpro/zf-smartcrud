@@ -3,6 +3,9 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'PhproSmartCrud\Service\CrudServiceFactory'   => 'PhproSmartCrud\Service\CrudServiceFactory',
+            'PhproSmartCrud\Service\CreateServiceFactory' => 'PhproSmartCrud\Service\CreateServiceFactory',
+            'PhproSmartCrud\Service\UpdateServiceFactory' => 'PhproSmartCrud\Service\UpdateServiceFactory',
+            'PhproSmartCrud\Service\DeleteServiceFactory' => 'PhproSmartCrud\Service\DeleteServiceFactory',
             'PhproSmartCrud\Service\ParametersService'    => 'PhproSmartCrud\Service\ParametersService',
         ),
         'invokables' => array(

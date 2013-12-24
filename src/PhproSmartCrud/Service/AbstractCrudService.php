@@ -12,14 +12,17 @@ namespace PhproSmartCrud\Service;
 use PhproSmartCrud\Event\CrudEvent;
 use PhproSmartCrud\Gateway\CrudGatewayInterface;
 use Zend\EventManager\EventManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Class AbstractCrudService
  *
  * @package PhproSmartCrud\Service
  */
-abstract class AbstractCrudService
+abstract class AbstractCrudService implements ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
 
     /**
      * @var ParametersService
@@ -193,15 +196,15 @@ abstract class AbstractCrudService
     /**
      * @return \Zend\Form\Form
      */
-    public function getForm($id = null)
+    public function getForm($entity)
     {
         if (empty($this->form)) {
-            $form = $this->getServiceManager()->get($this->getFormKey());
-            $form->bind($this->loadEntity($id));
-            $form->setBindOnValidate(true);
-            $this->form = $form;
+            /** @var \Zend\Form\Form $form */
+            $this->form = $this->getServiceLocator()->get($this->getFormKey());
         }
-
+        $this->form->bind($entity);
+        $this->form->bindOnValidate();
+        $this->getEventManager()->trigger($this->createEvent(CrudEvent::FORM_READY, $this->form));
         return $this->form;
     }
 
@@ -210,9 +213,9 @@ abstract class AbstractCrudService
      *
      * @return CrudEvent
      */
-    public function createEvent($eventName)
+    public function createEvent($eventName, $target)
     {
-        $event = new CrudEvent($eventName, $this->getEntity(), $this->getParameters());
+        $event = new CrudEvent($eventName, $target, $this->getParameters());
         return $event;
     }
 
