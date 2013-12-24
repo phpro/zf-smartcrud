@@ -12,7 +12,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package PhproSmartCrud\Service
  */
-class CrudServiceFactory
+abstract class AbstractActionServiceFactory
     implements FactoryInterface, ServiceLocatorAwareInterface
 {
 
@@ -20,6 +20,14 @@ class CrudServiceFactory
      * The config key in the service manager
      */
     const CONFIG_KEY = 'PhproSmartcrudConfig';
+
+
+    /**
+     * Returns key of service to load.
+     *
+     * @return string
+     */
+    abstract public function getServiceKey();
 
     /**
      * @var ServiceLocatorInterface
@@ -56,7 +64,7 @@ class CrudServiceFactory
     {
         $this->setServiceLocator($serviceLocator);
         /** @var CrudService $smartCrud  */
-        $smartCrud = $serviceLocator->get('PhproSmartCrud\Service\CrudService');
+        $smartCrud = $serviceLocator->get($this->getServiceKey());
 
         $this->configureParameters($smartCrud);
         $this->configureGateway($smartCrud);

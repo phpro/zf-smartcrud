@@ -3,16 +3,16 @@
 namespace spec\PhproSmartCrud\Service;
 
 use PhpSpec\ObjectBehavior;
-use PhproSmartCrud\Service\CrudServiceFactory;
+use PhproSmartCrud\Service\CreateServiceFactory;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 
 /**
- * Class CrudServiceFactorySpec
+ * Class CreateServiceFactorySpec
  *
  * @package spec\PhproSmartCrud\Service
  */
-class CrudServiceFactorySpec extends ObjectBehavior
+abstract class AbstractActionServiceFactorySpec extends ObjectBehavior
 {
 
     /**
@@ -25,7 +25,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
         // Create mock objects
         $prophet = new Prophet();
         $serviceLocator = $prophet->prophesize('\Zend\ServiceManager\ServiceLocatorInterface');
-        $crudService = $prophet->prophesize('\PhproSmartCrud\Service\CrudService');
+        $crudService = $prophet->prophesize('\PhproSmartCrud\Service\AbstractCrudService');
         $listener = $prophet->prophesize('\Zend\EventManager\ListenerAggregateInterface');
         $gateway = $prophet->prophesize('\PhproSmartCrud\Gateway\AbstractCrudGateway');
 
@@ -46,8 +46,8 @@ class CrudServiceFactorySpec extends ObjectBehavior
         $this->setServiceLocator($serviceLocator->reveal());
 
         // Mock crud service:
-        $serviceLocator->has('PhproSmartCrud\Service\CrudService')->willReturn(true);
-        $serviceLocator->get('PhproSmartCrud\Service\CrudService')->willReturn($crudService->reveal());
+        $serviceLocator->has($this->getServiceKey())->willReturn(true);
+        $serviceLocator->get($this->getServiceKey())->willReturn($crudService->reveal());
 
         // Mock gateway
         $serviceLocator->has('service.gateway')->willReturn(true);
@@ -90,7 +90,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
     protected function mockConfiguration($serviceLocator, $config)
     {
         $serviceLocator->get('Config')->willReturn(array(
-            CrudServiceFactory::CONFIG_KEY => $config
+            CreateServiceFactory::CONFIG_KEY => $config
         ));
     }
 
@@ -101,7 +101,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType('PhproSmartCrud\Service\CrudServiceFactory');
+        $this->shouldHaveType('PhproSmartCrud\Service\CreateServiceFactory');
     }
 
     public function it_should_implement_zend_FactoryInterface()
@@ -111,7 +111,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      */
     public function it_should_have_fluent_interfaces($serviceLocator, $crudService)
     {
@@ -137,7 +137,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      */
     public function it_should_configurate_gateway($crudService)
     {
@@ -148,7 +148,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      */
     public function it_should_have_a_fluent_interface_after_configuring_gateway($crudService)
     {
@@ -157,7 +157,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      */
     public function it_should_throw_exception_on_invalid_gateway($serviceLocator, $crudService)
     {
@@ -169,7 +169,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      * @param \Zend\EventManager\EventManager $eventMananger
      *
      * @TODO Find out how to use Any::type with an interface instead of a class
@@ -184,7 +184,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      * @param \Zend\EventManager\EventManager $eventManager
      */
     public function it_should_throw_exception_on_invalid_listener($serviceLocator, $crudService, $eventManager)
@@ -200,7 +200,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      */
     public function it_should_not_add_listeners_on_invalid_config($serviceLocator, $crudService)
     {
@@ -217,7 +217,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      * @param \Zend\EventManager\EventManager $eventMananger
      *
      */
@@ -229,7 +229,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      */
     public function it_should_configure_smartcrud_parameters($serviceLocator, $crudService)
     {
@@ -240,7 +240,7 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      */
     public function it_should_have_fluent_interfaces_after_configuring_smartcrud_parameters($serviceLocator, $crudService)
     {
@@ -250,14 +250,14 @@ class CrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $crudService
      * @param \stdClass $dummy
      */
     public function it_should_create_crudservice_object($serviceLocator, $crudService, $dummy)
     {
         $this->mockConfiguration($serviceLocator, array('gateway' => 'service.gateway'));
-        $serviceLocator->has('PhproSmartCrud\Service\CrudService')->willReturn(true);
-        $serviceLocator->get('PhproSmartCrud\Service\CrudService')->willReturn($crudService);
+        $serviceLocator->has($this->getServiceKey())->willReturn(true);
+        $serviceLocator->get($this->getServiceKey())->willReturn($crudService);
         $serviceLocator->has('service.gateway')->willReturn(true);
         $serviceLocator->get('service.gateway')->willReturn($dummy);
         $this->mockParams($serviceLocator, array());
