@@ -53,6 +53,10 @@ abstract class AbstractCrudService implements ServiceLocatorAwareInterface
      * @var string
      */
     protected $entityKey;
+    /**
+     * @var string
+     */
+    protected $outputModel;
 
     /**
      * @var string
@@ -198,10 +202,6 @@ abstract class AbstractCrudService implements ServiceLocatorAwareInterface
      */
     public function getForm($entity)
     {
-        if (empty($this->form)) {
-            /** @var \Zend\Form\Form $form */
-            $this->form = $this->getServiceLocator()->get($this->getFormKey());
-        }
         $this->form->bind($entity);
         $this->form->bindOnValidate();
         $this->getEventManager()->trigger($this->createEvent(CrudEvent::FORM_READY, $this->form));
@@ -217,6 +217,25 @@ abstract class AbstractCrudService implements ServiceLocatorAwareInterface
     {
         $event = new CrudEvent($eventName, $target, $this->getParameters());
         return $event;
+    }
+
+    /**
+     * @param string $outputModel
+     */
+    public function setOutputModel($outputModel)
+    {
+
+        $this->outputModel = $outputModel;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOutputModel()
+    {
+        return $this->outputModel;
     }
 
 }

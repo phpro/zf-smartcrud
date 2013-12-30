@@ -39,44 +39,8 @@ class SmartCrudRouter extends Segment
     {
         return array(
             'controller' => 'PhproSmartCrud\Controller\CrudController',
+            'smart-service'   => 'PhproSmartCrud\Service\DeleteServiceFactory' ,
             'action' => 'list',
-            'entity' => null,
-            'form' => null,
-            'create' => array(
-                'service'   => 'PhproSmartCrud\Service\CreateServiceFactory' ,
-                'entity'    => null,
-                'form'      => null,
-                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
-                'listeners' => array() ,
-            ),
-            'update' => array(
-              'service'     => 'PhproSmartCrud\Service\UpdateServiceFactory' ,
-              'entity'    => null,
-              'form'      => null,
-              'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
-              'listeners'   => array() ,
-            ),
-            'delete' => array(
-                'service'   => 'PhproSmartCrud\Service\DeleteServiceFactory' ,
-                'entity'    => null,
-                'form'      => null,
-                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
-                'listeners' => array() ,
-            ),
-            'read' => array(
-                'service' => 'PhproSmartCrud\Service\ReadServiceFactory' ,
-                'entity'    => null,
-                'form'      => null,
-                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
-                'listeners' => array() ,
-            ),
-            'list' => array(
-                'service' => 'PhproSmartCrud\Service\ListServiceFactory' ,
-                'entity'    => null,
-                'form'      => null,
-                'output-model' => 'PhproSmartCrud\View\Model\ViewModel',
-                'listeners' => array() ,
-            ),
             'identifier-name' => 'id',
         );
     }

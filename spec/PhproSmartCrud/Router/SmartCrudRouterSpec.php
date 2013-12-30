@@ -39,28 +39,19 @@ class SmartCrudRouterSpec extends ObjectBehavior
 
     public function it_should_have_default_values()
     {
-        $this->getDefaultParams()->shouldHaveDefaultActionConfigurationValues('create');
-        $this->getDefaultParams()->shouldHaveDefaultActionConfigurationValues('update');
-        $this->getDefaultParams()->shouldHaveDefaultActionConfigurationValues('delete');
-        $this->getDefaultParams()->shouldHaveDefaultActionConfigurationValues('read');
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'smart-service', 'value' => 'PhproSmartCrud\Service\DeleteServiceFactory'));
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'action', 'value' => 'list'));
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'identifier-name',  'value' => 'id'));
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'controller', 'value' => 'PhproSmartCrud\Controller\CrudController'));
+
     }
 
     public function getMatchers()
     {
         return [
-            'haveDefaultActionConfigurationValues' => function ($subject, $value) {
-                    if (!array_key_exists($value, $subject)) {
-                        return false;
-                    }
-                    $config = $subject[$value];
-                    return array_key_exists('listeners', $config)
-                           && is_array($config['listeners'])
-                           && array_key_exists('entity', $config)
-                           && array_key_exists('output-model', $config)
-                           && $config['output-model'] == 'PhproSmartCrud\View\Model\ViewModel'
-                           && array_key_exists('form', $config)
-                        ;
-                },
+            'haveDefaultConfigurationValues' => function ($subject, $value) {
+                return array_key_exists($value['key'], $subject) && $value['value'] == $subject[$value['key']];
+            },
         ];
     }
 

@@ -57,6 +57,7 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
     public function it_should_have_fluent_interfaces()
     {
         $dummy = Argument::any();
+        $this->setOutputModel($dummy)->shouldReturn($this);
         $this->setParameters($dummy)->shouldReturn($this);
         $this->setGateway($dummy)->shouldReturn($this);
         $this->setEntity($dummy)->shouldReturn($this);
@@ -67,6 +68,12 @@ abstract class AbstractCrudServiceSpec extends ObjectBehavior
     {
         $paramsService = $this->mockParams(array('param1' => 'value1', 'param2' => 'value2'));
         $this->getParameters()->shouldReturn($paramsService);
+    }
+
+    public function it_should_have_an_output_model()
+    {
+        $outputModel = 'PhproSmartCrud\View\Model\ViewModel';
+        $this->setOutputModel($outputModel)->getOutputModel()->shouldReturn($outputModel);
     }
 
     /**
