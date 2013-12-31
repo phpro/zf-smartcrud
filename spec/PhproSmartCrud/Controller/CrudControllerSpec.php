@@ -140,7 +140,7 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_handle_get_to_a_create_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
     {
         $action = 'create';
-        $smartService->create(Argument::any())->shouldNotBeCalled();
+        $smartService->run(null,Argument::any())->shouldNotBeCalled();
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -170,7 +170,7 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $postParameters = array('property' => 'value');
         $action = 'create';
-        $smartService->create(Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
+        $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -200,7 +200,7 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $postParameters = array('property' => 'value');
         $action = 'create';
-        $smartService->create(Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
+        $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -229,7 +229,7 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $postParameters = array('property' => 'value');
         $action = 'update';
-        $smartService->update(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -262,7 +262,7 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_handle_a_get_to_an_update_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
     {
         $action = 'update';
-        $smartService->update(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $smartService->run(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -290,7 +290,7 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $postParameters = array('property' => 'value');
         $action = 'update';
-        $smartService->update(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -317,7 +317,7 @@ class CrudControllerSpec extends ObjectBehavior
     public function it_should_handle_a_get_to_an_delete_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
     {
         $action = 'update';
-        $smartService->delete(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $smartService->run(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -346,7 +346,7 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $postParameters = array('property' => 'value');
         $action = 'delete';
-        $smartService->delete(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(
@@ -379,7 +379,7 @@ class CrudControllerSpec extends ObjectBehavior
     {
         $postParameters = array('property' => 'value');
         $action = 'delete';
-        $smartService->delete(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
 
         // Configure routematch
         $this->mockRouteMatch($mvcEvent, $routeMatch, array(

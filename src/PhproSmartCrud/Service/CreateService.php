@@ -20,9 +20,12 @@ class CreateService extends AbstractCrudService
 {
 
     /**
+     * @param $id
+     * @param array $data
+     *
      * @return bool
      */
-    public function create($data)
+    public function run($id = null, $data)
     {
         $em = $this->getEventManager();
         $entity = $this->getEntity();

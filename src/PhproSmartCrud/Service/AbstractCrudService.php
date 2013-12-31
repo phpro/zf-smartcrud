@@ -230,6 +230,8 @@ abstract class AbstractCrudService implements ServiceLocatorAwareInterface
         return $this;
     }
 
+    abstract public function run($id, $data);
+
     /**
      * @return string
      */

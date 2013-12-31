@@ -41,7 +41,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
         $form->isValid()->shouldBeCalled()->willreturn(false);
         $this->setForm($form);
 
-        $this->create($this->getMockPostData());
+        $this->run(null,$this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldBeCalled();
     }
 
@@ -58,7 +58,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
         $this->setForm($form);
 
 
-        $this->create($this->getMockPostData());
+        $this->run(null,$this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
     }
     /**
@@ -73,7 +73,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
         $form->isValid()->shouldBeCalled()->willreturn(true);
         $this->setForm($form);
 
-        $this->create($this->getMockPostData());
+        $this->run(null,$this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldBeCalled();
     }
 
@@ -89,7 +89,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
         $form->isValid()->shouldBeCalled()->willreturn(true);
         $this->setForm($form);
 
-        $this->create($this->getMockPostData());
+        $this->run(null,$this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_CREATE))->shouldBeCalled();
     }
 
@@ -106,7 +106,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
         $this->setForm($form);
 
         $data = $this->getMockPostData();
-        $this->create($data);
+        $this->run(null,$data);
         $gateway->create(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
     }
 
@@ -125,7 +125,7 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
         $arguments = Argument::cetera();
         $data = $this->getMockPostData();
         $gateway->create($this->getEntity(), $data)->willReturn(true);
-        $this->create($data)->shouldReturn(true);
+        $this->run(null,$data)->shouldReturn(true);
     }
 
 

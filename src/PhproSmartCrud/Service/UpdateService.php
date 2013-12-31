@@ -22,7 +22,7 @@ class UpdateService extends AbstractCrudService
     /**
      * @return bool
      */
-    public function update($id, $data)
+    public function run($id, $data)
     {
         $em = $this->getEventManager();
         $entity = $this->loadEntity($id);

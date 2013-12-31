@@ -42,7 +42,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
         $form->isValid()->shouldBeCalled()->willreturn(false);
         $this->setForm($form);
 
-        $this->update(1, $this->getMockPostData());
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldBeCalled();
     }
 
@@ -58,7 +58,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
         $form->isValid()->shouldBeCalled()->willreturn(true);
         $this->setForm($form);
 
-        $this->update(1, $this->getMockPostData());
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
     }
     /**
@@ -73,7 +73,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
         $form->isValid()->shouldBeCalled()->willreturn(true);
         $this->setForm($form);
 
-        $this->update(1, $this->getMockPostData());
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldBeCalled();
     }
 
@@ -89,7 +89,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
         $form->isValid()->shouldBeCalled()->willreturn(true);
         $this->setForm($form);
 
-        $this->update(1, $this->getMockPostData());
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_UPDATE))->shouldBeCalled();
     }
 
@@ -112,7 +112,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
         $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->willReturn($entity);
         $gateway->update(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
 
-        $this->update(1, $data);
+        $this->run(1, $data);
         $gateway->update(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
     }
 
@@ -133,10 +133,10 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
         $arguments = Argument::cetera();
         $gateway->loadEntity($arguments, Argument::exact(1))->shouldBeCalled();
         $gateway->update($arguments, array())->willReturn(true);
-        $this->update(1, $data)->shouldReturn(true);
+        $this->run(1, $data)->shouldReturn(true);
 
         $gateway->update($arguments, array())->willReturn(false);
-        $this->update(1, $data)->shouldReturn(false);
+        $this->run(1, $data)->shouldReturn(false);
     }
 
     protected function getMockPostData()

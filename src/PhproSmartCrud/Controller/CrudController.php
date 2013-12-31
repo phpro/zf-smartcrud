@@ -80,10 +80,16 @@ class CrudController extends AbstractActionController
         if (!$routeMatch) {
             throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
         }
+
         $this->setIdentifierName($routeMatch->getParam('identifier-name', 'id'));
 
         $action = $routeMatch->getParam('action', 'not-found');
+
         $serviceKey = $routeMatch->getParam('smart-service', null);
+        if (!$serviceKey) {
+            throw new Exception\DomainException('Missing smart service key');
+        }
+
         $this->setSmartService($this->getServiceLocator()->get($serviceKey . '::' . $action));
 
         return parent::onDispatch($e);
@@ -104,7 +110,7 @@ class CrudController extends AbstractActionController
     public function createAction()
     {
         if ($this->getRequest()->isPost()
-            && $this->getSmartService()->create($this->getRequest()->getPost())) {
+            && $this->getSmartService()->run(null, $this->getRequest()->getPost())) {
                 return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
         return $this->prepareModel('create');
@@ -116,7 +122,7 @@ class CrudController extends AbstractActionController
     public function updateAction()
     {
         if ($this->getRequest()->isPost()
-            && $this->getSmartService()->update($this->getEntityId(), $this->getRequest()->getPost())) {
+            && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
             return $this->redirect()->toRoute(null, array('action' => 'view'));
         }
         return $this->prepareModel('update');
@@ -136,7 +142,7 @@ class CrudController extends AbstractActionController
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()
-            && $this->getSmartService()->delete($this->getEntityId(), $this->getRequest()->getPost())) {
+            && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
             return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
         return $this->prepareModel('delete');

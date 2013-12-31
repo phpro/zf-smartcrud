@@ -22,13 +22,13 @@ class ReadService extends AbstractCrudService
     /**
      * @return mixed
      */
-    public function read()
+    public function run($id, $data)
     {
         $em = $this->getEventManager();
         $em->trigger($this->createEvent(CrudEvent::BEFORE_READ, null));
 
         $gateway = $this->getGateway();
-        $result = $gateway->read($this->getEntity(), $this->getParameters()->fromRoute('id', 0));
+        $result = $gateway->read($this->getEntity(), $id);
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_READ, null));
         return $result;

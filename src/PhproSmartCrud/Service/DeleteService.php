@@ -22,7 +22,7 @@ class DeleteService extends AbstractCrudService
     /**
      * @return bool
      */
-    public function delete($id, $data)
+    public function run($id, $data)
     {
         $em = $this->getEventManager();
         $entity = $this->loadEntity($id);
