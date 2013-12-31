@@ -259,7 +259,7 @@ class Generate extends CliCommand
      *
      * @return string
      */
-    protected function writeConfigToFile($module, $config)
+    protected function writeConfig($module, $config)
     {
         $file = sprintf('%s/module/%s/config/module.config.php', getcwd(), $module);
         $writer = new PhpArrayWriter();
@@ -275,7 +275,7 @@ class Generate extends CliCommand
 
         // Create backup:
         if ($localConfig) {
-            $writer->toFile($file . '.backup', $localConfig);
+            copy($file, $file . '.backup');
         }
 
         // Merge with local config
