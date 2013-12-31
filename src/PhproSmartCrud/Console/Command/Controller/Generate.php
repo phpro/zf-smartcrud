@@ -16,7 +16,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zend\Config\Writer\PhpArray as PhpArrayWriter;
-use ZF\Configuration\ConfigResource;
 
 /**
  * Class Generate
@@ -258,12 +257,30 @@ class Generate extends CliCommand
      *
      * @return string
      */
-    protected function writeConfig($module, $config)
+    protected function writeConfigToFile($module, $config)
     {
         $file = sprintf('%s/module/%s/config/module.config.php', getcwd(), $module);
         $writer = new PhpArrayWriter();
-        $moduleConfig = new ConfigResource($config, $file, $writer);
-        $moduleConfig->patch(array(), true);
+
+        // Load local config:
+        $localConfig = array();
+        if (file_exists($file)) {
+            $localConfig = include $file;
+            if (!is_array($localConfig)) {
+                $localConfig = array();
+            }
+        }
+
+        // Create backup:
+        if ($localConfig) {
+            $this->writer->toFile($file . '.backup', $localConfig);
+        }
+
+        // Merge with local config
+        $localConfig = ArrayUtils::merge($localConfig, $config);
+
+        // Write to configuration file
+        $this->writer->toFile($file, $localConfig);
 
         return $file;
     }
