@@ -19,9 +19,9 @@ return array(
 );
 
 
-/**
+/*
  * Sample crudservice configuration
- */
+ *
 array(
     AbstractSmartCrudServiceFactory::CONFIG_KEY => array(
         'default' => array(
@@ -49,3 +49,4 @@ array(
         )
     ),
 );
+*/
