@@ -2,22 +2,17 @@
 namespace PhproSmartCrud;
 
 return array(
-    /**
-     * Smartcrud configuration
-     */
-    'PhproSmartcrudConfig' => array(
-        /**
-         * Default gateway object
-         */
-        'gateway' => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
 
-        /**
-         * Add default listeners to the smartcrud
-         */
-        'listeners' => array(
-            'PhproSmartCrud\Listener\FlashMessenger',
-             'PhproSmartCrud\Listener\BjyAuthorize',
-        ),
+    /**
+     * Configure custom gateways
+     */
+    'phpro-smartcrud-gateway' => array(
+        'custom.doctrine.gateway' => array(
+            'type' => 'phpro.smartcrud.gateway.doctrine',
+            'options' => array(
+                'object_manager' => 'Doctrine\ORM\EntityManager',
+            ),
+        )
     ),
 
 );

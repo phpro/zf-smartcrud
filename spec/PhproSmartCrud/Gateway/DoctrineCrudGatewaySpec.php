@@ -18,7 +18,7 @@ use Prophecy\Prophet;
  *
  * @package spec\PhproSmartCrud\Gateway
  */
-class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
+class DoctrineCrudGatewaySpec extends ObjectBehavior
 {
 
     public function it_is_initializable()
@@ -26,68 +26,40 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
         $this->shouldHaveType('PhproSmartCrud\Gateway\DoctrineCrudGateway');
     }
 
-    public function it_should_extend_PhproSmartCrud_AbstractGateway()
+    public function it_should_implement_PhproSmartCrud_CrudGatewayInterface()
     {
-        $this->shouldBeAnInstanceOf('PhproSmartCrud\Gateway\AbstractCrudGateway');
+        $this->shouldImplement('PhproSmartCrud\Gateway\CrudGatewayInterface');
+    }
+
+    public function it_should_implement_Doctrine_ObjectManagerAwareInterface()
+    {
+        $this->shouldImplement('DoctrineModule\Persistence\ObjectManagerAwareInterface');
     }
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager Make sure to use the wrapped / revealed object
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager Make sure to use the wrapped / revealed object
      */
-    protected function mockEntityManager($entityManager)
+    public function let($objectManager)
     {
-        // Create mocks
-        $prophet = new Prophet();
-        $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
-
-        // Configure ServiceManager
-        $this->setServiceManager($serviceManager);
-        $serviceManager->has('Doctrine\ORM\EntityManager')->willReturn(true);
-        $serviceManager->get('Doctrine\ORM\EntityManager')->willReturn($entityManager);
+        $this->setObjectManager($objectManager);
     }
 
     /**
-     * @param \Doctrine\ORM\EntityRepository $repository Make sure to use the wrapped / revealed object
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      */
-    protected function mockEntityRepository($repository)
+    public function it_should_have_doctrine_object_manager($objectManager)
     {
-        // Mock entity manager
-        $prophet = new Prophet();
-        $entityManager = $prophet->prophesize('Doctrine\ORM\EntityManager');
-        $this->mockEntityManager($entityManager->reveal());
-
-        // Mock repository
-        $entityManager->getRepository(Argument::type('string'))->willReturn($repository);
+        $this->getObjectManager()->shouldReturn($objectManager);
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \Doctrine\ORM\EntityManager $entityManager
-     */
-    public function it_should_have_doctrine_entity_manager($serviceManager, $entityManager)
-    {
-        $serviceManager->has('Doctrine\ORM\EntityManager')->willReturn(true);
-        $serviceManager->get('Doctrine\ORM\EntityManager')->willReturn($entityManager);
-        $this->getEntityManager()->shouldReturn($entityManager);
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \Doctrine\ORM\EntityManager $entityManager
-     */
-    public function it_should_throw_smartCrudException_when_no_entity_manager_exists($serviceManager)
-    {
-        $serviceManager->has('Doctrine\ORM\EntityManager')->willReturn(false);
-        $this->shouldThrow('\PhproSmartCrud\Exception\SmartCrudException')->duringGetEntityManager();
-    }
-
-    /**
-     * @param \Doctrine\ORM\EntityRepository $repository
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectRepository $repository
      * @param \stdClass $entity
      */
-    public function it_should_load_entity_repositories($repository, $entity)
+    public function it_should_load_object_repositories($objectManager, $repository, $entity)
     {
-        $this->mockEntityRepository($repository->getWrappedObject());
+        $objectManager->getRepository(Argument::type('string'))->willReturn($repository);
 
         // Load string
         $this->getRepository('stdClass')->shouldReturn($repository);
@@ -97,11 +69,12 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
     }
 
     /**
-     * @param \Doctrine\ORM\EntityRepository $repository
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectRepository $repository
      */
-    public function it_should_load_an_entity($repository, $entity)
+    public function it_should_load_an_entity($objectManager, $repository, $entity)
     {
-        $this->mockEntityRepository($repository->getWrappedObject());
+        $objectManager->getRepository(Argument::type('string'))->willReturn($repository);
 
         // With no ID
         $this->loadEntity('stdClass', null)->shouldBeAnInstanceOf('stdClass');
@@ -112,105 +85,97 @@ class DoctrineCrudGatewaySpec extends AbstractCrudGatewaySpec
     }
 
     /**
-     * @param \Doctrine\ORM\EntityRepository $repository
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectRepository $repository
      * @param \stdClass $entity
      */
-    public function it_should_generate_list($repository, $entity)
+    public function it_should_generate_list($objectManager, $repository, $entity)
     {
-        $this->mockEntityRepository($repository->getWrappedObject());
+        $objectManager->getRepository(Argument::type('string'))->willReturn($repository);
 
         $this->getList($entity, array());
         $repository->findAll()->shouldBeCalled();
     }
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param \stdClass $entity
      */
-    public function it_should_create_entity($entityManager, $entity)
+    public function it_should_create_entity($objectManager, $entity)
     {
-        $this->mockEntityManager($entityManager->getWrappedObject());
-
         $this->create($entity, array())->shouldReturn(true);
 
-        $entityManager->persist($entity)->shouldBeCalled();
-        $entityManager->flush()->shouldBeCalled();
-
+        $objectManager->persist($entity)->shouldBeCalled();
+        $objectManager->flush()->shouldBeCalled();
     }
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param \stdClass $entity
      */
-    public function it_should_not_create_invalid_entity($entityManager, $entity)
+    public function it_should_not_create_invalid_entity($objectManager, $entity)
     {
-        $this->mockEntityManager($entityManager->getWrappedObject());
-        $entityManager->flush()->willThrow('\Exception');
+        $objectManager->flush()->willThrow('\Exception');
 
         $this->create($entity, array())->shouldReturn(false);
     }
 
     /**
-     * @param \Doctrine\ORM\EntityRepository $repository
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectRepository $repository
      * @param \stdClass $entity
      */
-    public function it_should_read_entity($repository, $entity)
+    public function it_should_read_entity($objectManager, $repository, $entity)
     {
-        $this->mockEntityRepository($repository->getWrappedObject());
+        $objectManager->getRepository(Argument::type('string'))->willReturn($repository);
 
         $this->read($entity, 1);
         $repository->find(1)->shouldBeCalled();
     }
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param \stdClass $entity
      */
-    public function it_should_update_entity($entityManager, $entity)
+    public function it_should_update_entity($objectManager, $entity)
     {
-        $this->mockEntityManager($entityManager->getWrappedObject());
-
         $this->update($entity, array())->shouldReturn(true);
 
-        $entityManager->persist($entity)->shouldBeCalled();
-        $entityManager->flush()->shouldBeCalled();
+        $objectManager->persist($entity)->shouldBeCalled();
+        $objectManager->flush()->shouldBeCalled();
     }
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param \stdClass $entity
      */
-    public function it_should_not_update_invalid_entity($entityManager, $entity)
+    public function it_should_not_update_invalid_entity($objectManager, $entity)
     {
-        $this->mockEntityManager($entityManager->getWrappedObject());
-        $entityManager->flush()->willThrow('\Exception');
+        $objectManager->flush()->willThrow('\Exception');
 
         $this->update($entity, array())->shouldReturn(false);
     }
 
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param \stdClass $entity
      */
-    public function it_should_delete_entity($entityManager, $entity)
+    public function it_should_delete_entity($objectManager, $entity)
     {
-        $this->mockEntityManager($entityManager->getWrappedObject());
-
         $this->delete($entity, array())->shouldReturn(true);
 
-        $entityManager->remove($entity)->shouldBeCalled();
-        $entityManager->flush()->shouldBeCalled();
+        $objectManager->remove($entity)->shouldBeCalled();
+        $objectManager->flush()->shouldBeCalled();
     }
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param \stdClass $entity
      */
-    public function it_should_not_delete_invalid_entity($entityManager, $entity)
+    public function it_should_not_delete_invalid_entity($objectManager, $entity)
     {
-        $this->mockEntityManager($entityManager->getWrappedObject());
-        $entityManager->flush()->willThrow('\Exception');
+        $objectManager->flush()->willThrow('\Exception');
 
         $this->delete($entity, array())->shouldReturn(false);
     }

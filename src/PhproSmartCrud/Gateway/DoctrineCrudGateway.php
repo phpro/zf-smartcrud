@@ -9,8 +9,9 @@
 
 namespace PhproSmartCrud\Gateway;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use PhproSmartCrud\Exception\SmartCrudException;
 
 /**
@@ -18,8 +19,14 @@ use PhproSmartCrud\Exception\SmartCrudException;
  *
  * @package PhproSmartCrud\Gateway
  */
-class DoctrineCrudGateway extends  AbstractCrudGateway
+class DoctrineCrudGateway
+    implements ObjectManagerAwareInterface, CrudGatewayInterface
 {
+
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
 
     /**
      * @param      $entityKey
@@ -57,7 +64,7 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
      */
     public function create($entity, $parameters)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getObjectManager();
         try {
             $em->persist($entity);
             $em->flush();
@@ -87,7 +94,7 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
      */
     public function update($entity, $parameters)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getObjectManager();
         try {
             $em->persist($entity);
             $em->flush();
@@ -107,7 +114,7 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
     public function delete($entity, $id)
     {
         try {
-            $em = $this->getEntityManager();
+            $em = $this->getObjectManager();
             $em->remove($entity);
             $em->flush();
         } catch (\Exception $e) {
@@ -118,28 +125,34 @@ class DoctrineCrudGateway extends  AbstractCrudGateway
     }
 
     /**
-     * @return EntityManager
-     * @throws SmartCrudException
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      */
-    public function getEntityManager()
+    public function setObjectManager(ObjectManager $objectManager)
     {
-        $serviceManager = $this->getServiceManager();
-        if (!$serviceManager->has('Doctrine\ORM\EntityManager')) {
-            throw new SmartCrudException('There is no entity manger registered in the service manager with the key: Doctrine\ORM\EntityManager.');
-        }
+        $this->objectManager = $objectManager;
+    }
 
-        return $serviceManager->get('Doctrine\ORM\EntityManager');
+    /**
+     * @return array|ObjectManager|object
+     * @throws \PhproSmartCrud\Exception\SmartCrudException
+     */
+    public function getObjectManager()
+    {
+        if (!$this->objectManager || !$this->objectManager instanceof ObjectManager) {
+            throw new SmartCrudException('Invalid object manager configured.');
+        }
+        return $this->objectManager;
     }
 
     /**
      * @param $entity
      *
-     * @return EntityRepository
+     * @return ObjectRepository
      */
     public function getRepository($entity)
     {
         $entityKey = is_string($entity) ? $entity : get_class($entity);
-        return $this->getEntityManager()->getRepository($entityKey);
+        return $this->getObjectManager()->getRepository($entityKey);
     }
 
 }

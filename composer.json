@@ -1,5 +1,5 @@
 {
-    "name": "phpro/smartcrud",
+    "name": "phpro/zf-smartcrud",
     "description": "Module for creating smartcrud with the ZF2 MVC layer.",
     "type": "zf-module",
     "license": "BSD-3-Clause",
@@ -9,7 +9,7 @@
         "zf2",
         "module"
     ],
-    "homepage": "https://github.com/veewee/PhproSmartCrud",
+    "homepage": "https://github.com/phpro/zf-smartcrud",
     "authors": [
         {
             "name": "Toon Verwerft",
@@ -54,7 +54,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1-dev"
+            "dev-master": "2.1-dev"
         }
     },
     "bin": ["bin/smartcrud", "bin/smartcrud.php"]

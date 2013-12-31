@@ -37,4 +37,22 @@ class SmartCrudRouterSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Zend\Mvc\Router\Http\Segment');
     }
 
+    public function it_should_have_default_values()
+    {
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'smart-service', 'value' => 'PhproSmartCrud\Service\DeleteServiceFactory'));
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'action', 'value' => 'list'));
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'identifier-name',  'value' => 'id'));
+        $this->getDefaultParams()->shouldHaveDefaultConfigurationValues(array('key' => 'controller', 'value' => 'PhproSmartCrud\Controller\CrudController'));
+
+    }
+
+    public function getMatchers()
+    {
+        return array(
+            'haveDefaultConfigurationValues' => function ($subject, $value) {
+                return array_key_exists($value['key'], $subject) && $value['value'] == $subject[$value['key']];
+            },
+        );
+    }
+
 }

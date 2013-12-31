@@ -35,7 +35,7 @@ class ReadServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_before_read_event($eventManager)
     {
-        $this->read();
+        $this->run(1, null);
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_READ))->shouldBeCalled();
     }
 
@@ -44,21 +44,21 @@ class ReadServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_after_read_event($eventManager)
     {
-        $this->read();
+        $this->run(1, null);
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_READ))->shouldBeCalled();
     }
 
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_call_read_function_on_gateway($gateway)
     {
-        $this->read();
+        $this->run(1, null);
         $gateway->read(Argument::type('stdClass'), 1)->shouldBeCalled();
     }
 
     /**
-     * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_return_gateway_return_value($gateway)
     {
@@ -66,10 +66,9 @@ class ReadServiceSpec extends AbstractCrudServiceSpec
         $data = array('column1' => 'value1', 'column2' => 'value2');
 
         $gateway->read($arguments, 1)->willReturn($data);
-        $this->read()->shouldReturn($data);
-
+        $this->run(1, null)->shouldReturn($data);
         $gateway->read($arguments, 1)->willReturn(null);
-        $this->read()->shouldReturn(null);
+        $this->run(1, null)->shouldReturn(null);
     }
 
 }
