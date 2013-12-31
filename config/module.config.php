@@ -2,7 +2,7 @@
 return array(
     'service_manager' => array(
         "abstract_factories" => array(
-            'PhproSmartCrud\Gateway\AbstractCrudFactory',
+            'PhproSmartCrud\Gateway\AbstractGatewayFactory',
             'PhproSmartCrud\Service\AbstractSmartCrudServiceFactory',
         ),
         'factories' => array(
