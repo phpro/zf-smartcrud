@@ -63,7 +63,6 @@ class ApplicationFactory implements FactoryInterface
         $cli = new Application();
         $cli->setName('SmartCrud Command Line Interface');
         $cli->setVersion(Version::VERSION);
-        $cli->setHelperSet(new HelperSet());
 
         // Load commands using event
         $this->getEventManager($sl)->trigger('loadCli.post', $cli, array('ServiceManager' => $sl));

@@ -75,8 +75,12 @@ class Module implements
         ));
 
         $serviceManager = $event->getParam('ServiceManager');
-        $serviceHelper  = new \PhproSmartCrud\Console\Helper\ServiceManagerHelper($serviceManager);
-        $cli->getHelperSet()->set($serviceHelper, 'sm');
+        
+        $helperSet = $cli->getHelperSet();
+        $helperSet->set(new \PhproSmartCrud\Console\Helper\ServiceManagerHelper($serviceManager));
+        $helperSet->set(new \PhproSmartCrud\Console\Helper\ConfigHelper());
+        $helperSet->set(new \PhproSmartCrud\Console\Helper\GatewayListHelper());
+        $helperSet->set(new \PhproSmartCrud\Console\Helper\ModuleListHelper());
     }
 
 }

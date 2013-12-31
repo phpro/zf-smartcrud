@@ -10,34 +10,23 @@
 namespace PhproSmartCrud\Console\Helper;
 
 use Symfony\Component\Console\Helper\Helper;
-use Zend\ServiceManager\ServiceManager;
 
 /**
- * Class ServiceManagerHelper
+ * Class ModuleListHelper
  *
  * @package PhproSmartCrud\Console\Helper
  */
-class ServiceManagerHelper extends Helper
+class ModuleListHelper extends Helper
 {
-    protected $serviceManager;
 
     /**
-     * @param ServiceManager $serviceManager
+     * @return array
      */
-    public function __construct(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-    }
-
-    /**
-     * Get the ServiceManager instance.
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
+    public function getList()
+   {
+       $config = $this->getHelperSet()->get('Config')->getApplicationConfig();
+       return isset($config['modules']) ? $config['modules'] : array();
+   }
 
     /**
      * Get the canonical name of this helper.
@@ -47,6 +36,6 @@ class ServiceManagerHelper extends Helper
      */
     public function getName()
     {
-        return 'serviceManager';
+        return 'moduleList';
     }
 }

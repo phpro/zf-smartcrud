@@ -13,30 +13,31 @@ use Symfony\Component\Console\Helper\Helper;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * Class ServiceManagerHelper
+ * Class ConfigHelper
  *
  * @package PhproSmartCrud\Console\Helper
  */
-class ServiceManagerHelper extends Helper
+class ConfigHelper extends Helper
 {
-    protected $serviceManager;
 
     /**
-     * @param ServiceManager $serviceManager
+     * @return array
      */
-    public function __construct(ServiceManager $serviceManager)
+    public function getConfig()
     {
-        $this->serviceManager = $serviceManager;
+        $serviceManager = $this->getHelperSet()->get('serviceManager')->getServiceManager();
+        $config = $serviceManager->get('Config');
+        return $config;
     }
 
     /**
-     * Get the ServiceManager instance.
-     *
-     * @return ServiceManager
+     * @return array
      */
-    public function getServiceManager()
+    public function getApplicationConfig()
     {
-        return $this->serviceManager;
+        $serviceManager = $this->getHelperSet()->get('serviceManager')->getServiceManager();
+        $config = $serviceManager->get('ApplicationConfig');
+        return $config;
     }
 
     /**
@@ -47,6 +48,6 @@ class ServiceManagerHelper extends Helper
      */
     public function getName()
     {
-        return 'serviceManager';
+        return 'Config';
     }
 }
