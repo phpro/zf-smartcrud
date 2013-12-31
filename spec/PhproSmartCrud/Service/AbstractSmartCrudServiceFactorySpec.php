@@ -64,7 +64,7 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                 ),
                 'Admin\Service\UserServiceFactory' => array(
                     AbstractSmartCrudServiceFactory::CONFIG_DEFAULT => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'Ageas\Entity\User',
+                        AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                         AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                         AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm'
                     ),
@@ -91,7 +91,7 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
         $this->getConfig('Admin\Service\UserServiceFactory', 'create')->shouldReturn(
             array(
                  AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
-                 AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'Ageas\Entity\User',
+                 AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                  AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm',
                  AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                  AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(
@@ -103,7 +103,7 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
         $this->getConfig('Admin\Service\UserServiceFactory', 'update')->shouldReturn(
             array(
                  AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
-                 AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'Ageas\Entity\User',
+                 AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                  AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm',
                  AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                  AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(
@@ -129,7 +129,7 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                 ),
                 $requestedName => array(
                     AbstractSmartCrudServiceFactory::CONFIG_DEFAULT => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'Ageas\Entity\User',
+                        AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                         AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                         AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm'
                     ),
