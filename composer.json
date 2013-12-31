@@ -47,10 +47,7 @@
     "autoload": {
         "psr-0": {
             "PhproSmartCrud": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
+        }
     },
     "extra": {
         "branch-alias": {

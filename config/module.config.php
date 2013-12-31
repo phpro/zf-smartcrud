@@ -7,6 +7,7 @@ return array(
         ),
         'factories' => array(
             'PhproSmartCrud\Service\ParametersService'    => 'PhproSmartCrud\Service\ParametersService',
+            'PhproSmartCrud\Console\Application'          => 'PhproSmartCrud\Console\ApplicationFactory',
         ),
         'invokables' => array(
             // Services
@@ -33,6 +34,9 @@ return array(
             // View strategies
             'PhproSmartCrud\View\Strategy\JsonStrategy'        =>  'PhproSmartCrud\View\Strategy\JsonStrategy',
             'PhproSmartCrud\View\Strategy\RedirectStrategy'    =>  'PhproSmartCrud\View\Strategy\RedirectStrategy',
+        ),
+        'aliases' => array(
+            'zf-smartcrud.cli' => 'PhproSmartCrud\Console\Application'
         ),
         // Make sure to generate new instances ...
         'shared' => array(
