@@ -10,7 +10,6 @@
 namespace PhproSmartCrud\Console\Helper;
 
 use Symfony\Component\Console\Helper\Helper;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class ConfigHelper
