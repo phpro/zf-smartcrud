@@ -22,15 +22,17 @@ class DeleteService extends AbstractCrudService
     /**
      * @return bool
      */
-    public function delete()
+    public function run($id, $data)
     {
         $em = $this->getEventManager();
-        $em->trigger($this->createEvent(CrudEvent::BEFORE_DELETE));
+        $entity = $this->loadEntity($id);
+
+        $em->trigger($this->createEvent(CrudEvent::BEFORE_DELETE, $entity));
 
         $gateway = $this->getGateway();
-        $result = $gateway->delete($this->getEntity(), $this->getParameters()->fromRoute('id', 0));
+        $result = $gateway->delete($this->loadEntity($id), $data);
 
-        $em->trigger($this->createEvent(CrudEvent::AFTER_DELETE));
+        $em->trigger($this->createEvent(CrudEvent::AFTER_DELETE, $entity));
         return $result;
     }
 

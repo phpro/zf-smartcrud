@@ -2,23 +2,6 @@
 namespace PhproSmartCrud;
 
 return array(
-    /**
-     * Smartcrud configuration
-     */
-    'PhproSmartcrudConfig' => array(
-        /**
-         * Default gateway object
-         */
-        'gateway' => 'custom.doctrine.gateway',
-
-        /**
-         * Add default listeners to the smartcrud
-         */
-        'listeners' => array(
-            'phpro.smartcrud.listener.flashmessenger',
-            'phpro.smartcrud.listener.bjyauthorize',
-        ),
-    ),
 
     /**
      * Configure custom gateways

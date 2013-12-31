@@ -25,13 +25,17 @@ class ListService extends AbstractCrudService
     public function getList()
     {
         $em = $this->getEventManager();
-        $em->trigger($this->createEvent(CrudEvent::BEFORE_LIST));
+        $em->trigger($this->createEvent(CrudEvent::BEFORE_LIST, null));
 
         $gateway = $this->getGateway();
         $result = $gateway->getList($this->getEntity(), $this->getParameters()->fromQuery());
 
-        $em->trigger($this->createEvent(CrudEvent::AFTER_LIST));
+        $em->trigger($this->createEvent(CrudEvent::AFTER_LIST, null));
         return $result;
     }
 
+    public function run($id, $data)
+    {
+        // TODO: Implement run() method.
+    }
 }

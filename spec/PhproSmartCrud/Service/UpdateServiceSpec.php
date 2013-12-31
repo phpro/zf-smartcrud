@@ -32,43 +32,115 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
 
     /**
      * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\Form\Form $form
      */
-    public function it_should_trigger_before_update_event($eventManager)
+    public function it_should_trigger_invalid_update_event($eventManager,$form)
     {
-        $this->update();
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(false);
+        $this->setForm($form);
+
+        $this->run(1, $this->getMockPostData());
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldBeCalled();
+    }
+
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\Form\Form $form
+     */
+    public function it_should_trigger_before_data_validation_event($eventManager,$form)
+    {
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(true);
+        $this->setForm($form);
+
+        $this->run(1, $this->getMockPostData());
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
+    }
+    /**
+     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\Form\Form $form
+     */
+    public function it_should_trigger_before_update_event($eventManager, $form)
+    {
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(true);
+        $this->setForm($form);
+
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldBeCalled();
     }
 
     /**
      * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\Form\Form $form
      */
-    public function it_should_trigger_after_update_event($eventManager)
+    public function it_should_trigger_after_update_event($eventManager, $form)
     {
-        $this->update();
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(true);
+        $this->setForm($form);
+
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_UPDATE))->shouldBeCalled();
     }
 
     /**
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \StdClass $entity
+     * @param \Zend\Form\Form $form
      */
-    public function it_should_call_update_function_on_gateway($gateway)
+    public function it_should_call_update_function_on_gateway($gateway, $entity, $form)
     {
-        $this->update();
-        $gateway->update(Argument::type('stdClass'), Argument::exact(array()))->shouldBeCalled();
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(true);
+        $this->setForm($form);
+
+        $data = $this->getMockPostData();
+        $this->setEntityKey('stdClass');
+        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->shouldBeCalled();
+        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->willReturn($entity);
+        $gateway->update(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
+
+        $this->run(1, $data);
+        $gateway->update(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
     }
 
     /**
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \Zend\Form\Form $form
      */
-    public function it_should_return_gateway_return_value($gateway)
+    public function it_should_return_gateway_return_value($gateway, $form)
     {
-        $arguments = Argument::cetera();
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(true);
+        $this->setForm($form);
 
+        $data = $this->getMockPostData();
+
+        $arguments = Argument::cetera();
+        $gateway->loadEntity($arguments, Argument::exact(1))->shouldBeCalled();
         $gateway->update($arguments, array())->willReturn(true);
-        $this->update()->shouldReturn(true);
+        $this->run(1, $data)->shouldReturn(true);
 
         $gateway->update($arguments, array())->willReturn(false);
-        $this->update()->shouldReturn(false);
+        $this->run(1, $data)->shouldReturn(false);
     }
 
+    protected function getMockPostData()
+    {
+        return array('property' => 'value');
+    }
 }

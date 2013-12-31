@@ -35,31 +35,20 @@ class SmartCrudRouter extends Segment
      *
      * @return array
      */
-    protected function getDefaultParams()
+    public function getDefaultParams()
     {
         return array(
-            'controller' => 'phpro.smartcrud.controller',
+            'controller' => 'PhproSmartCrud\Controller\CrudController',
+            'smart-service'   => 'PhproSmartCrud\Service\DeleteServiceFactory' ,
             'action' => 'list',
-            'entity' => null,
-            'form' => null,
-            'id' => null,
-            'listeners' => array(),
-            'output' => array(
-                'list' => 'phpro.smartcrud.view.model.view',
-                'create' => 'phpro.smartcrud.view.model.view',
-                'post-create' => 'phpro.smartcrud.view.model.redirect',
-                'read' => 'phpro.smartcrud.view.model.view',
-                'update' => 'phpro.smartcrud.view.model.view',
-                'post-update' => 'phpro.smartcrud.view.model.redirect',
-                'delete' => 'phpro.smartcrud.view.model.redirect',
-            ),
+            'identifier-name' => 'id',
         );
     }
 
     /**
      * @return array
      */
-    protected function getDefaultConstraints()
+    public function getDefaultConstraints()
     {
         return array(
             'action' => 'list|create|read|update|delete',

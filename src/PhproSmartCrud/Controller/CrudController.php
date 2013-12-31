@@ -9,41 +9,61 @@
 
 namespace PhproSmartCrud\Controller;
 use PhproSmartCrud\Exception\SmartCrudException;
-use PhproSmartCrud\Service\CrudService;
+use PhproSmartCrud\Service\AbstractCrudService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Exception;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Form\Form;
 use Zend\View\Model\ModelInterface;
 
 /**
  * Class CrudController
  */
 class CrudController extends AbstractActionController
-    implements ServiceManagerAwareInterface
 {
 
     /**
-     * @var ServiceManager
+     * @var AbstractCrudService
      */
-    protected $serviceManager;
+    protected $smartService;
 
     /**
-     * @var CrudService
+     * Name of request or query parameter containing identifier
+     *
+     * @var string
      */
-    protected $crudService;
+    protected $identifierName = 'id';
 
     /**
-     * @var Form
+     * Set the route match/query parameter name containing the identifier
+     *
+     * @param  string $name
+     * @return self
      */
-    protected $form;
+    public function setIdentifierName($name)
+    {
+        $this->identifierName = (string) $name;
+        return $this;
+    }
 
     /**
-     * @var mixed
+     * Retrieve the route match/query parameter name containing the identifier
+     *
+     * @return string
      */
-    protected $entity;
+    public function getIdentifierName()
+    {
+        return $this->identifierName;
+    }
+
+    /**
+     * Returns the id specified by the identifier name
+     *
+     * @return mixed
+     */
+    public function getEntityId()
+    {
+        return $this->params()->fromRoute($this->getIdentifierName(), null);
+    }
 
     /**
      * Inject parameters from the router directly in the controller
@@ -61,40 +81,16 @@ class CrudController extends AbstractActionController
             throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
         }
 
-        $id = $routeMatch->getParam('id', null);
-        $entityKey = $routeMatch->getParam('entity', false);
-        $formKey = $routeMatch->getParam('form', false);
+        $this->setIdentifierName($routeMatch->getParam('identifier-name', 'id'));
 
-        if (!$entityKey) {
-            throw new SmartCrudException('There was no entity type configured to the router');
+        $action = $routeMatch->getParam('action', 'not-found');
+
+        $serviceKey = $routeMatch->getParam('smart-service', null);
+        if (!$serviceKey) {
+            throw new Exception\DomainException('Missing smart service key');
         }
 
-        if (!$formKey) {
-            throw new SmartCrudException('There was no form configured to the router');
-        }
-
-        // Add listeners
-        $routeListeners = $routeMatch->getParam('listeners', array());
-        foreach ($routeListeners as $listener) {
-            if (!$this->getServiceManager()->has($listener)) {
-                throw new SmartCrudException(sprintf('The route listener class %s could not be found', $listener));
-            }
-            $eventListener = $this->getServiceManager()->get($listener);
-            $this->getCrudService()->getEventManager()->attach($eventListener);
-        }
-
-        // Add entity
-        $entity = $this->getCrudService()->loadEntity($entityKey, $id);
-        $this->setEntity($entity);
-        $this->getCrudService()->setEntity($entity);
-
-        // Add form
-        /** @var \Zend\Form\Form $form  */
-        $form = $this->getServiceManager()->get($formKey);
-        $form->bind($this->getEntity());
-        $form->setBindOnValidate(true);
-        $this->setForm($form);
-        $this->getCrudService()->setForm($form);
+        $this->setSmartService($this->getServiceLocator()->get($serviceKey . '::' . $action));
 
         return parent::onDispatch($e);
     }
@@ -105,8 +101,7 @@ class CrudController extends AbstractActionController
      */
     public function listAction()
     {
-        $result = $this->getCrudService()->getList();
-        return $this->createModel($result);
+        return $this->prepareModel('list');
     }
 
     /**
@@ -114,12 +109,11 @@ class CrudController extends AbstractActionController
      */
     public function createAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->createModel(null);
+        if ($this->getRequest()->isPost()
+            && $this->getSmartService()->run(null, $this->getRequest()->getPost())) {
+                return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
-
-        $result = $this->getCrudService()->create();
-        return $this->createModel($result, 'post-create');
+        return $this->prepareModel('create');
     }
 
     /**
@@ -127,12 +121,11 @@ class CrudController extends AbstractActionController
      */
     public function updateAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->createModel(null);
+        if ($this->getRequest()->isPost()
+            && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
+            return $this->redirect()->toRoute(null, array('action' => 'view'));
         }
-
-        $result = $this->getCrudService()->update();
-        return $this->createModel($result, 'post-update');
+        return $this->prepareModel('update');
     }
 
     /**
@@ -140,8 +133,7 @@ class CrudController extends AbstractActionController
      */
     public function readAction()
     {
-        $result = $this->getCrudService()->read();
-        return $this->createModel($result);
+        return $this->prepareModel('read');
     }
 
     /**
@@ -149,149 +141,49 @@ class CrudController extends AbstractActionController
      */
     public function deleteAction()
     {
-        $result = $this->getCrudService()->delete();
-        return $this->createModel($result);
-    }
-
-    /**
-     * @param mixed $result
-     * @param string $action
-     *
-     * @return ModelInterface
-     * @throws \PhproSmartCrud\Exception\SmartCrudException
-     */
-    protected function createModel($result ,$action = null)
-    {
-        $event = $this->getEvent();
-        $router = $event->getRouteMatch();
-        $controllerAction = $router->getParam('action');
-        $action = $action ? $action : $controllerAction;
-        $models = $router->getParam('output', array());
-
-        // Validate params
-        if (!isset($models[$action])) {
-            throw new SmartCrudException('No output models are configured for the current route.');
+        if ($this->getRequest()->isPost()
+            && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
+            return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
-
-        // Get right model type
-        $modelKey = $models[$action];
-        $model = $this->getModelType($modelKey);
-
-        // Set model parameters:
-        $model->setVariable('action', $controllerAction);
-        $model->setVariable('result', $result);
-        $model->setVariable('form', $this->getForm());
-        $model->setVariable('entity', $this->getEntity());
-        $model->setTemplate(sprintf('phpro-smartcrud/%s', $controllerAction));
-
-        return $model;
+        return $this->prepareModel('delete');
     }
 
     /**
-     * @param $modelKey
+     * @param $action
      *
-     * @return ModelInterface
-     * @throws \Zend\ServiceManager\Exception\ServiceNotFoundException
+     * @return \PhproSmartCrud\View\Model\JsonModel|\PhproSmartCrud\View\Model\ViewModel
      */
-    protected function getModelType($modelKey)
+    public function prepareModel($action)
     {
+        $service = $this->getSmartService();
         if ($this->getRequest()->isXmlHttpRequest()) {
-            $model = $this->getServiceManager()->get('phpro.smartcrud.view.model.json');
-        } else {
-            $model = $this->getServiceManager()->get($modelKey);
+            $model = $this->getServiceLocator()->get('PhproSmartCrud\View\Model\JsonModel');
+            $service->setOutputModel($model);
         }
-
+        $model = $service->getOutputModel();
+        $model->setTemplate(sprintf('phpro-smartcrud/%s', $action));
+        if($this->getRequest()->isXmlHttpRequest()) {
+            $model->setTerminal(true);
+        }
         return $model;
     }
 
     /**
-     * @param ServiceManager $serviceManager
+     * @param AbstractCrudService $service
      *
      * @return $this
      */
-    public function setServiceManager(ServiceManager $serviceManager)
+    public function setSmartService(AbstractCrudService $service)
     {
-        $this->serviceManager = $serviceManager;
+        $this->smartService = $service;
         return $this;
     }
 
     /**
-     * @return ServiceManager
+     * @return AbstractCrudService
      */
-    public function getServiceManager()
+    public function getSmartService()
     {
-        // ServiceManager injected from \Zend\Mvc\Controller\ControllerManager
-        if (!$this->serviceManager) {
-            $sm = $this->getServiceLocator();
-            $this->setServiceManager($sm);
-        }
-
-        return $this->serviceManager;
+        return $this->smartService;
     }
-
-    /**
-     * @param $crudService
-     *
-     * @return $this
-     */
-    public function setCrudService($crudService)
-    {
-        $this->crudService = $crudService;
-        return $this;
-    }
-
-    /**
-     * @return \PhproSmartCrud\Service\CrudService
-     */
-    public function getCrudService()
-    {
-        if (!$this->crudService) {
-            /** @var \PhproSmartCrud\Service\CrudService $crudService  */
-            $crudService = $this->getServiceManager()->get('phpro.smartcrud');
-            $crudService
-                ->setForm($this->getForm())
-                ->setEntity($this->getEntity());
-            $this->crudService = $crudService;
-        }
-        return $this->crudService;
-    }
-
-    /**
-     * @param \Zend\Form\Form $form
-     *
-     * @return $this
-     */
-    public function setForm($form)
-    {
-        $this->form = $form;
-        return $this;
-    }
-
-    /**
-     * @return \Zend\Form\Form
-     */
-    public function getForm()
-    {
-        return $this->form;
-    }
-
-    /**
-     * @param $entity
-     *
-     * @return $this
-     */
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
 }

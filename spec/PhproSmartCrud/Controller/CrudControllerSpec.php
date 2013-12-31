@@ -9,9 +9,11 @@
 
 namespace spec\PhproSmartCrud\Controller;
 
+use PhproSmartCrud\Router\SmartCrudRouter;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Prophet;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class CrudControllerSpec
@@ -31,154 +33,19 @@ class CrudControllerSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Zend\Mvc\Controller\AbstractActionController');
     }
 
-    public function it_should_implement_Zend_ServiceManagerInterface()
+    public function it_should_have_an_identifier_name()
     {
-        $this->shouldBeAnInstanceOf('Zend\ServiceManager\ServiceManagerAwareInterface');
+        $this->setIdentifierName('aName')->shouldReturn($this);
+        $this->getIdentifierName()->shouldReturn('aName');
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $smartService
      */
-    protected function mockServiceManager($serviceManager, $crudService)
+    public function it_should_have_an_action_service($smartService)
     {
-        $this->setServiceManager($serviceManager);
-        $serviceManager->get('phpro.smartcrud')->willReturn($crudService);
-
-        // Default route config
-        $prophet = new Prophet();
-        $entity = $prophet->prophesize('stdClass');
-        $serviceManager->get('stdClass')->willReturn($entity);
-        $serviceManager->get('Zend\Form\Form')->willReturn($prophet->prophesize('Zend\Form\Form'));
-
-        // mock methods to prevent errors
-        $dummy = Argument::any();
-        $crudService->setForm($dummy)->willReturn($crudService);
-        $crudService->setEntity($dummy)->willReturn($crudService);
-        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
-    }
-
-    /**
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     * @param array $params
-     */
-    protected function mockRouteMatch($mvcEvent, $routeMatch, $params = array())
-    {
-        // Configure routematch
-        $mvcEvent->getRouteMatch()->willReturn($routeMatch);
-        $mvcEvent->setResult(Argument::any())->willReturn ($mvcEvent);
-        $routeMatch->getParam('action', Argument::any())->willReturn('index');
-        $routeMatch->getParam('id', Argument::any())->willReturn(null);
-        $routeMatch->getParam('listeners', Argument::any())->willReturn(array());
-        foreach ($params as $key => $value) {
-            $routeMatch->getParam($key, Argument::any())->willReturn($value);
-        }
-    }
-
-    /**
-     * @param $mvcEvent
-     */
-    protected function mockMvcEvent($mvcEvent)
-    {
-        $mvcEvent->setRequest(Argument::any())->willReturn($mvcEvent);
-        $mvcEvent->setResponse(Argument::any())->willReturn($mvcEvent);
-        $mvcEvent->setTarget(Argument::any())->willReturn($mvcEvent);
-        $mvcEvent->setName(Argument::any())->willReturn($mvcEvent);
-        $mvcEvent->stopPropagation(Argument::any())->willReturn($mvcEvent);
-        $mvcEvent->propagationIsStopped(Argument::any())->willReturn($mvcEvent);
-        $mvcEvent->setResult(Argument::any())->willReturn($mvcEvent);
-        $this->setEvent($mvcEvent);
-    }
-
-    /**
-     * @param $serviceManager
-     */
-    protected function mockViewModel($serviceManager)
-    {
-        $prophet = new Prophet();
-        $viewModel = $prophet->prophesize('\Zend\View\Model\ModelInterface');
-        $jsonModel = $prophet->prophesize('\PhproSmartCrud\View\Model\JsonModel');
-
-        $serviceManager->get('ViewModelInterface')->willReturn($viewModel);
-        $serviceManager->get('phpro.smartcrud.view.model.json')->willReturn($jsonModel);
-    }
-
-    /**
-     * @param array $routeParams
-     *
-     * @return array
-     */
-    protected function mergeRouteParams($routeParams)
-    {
-        $defaults = array(
-            'action' => '',
-            'entity' => 'stdClass',
-            'form' => 'Zend\Form\Form',
-            'id' => null,
-            'listeners' => array(),
-            'output' => array(
-                'list' => 'ViewModelInterface',
-                'create' => 'ViewModelInterface',
-                'post-create' => 'ViewModelInterface',
-                'read' => 'ViewModelInterface',
-                'update' => 'ViewModelInterface',
-                'post-update' => 'ViewModelInterface',
-                'delete' => 'ViewModelInterface',
-            )
-        );
-
-        return array_merge($defaults, $routeParams);
-    }
-
-    /**
-     * @param array $routeParams
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    protected function mockControllerAction($routeParams, $request, $crudService)
-    {
-        // Mock services:
-        $prophet = new Prophet();
-        $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
-        $this->mockServiceManager($serviceManager, $crudService);
-        $this->mockViewModel($serviceManager);
-        $this->setCrudService($crudService);
-
-        // create routematch
-        /** @var \Zend\Mvc\Router\Routematch $routeMatch  */
-        $routeMatch = $prophet->prophesize('\Zend\Mvc\Router\Routematch');
-        $routeMatch->setParam(Argument::any(), Argument::any())->willReturn($routeMatch);
-        foreach ($routeParams as $key => $value) {
-            $routeMatch->getParam($key, Argument::cetera())->willReturn($value);
-        }
-
-        // Configure mvc Event
-        /** @var \Zend\Mvc\MvcEvent $mvcEvent  */
-        $mvcEvent = $prophet->prophesize('\Zend\Mvc\MvcEvent');
-        $mvcEvent->getRouteMatch()->willReturn($routeMatch);
-        $this->mockMvcEvent($mvcEvent);
-
-        // Configure and dispatch request
-        $this->mockParams($serviceManager, array());
-        $this->dispatch($request);
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param array $paramsData
-     */
-    protected function mockParams($serviceManager, array $paramsData)
-    {
-        $prophet = new Prophet();
-        /** @var \PhproSmartCrud\Service\ParametersService $params  */
-        $params = $prophet->prophesize('PhproSmartCrud\Service\ParametersService');
-        $params->fromRoute()->willReturn($paramsData);
-        $params->fromPost()->willReturn($paramsData);
-        $params->fromQuery()->willReturn($paramsData);
-        $params->fromRoute('id', Argument::any())->willReturn(1);
-
-        $serviceManager->get('phpro.smartcrud.params')->willReturn($params);
+        $this->setSmartService($smartService)->shouldReturn($this);
+        $this->getSmartService()->shouldReturn($smartService);
     }
 
     /**
@@ -189,312 +56,427 @@ class CrudControllerSpec extends ObjectBehavior
         $mvcEvent->getRouteMatch()->willReturn(null);
         $this->shouldThrow('Zend\Mvc\Exception\DomainException')->duringOnDispatch($mvcEvent);
     }
-
     /**
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     * @param \stdClass $entity
+     * @param array $params
      */
-    public function it_should_configure_entity_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
+    protected function mockRouteMatch($mvcEvent, $routeMatch, $params = array())
     {
         // Configure routematch
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-            'entity' => 'stdClass',
-            'form' => 'Zend\Form\Form',
-        ));
+        $mvcEvent->getRouteMatch()->willReturn($routeMatch);
+        $mvcEvent->setResult(Argument::any())->willReturn ($mvcEvent);
+        if(array_key_exists('action',$params)) {
+            $action = $params['action'];
+            $routeMatch->getParam('action', Argument::any())->willReturn($action);
+            if(array_key_exists($action,$params)) {
+                $routeMatch->getParam($action, Argument::any())->willReturn($params[$action]);
+            }
+        } else {
+            $routeMatch->getParam('action', Argument::any())->willReturn('index');
 
-        // Configure service
-        $this->mockServiceManager($serviceManager, $crudService);
-        $crudService->loadEntity(Argument::cetera())->willReturn($entity);
+        }
+        if(array_key_exists('smart-service',$params)) {
+            $routeMatch->getParam('smart-service', Argument::any())->willReturn($params['smart-service']);
+        } else {
+            $routeMatch->getParam('smart-service', Argument::any())->willReturn('PhproSmartCrud\Service\AbstractCrudService');
+        }
 
-        // Test
-        $this->onDispatch($mvcEvent);
-        $crudService->loadEntity('stdClass', null)->shouldBeCalled();
-        $this->getEntity()->shouldBe($entity);
-        $crudService->setEntity($entity)->shouldBeCalled();
-    }
+        if(array_key_exists('identifier-name',$params)) {
+            $identifierName = $params['identifier-name'];
+            $routeMatch->getParam('identifier-name', Argument::any())->willReturn($identifierName);
+            if (array_key_exists($identifierName, $params)) {
+                $routeMatch->getParam($identifierName, Argument::any())->willReturn($params[$identifierName]);
+            } else {
+                $routeMatch->getParam($identifierName, Argument::any())->willReturn(null);
+            }
+        } else {
+            $routeMatch->getParam('identifier-name', Argument::any())->willReturn('id');
+            $routeMatch->getParam('id', Argument::any())->willReturn(null);
+        }
 
-    /**
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     * @param \Zend\Form\Form $form
-     */
-    public function it_should_configure_form_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $crudService, $form)
-    {
-        // Configure routematch
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-            'entity' => 'stdClass',
-            'form' => 'ServiceFormKey'
-        ));
-
-        // Configure service
-        $serviceManager->get('ServiceFormKey')->willReturn($form);
-        $this->mockServiceManager($serviceManager, $crudService);
-
-        // Test
-        $this->onDispatch($mvcEvent);
-        $serviceManager->get('ServiceFormKey')->shouldBeCalled();
-        $this->getForm()->shouldBe($form);
-
-        // Service config
-        $crudService->setForm($form)->shouldBeCalled();
-
-        // Form config:
-        $form->bind(Argument::type('stdClass'))->shouldBeCalled();
-        $form->setBindOnValidate(true)->shouldBeCalled();
-    }
-
-    /**
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     * @param \stdClass $entity
-     * @param \Zend\EventManager\EventManager $eventManager
-     */
-    public function it_should_configure_listeners_in_the_crud_service_on_dispatch($mvcEvent, $routeMatch,
-        $serviceManager, $crudService, $entity, $eventManager)
-    {
-        // Configure routematch
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-                                                           'entity' => 'stdClass',
-                                                           'form' => 'Zend\Form\Form',
-                                                           'listeners' => array('listener1')
-                                                      ));
-        $dummy = Argument::cetera();
-
-        $this->mockServiceManager($serviceManager, $crudService);
-        $serviceManager->has('listener1')->willReturn(true);
-        $serviceManager->get('listener1')->willReturn('listener1');
-
-        $crudService->getEventManager()->willReturn($eventManager);
-
-        $serviceManager->has('listener1')->shouldBeCalled();
-        $serviceManager->get('listener1')->shouldBeCalled();
-        $crudService->getEventManager()->shouldBeCalled();
-        $eventManager->attach('listener1')->shouldBeCalled();
-        $this->onDispatch($mvcEvent);
-    }
-
-    /**
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     * @param \stdClass $entity
-     */
-    public function it_should_throw_exception_when_listeners_are_not_configured($mvcEvent, $routeMatch, $serviceManager, $crudService, $entity)
-    {
-        // Configure routematch
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-           'entity' => 'stdClass',
-           'form' => 'Zend\Form\Form',
-           'listeners' => array('listener1')
-        ));
-        $this->mockServiceManager($serviceManager, $crudService);
-        $serviceManager->has('listener1')->willReturn(false);
-        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringOnDispatch($mvcEvent);
-    }
-
-    /**
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     */
-    public function it_should_throw_smartCrudException_when_no_entity_is_configured($mvcEvent, $routeMatch)
-    {
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-            'entity' => null,
-            'form' => 'ServiceFormKey',
-        ));
-        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringOnDispatch($mvcEvent);
-    }
-
-    /**
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
-     */
-    public function it_should_throw_smartCrudException_when_no_form_is_configured($mvcEvent, $routeMatch)
-    {
-        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
-            'entity' => 'stdClass',
-            'form' => null,
-        ));
-        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringOnDispatch($mvcEvent);
     }
 
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\AbstractCrudService $smartService
      */
-    public function it_should_have_fluent_interfaces($serviceManager)
-    {
-        $dummy = Argument::any();
-        $this->setServiceManager($serviceManager)->shouldReturn($this);
-        $this->setForm($dummy)->shouldReturn($this);
-        $this->setEntity($dummy)->shouldReturn($this);
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     */
-    public function it_should_have_a_service_manager($serviceManager)
-    {
-        $this->setServiceManager($serviceManager);
-        $this->getServiceManager()->shouldReturn($serviceManager);
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     */
-    public function it_should_load_service_manager_from_controller_manager($serviceManager)
+    protected function mockServiceManager($serviceManager, $smartService, $smartServiceKey)
     {
         $this->setServiceLocator($serviceManager);
-        $this->getServiceManager()->shouldReturn($serviceManager);
+        $serviceManager->get(Argument::exact($smartServiceKey))->willReturn($smartService);
+        return $serviceManager;
     }
 
     /**
-     * @param \Zend\Form\Form $form
-     */
-    public function it_should_have_a_form($form)
-    {
-        $this->setForm($form);
-        $this->getForm()->shouldReturn($form);
-    }
-
-    /**
-     * @param \stdClass $entity
-     */
-    public function it_should_have_an_entity($entity)
-    {
-        $this->setEntity($entity);
-        $this->getEntity()->shouldReturn($entity);
-    }
-
-    /**
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    public function it_should_have_a_crud_service($crudService)
-    {
-        $this->setCrudService($crudService);
-        $this->getCrudService()->shouldReturn($crudService);
-    }
-
-    /**
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \PhproSmartCrud\Service\AbstractCrudService $smartService
      */
-    public function it_should_have_a_default_crud_service($serviceManager, $crudService)
+    public function it_should_configure_the_identifier_name_and_smart_service_on_dispatch($mvcEvent, $routeMatch, $serviceManager, $smartService)
     {
-        $dummy = Argument::any();
-        $this->mockServiceManager($serviceManager, $crudService);
-
-        // validate:
-        $this->getCrudService()->shouldReturn($crudService);
-        $crudService->setForm($dummy)->shouldBeCalled();
-        $crudService->setEntity($dummy)->shouldBeCalled();
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => 'index',
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'identifier-name' => 'idenfifier-id',
+                                                      ));
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::index');
+        $this->onDispatch($mvcEvent);
+        $this->getIdentifierName()->shouldBe('idenfifier-id');
+        $this->getSmartService()->shouldBe($smartService);
     }
 
     /**
      * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\CreateService $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
      */
-    public function it_should_handle_list_action($request, $crudService)
+    public function it_should_handle_get_to_a_create_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
     {
-        $routeParams = $this->mergeRouteParams(array('action' => 'list'));
-        $crudService->getList()->willReturn(array());
+        $action = 'create';
+        $smartService->run(null,Argument::any())->shouldNotBeCalled();
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'id'             => '1'
+                                                      ));
+
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockGet($request, $mvcEvent, $smartService,$smartService, $params, $action);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\CreateService $smartService
+     * @param \Zend\Mvc\Controller\PluginManager $pluginManager
+     * @param \Zend\Mvc\Controller\Plugin\Redirect $redirectPlugin
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_valid_post_to_create_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $pluginManager, $redirectPlugin, $params)
+    {
+        $postParameters = array('property' => 'value');
+        $action = 'create';
+        $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService'
+                                                      ));
+
+        $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
+        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'index')))->shouldBeCalled();
+        $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'index'))->willReturn('mockRedirect');
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockValidPost($request, $mvcEvent, $pluginManager, $params, $action, $postParameters);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\CreateService $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_invalid_post_to_create_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
+    {
+        $postParameters = array('property' => 'value');
+        $action = 'create';
+        $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService'
+                                                      ));
+
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\UpdateService $smartService
+     * @param \Zend\Mvc\Controller\PluginManager $pluginManager
+     * @param \Zend\Mvc\Controller\Plugin\Redirect $redirectPlugin
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_a_valid_post_to_an_update_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $pluginManager, $redirectPlugin, $params)
+    {
+        $postParameters = array('property' => 'value');
+        $action = 'update';
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'id'             => '1'
+                                                      ));
+
+        $pluginManager->get(Argument::exact('params'), null)->shouldBeCalled()->willReturn($params);
+        $params->fromRoute(Argument::exact('id'), null)->shouldBeCalled()->willReturn(1);
+
+        $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
+        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'view')))->shouldBeCalled();
+        $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'view'))->willReturn('mockRedirect');
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockValidPost($request, $mvcEvent, $pluginManager, $params, $action, $postParameters);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\UpdateService $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_a_get_to_an_update_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
+    {
+        $action = 'update';
+        $smartService->run(Argument::any(), Argument::any())->shouldNotBeCalled();
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'id'             => '1'
+                                                      ));
+
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockGet($request, $mvcEvent, $smartService,$smartService, $params, $action);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\UpdateService $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_invalid_post_to__an_update_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
+    {
+        $postParameters = array('property' => 'value');
+        $action = 'update';
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'id'             => '1'
+                                                      ));
+
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\DeleteService $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_a_get_to_an_delete_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
+    {
+        $action = 'update';
+        $smartService->run(Argument::any(), Argument::any())->shouldNotBeCalled();
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'id'             => '1'
+                                                      ));
+
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockGet($request, $mvcEvent, $smartService,$smartService, $params, $action);
+    }
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\DeleteService $smartService
+     * @param \Zend\Mvc\Controller\PluginManager $pluginManager
+     * @param \Zend\Mvc\Controller\Plugin\Redirect $redirectPlugin
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_valid_post_to_a_delete_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $pluginManager, $redirectPlugin, $params)
+    {
+        $postParameters = array('property' => 'value');
+        $action = 'delete';
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(true);
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'id'             => '1'
+                                                      ));
+
+        $pluginManager->get(Argument::exact('params'), null)->shouldBeCalled()->willReturn($params);
+        $params->fromRoute(Argument::exact('id'), null)->shouldBeCalled()->willReturn(1);
+
+        $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
+        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'index')))->shouldBeCalled();
+        $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'index'))->willReturn('mockRedirect');
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockValidPost($request, $mvcEvent, $pluginManager, $params, $action, $postParameters);
+    }
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Mvc\Router\Http\RouteMatch $routeMatch
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \PhproSmartCrud\Service\DeleteService $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     */
+    public function it_should_handle_invalid_post_to__an_delete_action($request, $mvcEvent, $routeMatch, $serviceManager, $smartService, $params)
+    {
+        $postParameters = array('property' => 'value');
+        $action = 'delete';
+        $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
+
+        // Configure routematch
+        $this->mockRouteMatch($mvcEvent, $routeMatch, array(
+                                                           'action'         => $action,
+                                                           'smart-service'  => 'PhproSmartCrud\Service\AbstractCrudService',
+                                                           'id'             => '1'
+                                                      ));
+
+
+        // Configure service
+        $serviceManager = $this->mockServiceManager($serviceManager, $smartService, 'PhproSmartCrud\Service\AbstractCrudService::' . $action);
+
+        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters);
+    }
+
+    private function mockGet($request, $mvcEvent, $params, $smartService, $action)
+    {
+        /** @var \Zend\Mvc\MvcEvent $mvcEvent  */
+        $router = new SmartCrudRouter('test');
+        $mvcEvent->getRouter()->willReturn($router);
+
+        $prophet = new Prophet();
+        $ouput = $prophet->prophesize('PhproSmartCrud\View\Model\ViewModel');
+        $smartService->getOutputModel()->shouldBeCalled()->willReturn($ouput);
+
+
         $request->isXmlHttpRequest()->willReturn(false);
-        $this->mockControllerAction($routeParams, $request, $crudService);
+        $request->isPost()->willReturn(false);
+        $request->getPost()->shouldNotBeCalled();
 
-        $this->listAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
+        $mvcEvent->getRequest()->willReturn($request);
+        $mvcEvent->setRequest(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResponse(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setTarget(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setName(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->stopPropagation(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->propagationIsStopped(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResult(Argument::any())->willReturn($mvcEvent);
+
+        $this->setEvent($mvcEvent);
+
+        $this->dispatch($request);
     }
 
-    /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    public function it_should_handle_create_action($request, $crudService)
+    private function mockValidPost($request, $mvcEvent, $pluginManager, $params, $action, $postParameters)
     {
-        $routeParams = $this->mergeRouteParams(array('action' => 'create'));
-        $crudService->create()->willReturn(true);
+            /** @var \Zend\Mvc\MvcEvent $mvcEvent  */
+        $router = new SmartCrudRouter('test');
+        $mvcEvent->getRouter()->willReturn($router);
+
+        $pluginManager->setController(Argument::any())->shouldBeCalled();
+        $this->setPluginManager($pluginManager);
+
+
         $request->isXmlHttpRequest()->willReturn(false);
         $request->isPost()->willReturn(true);
-        $this->mockControllerAction($routeParams, $request, $crudService);
+        $request->getPost()->shouldBeCalled();
+        $request->getPost()->willReturn($postParameters);
 
-        $this->createAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
+        $mvcEvent->getRequest()->willReturn($request);
+        $mvcEvent->setRequest(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResponse(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setTarget(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setName(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->stopPropagation(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->propagationIsStopped(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResult(Argument::any())->willReturn($mvcEvent);
+
+        $this->setEvent($mvcEvent);
+
+        $this->dispatch($request);
     }
 
-    /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    public function it_should_handle_read_action($request, $crudService)
+    private function mockInValidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters)
     {
-        $routeParams = $this->mergeRouteParams(array('action' => 'read'));
-        $crudService->read()->willReturn(true);
-        $request->isXmlHttpRequest()->willReturn(false);
-        $this->mockControllerAction($routeParams, $request, $crudService);
+        /** @var \Zend\Mvc\MvcEvent $mvcEvent  */
+        $router = new SmartCrudRouter('test');
+        $mvcEvent->getRouter()->willReturn($router);
 
-        $this->readAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
-    }
-
-    /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    public function it_should_handle_update_action($request, $crudService)
-    {
-        $routeParams = $this->mergeRouteParams(array('action' => 'update'));
-        $crudService->update()->willReturn(true);
+        $prophet = new Prophet();
+        $ouput = $prophet->prophesize('PhproSmartCrud\View\Model\ViewModel');
+        $smartService->getOutputModel()->shouldBeCalled()->willReturn($ouput);
         $request->isXmlHttpRequest()->willReturn(false);
         $request->isPost()->willReturn(true);
-        $this->mockControllerAction($routeParams, $request, $crudService);
+        $request->getPost()->shouldBeCalled()->willReturn($postParameters);
 
-        $this->updateAction()->shouldBeAnInstanceOf('\Zend\View\Model\ModelInterface');
+        $mvcEvent->getRequest()->willReturn($request);
+        $mvcEvent->setRequest(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResponse(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setTarget(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setName(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->stopPropagation(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->propagationIsStopped(Argument::any())->willReturn($mvcEvent);
+        $mvcEvent->setResult(Argument::any())->willReturn($mvcEvent);
+
+        $this->setEvent($mvcEvent);
+
+        $this->dispatch($request);
     }
-
-    /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    public function it_should_handle_delete_action($request, $crudService)
-    {
-        $routeParams = $this->mergeRouteParams(array('action' => 'delete'));
-        $crudService->delete()->willReturn(true);
-        $request->isXmlHttpRequest()->willReturn(true);
-        $this->mockControllerAction($routeParams, $request, $crudService);
-
-        $this->deleteAction()->shouldBeAnInstanceOf('\PhproSmartCrud\View\Model\JsonModel');
-    }
-
-    /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    public function it_should_return_json_model_on_ajax($request, $crudService)
-    {
-        $routeParams = $this->mergeRouteParams(array('action' => 'list'));
-        $crudService->getList()->willReturn(array());
-        $request->isXmlHttpRequest()->willReturn(true);
-        $this->mockControllerAction($routeParams, $request, $crudService);
-
-        $this->listAction()->shouldBeAnInstanceOf('\PhproSmartCrud\View\Model\JsonModel');
-    }
-
-    /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \PhproSmartCrud\Service\CrudService $crudService
-     */
-    public function it_should_throw_exception_when_output_model_is_not_configured($request, $crudService)
-    {
-        $routeParams = $this->mergeRouteParams(array('action' => 'does-not-exist-in-output-array'));
-        $crudService->getList()->willReturn(array());
-        $request->isXmlHttpRequest()->willReturn(false);
-        $this->mockControllerAction($routeParams, $request, $crudService);
-
-        $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')->duringListAction();
-    }
-
 }
