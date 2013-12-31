@@ -21,6 +21,7 @@ class CrudEvent extends Event
 
     const BEFORE_LIST = 'before-list';
     const AFTER_LIST = 'after-list';
+    const BEFORE_DATA_VALIDATION = 'before-data-validation';
     const BEFORE_CREATE = 'before-create';
     const AFTER_CREATE = 'after-create';
     const INVALID_CREATE = 'invalid-create';
@@ -34,6 +35,7 @@ class CrudEvent extends Event
     const INVALID_DELETE = 'invalid-delete';
     const BEFORE_VALIDATE = 'before-validate';
     const AFTER_VALIDATE = 'after-validate';
+    const FORM_READY = 'form-ready';
 
     /**
      * Shortcut function to retreive entity

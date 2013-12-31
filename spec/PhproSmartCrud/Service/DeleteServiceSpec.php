@@ -35,7 +35,7 @@ class DeleteServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_before_delete_event($eventManager)
     {
-        $this->delete();
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldBeCalled();
     }
 
@@ -44,17 +44,25 @@ class DeleteServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_trigger_after_delete_event($eventManager)
     {
-        $this->delete();
+        $this->run(1, $this->getMockPostData());
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_DELETE))->shouldBeCalled();
     }
 
     /**
      * @param \PhproSmartCrud\Gateway\AbstractCrudGateway $gateway
+     * @param \StdClass $entity
      */
-    public function it_should_call_delete_function_on_gateway($gateway)
+    public function it_should_call_delete_function_on_gateway($gateway, $entity)
     {
-        $this->delete();
-        $gateway->delete(Argument::type('stdClass'), 1)->shouldBeCalled();
+
+        $data = $this->getMockPostData();
+        $this->setEntityKey('stdClass');
+        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->shouldBeCalled();
+        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->willReturn($entity);
+        $gateway->delete(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
+        $this->setGateway($gateway);
+        $this->run(1, $data);
+
     }
 
     /**
@@ -62,12 +70,20 @@ class DeleteServiceSpec extends AbstractCrudServiceSpec
      */
     public function it_should_return_gateway_return_value($gateway)
     {
+        $data = $this->getMockPostData();
+
         $arguments = Argument::cetera();
+
+        $gateway->loadEntity($arguments, Argument::exact(1))->shouldBeCalled();
         $gateway->delete($arguments, 1)->willReturn(true);
-        $this->delete()->shouldReturn(true);
+        $this->run(1, $data)->shouldReturn(true);
 
         $gateway->delete($arguments, 1)->willReturn(false);
-        $this->delete()->shouldReturn(false);
+        $this->run(1, $data)->shouldReturn(false);
     }
 
+    protected function getMockPostData()
+    {
+        return array('property' => 'value');
+    }
 }

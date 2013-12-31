@@ -12,14 +12,17 @@ namespace PhproSmartCrud\Service;
 use PhproSmartCrud\Event\CrudEvent;
 use PhproSmartCrud\Gateway\CrudGatewayInterface;
 use Zend\EventManager\EventManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Class AbstractCrudService
  *
  * @package PhproSmartCrud\Service
  */
-abstract class AbstractCrudService
+abstract class AbstractCrudService implements ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
 
     /**
      * @var ParametersService
@@ -42,6 +45,58 @@ abstract class AbstractCrudService
     protected $eventManager;
 
     /**
+     * @var Form
+     */
+    protected $form;
+
+    /**
+     * @var string
+     */
+    protected $entityKey;
+    /**
+     * @var string
+     */
+    protected $outputModel;
+
+    /**
+     * @var string
+     */
+    protected $formKey;
+
+    /**
+     * @param string $formKey
+     */
+    public function setFormKey($formKey)
+    {
+        $this->formKey = $formKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormKey()
+    {
+        return $this->formKey;
+    }
+
+    /**
+     * @param string $entityKey
+     */
+    public function setEntityKey($entityKey)
+    {
+        $this->entityKey = $entityKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityKey()
+    {
+        return $this->entityKey;
+    }
+    /**
      * @param mixed $entity
      *
      * @return $this
@@ -58,6 +113,17 @@ abstract class AbstractCrudService
     public function getEntity()
     {
         return $this->entity;
+    }
+
+    /**
+     * @param      $entityKey
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function loadEntity($id = null)
+    {
+        return $this->getGateway()->loadEntity($this->getEntityKey(), $id);
     }
 
     /**
@@ -121,14 +187,57 @@ abstract class AbstractCrudService
     }
 
     /**
+     * @param \Zend\Form\Form $form
+     *
+     * @return $this
+     */
+    public function setForm($form)
+    {
+        $this->form = $form;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Form\Form
+     */
+    public function getForm($entity)
+    {
+        $this->form->bind($entity);
+        $this->form->bindOnValidate();
+        $this->getEventManager()->trigger($this->createEvent(CrudEvent::FORM_READY, $this->form));
+        return $this->form;
+    }
+
+    /**
      * @param $eventName
      *
      * @return CrudEvent
      */
-    public function createEvent($eventName)
+    public function createEvent($eventName, $target)
     {
-        $event = new CrudEvent($eventName, $this->getEntity(), $this->getParameters());
+        $event = new CrudEvent($eventName, $target, $this->getParameters());
         return $event;
+    }
+
+    /**
+     * @param string $outputModel
+     */
+    public function setOutputModel($outputModel)
+    {
+
+        $this->outputModel = $outputModel;
+
+        return $this;
+    }
+
+    abstract public function run($id, $data);
+
+    /**
+     * @return string
+     */
+    public function getOutputModel()
+    {
+        return $this->outputModel;
     }
 
 }

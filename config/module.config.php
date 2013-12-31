@@ -1,8 +1,10 @@
 <?php
 return array(
     'service_manager' => array(
+        "abstract_factories" => array(
+            'PhproSmartCrud\Service\AbstractSmartCrudServiceFactory'
+        ),
         'factories' => array(
-            'PhproSmartCrud\Service\CrudServiceFactory'   => 'PhproSmartCrud\Service\CrudServiceFactory',
             'PhproSmartCrud\Service\ParametersService'    => 'PhproSmartCrud\Service\ParametersService',
         ),
         'invokables' => array(
