@@ -23,7 +23,7 @@ class Application extends CliApplication
      */
     public function __construct()
     {
-        parent::__construct('Smartcrud', '0.1');
+        parent::__construct('Smartcrud', '2.1');
     }
 
     /**
