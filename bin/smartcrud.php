@@ -5,9 +5,11 @@ use Zend\Mvc\Application;
 
 ini_set('display_errors', true);
 chdir(__DIR__);
+if (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
+    throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
+}
 
 $previousDir = '.';
-
 while (!file_exists('config/application.config.php')) {
     $dir = dirname(getcwd());
 
@@ -20,10 +22,6 @@ while (!file_exists('config/application.config.php')) {
 
     $previousDir = $dir;
     chdir($dir);
-}
-
-if (!(@include_once __DIR__ . '/../vendor/autoload.php') && !(@include_once __DIR__ . '/../../../autoload.php')) {
-    throw new RuntimeException('Error: vendor/autoload.php could not be found. Did you run php composer.phar install?');
 }
 
 $application = Application::init(include 'config/application.config.php');

@@ -54,5 +54,5 @@
             "dev-master": "2.1-dev"
         }
     },
-    "bin": ["bin/smartcrud", "bin/smartcrud.php"]
+    "bin": ["bin/smartcrud"]
 }
