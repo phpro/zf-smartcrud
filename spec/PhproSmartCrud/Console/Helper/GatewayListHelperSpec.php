@@ -45,4 +45,3 @@ class GatewayListHelperSpec extends AbstractHelperSpec
     }
 
 }
-

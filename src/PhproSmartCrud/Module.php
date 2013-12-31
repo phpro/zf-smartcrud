@@ -6,7 +6,6 @@
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
-
 namespace PhproSmartCrud;
 
 use Zend\EventManager\EventInterface;
@@ -75,7 +74,7 @@ class Module implements
         ));
 
         $serviceManager = $event->getParam('ServiceManager');
-        
+
         $helperSet = $cli->getHelperSet();
         $helperSet->set(new \PhproSmartCrud\Console\Helper\ServiceManagerHelper($serviceManager));
         $helperSet->set(new \PhproSmartCrud\Console\Helper\ConfigHelper());
