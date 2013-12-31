@@ -15,6 +15,8 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zend\Config\Writer\PhpArray as PhpArrayWriter;
+use ZF\Configuration\ConfigResource;
 
 /**
  * Class Generate
@@ -34,7 +36,6 @@ class Generate extends CliCommand
     }
 
     /**
-     * @TODO write generation of files
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -50,12 +51,11 @@ class Generate extends CliCommand
         $entity = $this->getEntityClass($output);
         $form = $this->getFormClass($output);
 
-        $currentConfig = $this->parseCurrentConfig($gateway, $routePrefix, $controller, $entity, $form);
+        $config = $this->parseConfig($gateway, $routePrefix, $controller, $entity, $form);
+        $file = $this->writeConfig($module, $config);
 
-        var_dump($currentConfig);exit;
-
-
-        $output->writeln($text);
+        $output->writeln(sprintf('<fg=green>Configuration added to %s</fg=green>', $file));
+        $output->writeln('Smartcrud controller generated.');
     }
 
     /**
@@ -141,7 +141,6 @@ class Generate extends CliCommand
     }
 
     /**
-     * @TODO validate route
      *
      * @param OutputInterface $output
      *
@@ -194,7 +193,7 @@ class Generate extends CliCommand
      *
      * @return array
      */
-    protected function parseCurrentConfig($gateway, $routePrefix, $controller, $entity, $form)
+    protected function parseConfig($gateway, $routePrefix, $controller, $entity, $form)
     {
 
         $serviceKey = 'SmartCrudService\\' . ltrim($entity, '\\');
@@ -233,7 +232,7 @@ class Generate extends CliCommand
                     $routeName => array(
                         'type' => 'Zend\Mvc\Router\Http\Literal',
                         'options' => array(
-                            'route'    => '/' . $routePrefix . '[/:action[/:uid]]',
+                            'route'    => '/' . $routePrefix . '[/:action[/:id]]',
                             'defaults' => array(
                                 'controller' => $controller,
                                 'smart-service'   => $serviceKey ,
@@ -251,6 +250,22 @@ class Generate extends CliCommand
 
             )
         );
+    }
+
+    /**
+     * @param $module
+     * @param $config
+     *
+     * @return string
+     */
+    protected function writeConfig($module, $config)
+    {
+        $file = sprintf('%s/module/%s/config/module.config.php', getcwd(), $module);
+        $writer = new PhpArrayWriter();
+        $moduleConfig = new ConfigResource($config, $file, $writer);
+        $moduleConfig->patch(array(), true);
+
+        return $file;
     }
 
 }
