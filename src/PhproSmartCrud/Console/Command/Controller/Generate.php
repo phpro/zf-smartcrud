@@ -16,6 +16,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zend\Config\Writer\PhpArray as PhpArrayWriter;
+use Zend\Stdlib\ArrayUtils;
+
 
 /**
  * Class Generate
@@ -273,14 +275,14 @@ class Generate extends CliCommand
 
         // Create backup:
         if ($localConfig) {
-            $this->writer->toFile($file . '.backup', $localConfig);
+            $writer->toFile($file . '.backup', $localConfig);
         }
 
         // Merge with local config
         $localConfig = ArrayUtils::merge($localConfig, $config);
 
         // Write to configuration file
-        $this->writer->toFile($file, $localConfig);
+        $writer->toFile($file, $localConfig);
 
         return $file;
     }
