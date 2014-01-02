@@ -234,22 +234,26 @@ class Generate extends CliCommand
                         'type' => 'Zend\Mvc\Router\Http\Literal',
                         'options' => array(
                             'route'    => '/' . $routePrefix . '[/:action[/:id]]',
+                            'constraints' => array(
+                                'action' => 'list|create|read|update|delete',
+                                'id' => '[0-9]*',
+                            ),
                             'defaults' => array(
                                 'controller' => $controller,
                                 'smart-service'   => $serviceKey ,
                                 'action' => 'list',
                                 'identifier-name' => 'id',
-                                'constraints' => array(
-                                    'action' => 'list|create|read|update|delete',
-                                    'id' => '[0-9]*',
-                                ),
                             )
                         ),
                     ),
                 ),
+            ),
 
-
-            )
+            'controllers' => array(
+                'invokables' => array(
+                    $controller => 'PhproSmartCrud\\Controller\\CrudController',
+                ),
+            ),
         );
     }
 
