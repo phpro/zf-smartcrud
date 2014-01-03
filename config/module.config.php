@@ -2,11 +2,12 @@
 return array(
     'service_manager' => array(
         "abstract_factories" => array(
-            'PhproSmartCrud\Gateway\AbstractCrudFactory',
+            'PhproSmartCrud\Gateway\AbstractGatewayFactory',
             'PhproSmartCrud\Service\AbstractSmartCrudServiceFactory',
         ),
         'factories' => array(
             'PhproSmartCrud\Service\ParametersService'    => 'PhproSmartCrud\Service\ParametersService',
+            'PhproSmartCrud\Console\Application'          => 'PhproSmartCrud\Console\ApplicationFactory',
         ),
         'invokables' => array(
             // Services
@@ -34,6 +35,9 @@ return array(
             'PhproSmartCrud\View\Strategy\JsonStrategy'        =>  'PhproSmartCrud\View\Strategy\JsonStrategy',
             'PhproSmartCrud\View\Strategy\RedirectStrategy'    =>  'PhproSmartCrud\View\Strategy\RedirectStrategy',
         ),
+        'aliases' => array(
+            'zf-smartcrud.cli' => 'PhproSmartCrud\Console\Application'
+        ),
         // Make sure to generate new instances ...
         'shared' => array(
             'PhproSmartCrud\View\Model\JsonModel'       =>  false,
@@ -44,6 +48,9 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'PhproSmartCrud\Controller\CrudController' => 'PhproSmartCrud\Controller\CrudController'
+        ),
+        'abstract_factories' => array(
+            'PhproSmartCrud\\Controller\\AbstractCrudControllerFactory',
         ),
     ),
     'view_manager' => array(

@@ -9,11 +9,16 @@
 
 namespace PhproSmartCrud\Console\Command\Controller;
 
+use PhproSmartCrud\Controller\AbstractCrudControllerFactory;
+use PhproSmartCrud\Service\AbstractSmartCrudServiceFactory;
 use Symfony\Component\Console\Command\Command as CliCommand;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zend\Config\Writer\PhpArray as PhpArrayWriter;
+use Zend\Stdlib\ArrayUtils;
+
 
 /**
  * Class Generate
@@ -33,7 +38,6 @@ class Generate extends CliCommand
     }
 
     /**
-     * @TODO write generation of files
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -42,15 +46,18 @@ class Generate extends CliCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $module = $this->getModuleName($output);
         $gateway = $this->getGatewayClass($output);
+        $module = $this->getModuleName($output);
+        $routePrefix = $this->getRoutePrefix($output);
+        $controller = $this->getControllerClass($output);
         $entity = $this->getEntityClass($output);
-        $route = $this->getRoutePrefix($output);
+        $form = $this->getFormClass($output);
 
-        $text = print_r(array('TODO: create logica', $module, $entity, $route, $gateway), true);
+        $config = $this->parseConfig($gateway, $routePrefix, $controller, $entity, $form);
+        $file = $this->writeConfig($module, $config);
 
-
-        $output->writeln($text);
+        $output->writeln(sprintf('<fg=green>Configuration added to %s</fg=green>', $file));
+        $output->writeln('Smartcrud controller generated.');
     }
 
     /**
@@ -70,24 +77,24 @@ class Generate extends CliCommand
     protected function getModuleName(OutputInterface $output)
     {
         $dialog = $this->getDialog();
-        $moduleList = $this->getModuleList();
+        $moduleList = $this->getHelper('moduleList')->getList();
         $module = $dialog->askAndValidate($output, 'Please enter the name of the module: ', function ($module) use ($moduleList) {
-            if (!in_array($module, $moduleList))  {
-                throw new \RunTimeException('Invalid module: ' . $module);
-            }
-            return $module;
-        }, false, '', $moduleList);
+                if (!in_array($module, $moduleList))  {
+                    throw new \RunTimeException('Invalid module: ' . $module);
+                }
+
+                $location = sprintf('%s/module/%s/Module.php', getcwd(), $module);
+                if (!file_exists($location)) {
+                    throw new \RunTimeException(sprintf(
+                        'The selected module "%s" is not writable. Make sure that it is in the module directory.',
+                        $module
+                    ));
+                }
+
+                return $module;
+            }, false, '', $moduleList);
 
         return $module;
-    }
-
-    /**
-     * @TODO retrieve list of registered modules
-     * @return array
-     */
-    protected function getModuleList()
-    {
-        return array('test', 'test2', 'test3');
     }
 
     /**
@@ -99,28 +106,43 @@ class Generate extends CliCommand
     protected function getEntityClass(OutputInterface $output)
     {
         $dialog = $this->getDialog();
-        $entityList = $this->getEntityList();
-        $entity = $dialog->askAndValidate($output, 'Please enter the class of the entity: ', function ($entity) use ($entityList) {
-            if (!in_array($entity, $entityList))  {
-                throw new \RunTimeException('Invalid entity: ' . $entity);
-            }
-            return $entity;
-        }, false, '', $entityList);
+        $entity = $dialog->ask($output, 'Please enter the class of the entity: ', '');
+        $entity = str_replace('/', '\\', $entity);
 
         return $entity;
     }
 
     /**
-     * @TODO retrieve list of entities
-     * @return array
+     * @param OutputInterface $output
+     *
+     * @return string
+     * @throws \RunTimeException
      */
-    protected function getEntityList()
+    protected function getFormClass(OutputInterface $output)
     {
-        return array('test', 'test2', 'test3');
+        $dialog = $this->getDialog();
+        $form = $dialog->ask($output, 'Please enter the identifier key of the form: ', '');
+        $form = str_replace('/', '\\', $form);
+
+        return $form;
     }
 
     /**
-     * @TODO validate route
+     * @param OutputInterface $output
+     *
+     * @return string
+     * @throws \RunTimeException
+     */
+    protected function getControllerClass(OutputInterface $output)
+    {
+        $dialog = $this->getDialog();
+        $controller = $dialog->ask($output, 'Please enter the identifier key of the controller: ', '');
+        $controller = str_replace('/', '\\', $controller);
+
+        return $controller;
+    }
+
+    /**
      *
      * @param OutputInterface $output
      *
@@ -131,16 +153,16 @@ class Generate extends CliCommand
     {
         $dialog = $this->getDialog();
         $route = $dialog->askAndValidate($output, 'Please enter the prefix of the route: ', function ($route) {
-            if (false)  {
-                throw new \RunTimeException('Invalid route: ' . $route);
-            }
-            return $route;
-        }, false, '');
+                if (false)  {
+                    throw new \RunTimeException('Invalid route: ' . $route);
+                }
+                return $route;
+            }, false, '');
 
         return $route;
     }
 
-    /***
+    /**
      * @param OutputInterface $output
      * @return string
      * @throws \RunTimeException
@@ -148,27 +170,128 @@ class Generate extends CliCommand
     protected function getGatewayClass(OutputInterface $output)
     {
         $dialog = $this->getDialog();
-        $gatewayList = $this->getGatewayList();
-        $gateway = $dialog->askAndValidate($output, 'Please enter the class of the gateway: ', function ($gateway) use ($gatewayList) {
+        $gatewayHelper = $this->getHelper('gatewayList');
+        $gatewayList = $gatewayHelper->getList();
+        $defaultGateway = $gatewayHelper->getDefault();
+
+        $question = sprintf('Please enter the service key of the gateway <fg=yellow>(Default: %s)</fg=yellow>:', $defaultGateway);
+        $gateway = $dialog->askAndValidate($output, $question, function ($gateway) use ($gatewayList) {
                 if (!in_array($gateway, $gatewayList))  {
                     throw new \RunTimeException('Invalid gateway: ' . $gateway);
                 }
 
-                return array_search($gateway, $gatewayList);
-            }, false, '', $gatewayList);
+                return $gateway;
+            }, false, $defaultGateway, $gatewayList);
 
         return $gateway;
     }
 
     /**
+     * @param $gateway
+     * @param $routePrefix
+     * @param $controller
+     * @param $entity
+     * @param $form
+     *
      * @return array
      */
-    protected function getGatewayList()
+    protected function parseConfig($gateway, $routePrefix, $controller, $entity, $form)
     {
+
+        $entitySuffix = ltrim($entity, '\\');
+        $serviceKey = 'SmartCrudService\\' . $entitySuffix;
+        $controllerKey = 'SmartCrudController\\' . $entitySuffix;
+        $routeName = str_replace('\\', '-', strtolower($serviceKey));
+        $routePrefix = ltrim($routePrefix, '/');
+
         return array(
-            'PhproSmartCrud\Gateway\DoctrineCrudGateway' => 'Doctrine',
-            'PhproSmartCrud\Gateway\ZendDbCrudGateway'   => 'Zend-Db',
+            AbstractSmartCrudServiceFactory::CONFIG_KEY => array(
+                $serviceKey => array(
+                    'default' => array(
+                        AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY  => $gateway,
+                        AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => $entity,
+                        AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
+                        AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => $form,
+                    ),
+                    'list' => array(
+                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                    ),
+                    'create' => array(
+                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                    ),
+                    'read' => array(
+                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                    ),
+                    'update' => array(
+                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                    ),
+                    'delete' => array(
+                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                    ),
+                ),
+            ),
+
+            AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
+                $controllerKey => array(
+                    AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'PhproSmartCrud\\Controller\\CrudController',
+                    AbstractCrudControllerFactory::CONFIG_IDENTIFIER => 'id',
+                    AbstractCrudControllerFactory::CONFIG_SMART_SERVICE => $serviceKey,
+                ),
+            ),
+
+            'router' => array(
+                'routes' => array(
+                    $routeName => array(
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => array(
+                            'route'    => '/' . $routePrefix . '[/:action[/:id]]',
+                            'constraints' => array(
+                                'action' => 'list|create|read|update|delete',
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => $controller,
+                                'action' => 'list',
+                            )
+                        ),
+                    ),
+                ),
+            ),
         );
+    }
+
+    /**
+     * @param $module
+     * @param $config
+     *
+     * @return string
+     */
+    protected function writeConfig($module, $config)
+    {
+        $file = sprintf('%s/module/%s/config/module.config.php', getcwd(), $module);
+        $writer = new PhpArrayWriter();
+
+        // Load local config:
+        $localConfig = array();
+        if (file_exists($file)) {
+            $localConfig = include $file;
+            if (!is_array($localConfig)) {
+                $localConfig = array();
+            }
+        }
+
+        // Create backup:
+        if ($localConfig) {
+            copy($file, $file . '.backup');
+        }
+
+        // Merge with local config
+        $localConfig = ArrayUtils::merge($localConfig, $config);
+
+        // Write to configuration file
+        $writer->toFile($file, $localConfig);
+
+        return $file;
     }
 
 }
