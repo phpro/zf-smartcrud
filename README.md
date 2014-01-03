@@ -1,6 +1,6 @@
 # SmartCrud for Zend Framework
-Master: [![Build Status](https://secure.travis-ci.org/phpro/PhproSmartCrud.png?branch=master)](http://travis-ci.org/veewee/PhproSmartCrud)
-Dev-Master: [![Build Status](https://secure.travis-ci.org/phpro/PhproSmartCrud.png?branch=0.1-dev)](http://travis-ci.org/veewee/PhproSmartCrud)
+Master: [![Build Status](https://secure.travis-ci.org/phpro/zf-smartcrud.png?branch=master)](http://travis-ci.org/phpro/zf-smartcrud)
+Dev-Master: [![Build Status](https://secure.travis-ci.org/phpro/zf-smartcrud.png?branch=0.1-dev)](http://travis-ci.org/phpro/zf-smartcrud)
 
 Module providing a SmartCrud for working with the [Zend Framework 2](https://github.com/zendframework/zf2) MVC
 layer.
