@@ -19,6 +19,7 @@
     "minimum-stability": "dev",
     "require": {
         "php":                               ">=5.3.3",
+        "zendframework/zend-config":         "2.*",
         "zendframework/zend-mvc":            "2.*",
         "zendframework/zend-http":           "2.*",
         "zendframework/zend-eventmanager":   "2.*",
@@ -47,15 +48,12 @@
     "autoload": {
         "psr-0": {
             "PhproSmartCrud": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
+        }
     },
     "extra": {
         "branch-alias": {
             "dev-master": "0.1-dev"
         }
     },
-    "bin": ["bin/smartcrud", "bin/smartcrud.php"]
+    "bin": ["bin/smartcrud"]
 }

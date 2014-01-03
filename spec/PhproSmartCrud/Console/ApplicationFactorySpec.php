@@ -17,16 +17,16 @@ use Prophecy\Argument;
  *
  * @package spec\PhproSmartCrud\Console
  */
-class ApplicationSpec extends ObjectBehavior
+class ApplicationFactorySpec extends ObjectBehavior
 {
     public function it_is_initializable()
     {
-        $this->shouldHaveType('PhproSmartCrud\Console\Application');
+        $this->shouldHaveType('PhproSmartCrud\Console\ApplicationFactory');
     }
 
     public function it_should_extend_Symfony_Console_Application()
     {
-        $this->shouldBeAnInstanceOf('\Symfony\Component\Console\Application');
+        $this->shouldHaveType('\Zend\ServiceManager\FactoryInterface');
     }
 
 }
