@@ -20,7 +20,7 @@ class AbstractSmartCrudServiceFactory
     /**
      * The config key in the service manager
      */
-    const CONFIG_KEY = 'phpro-smart-service';
+    const CONFIG_KEY = 'phpro-smartcrud-service';
 
     const CONFIG_ENTITY_CLASS   = 'entity-class';
     const CONFIG_PARAMETERS_KEY = 'parameters';
