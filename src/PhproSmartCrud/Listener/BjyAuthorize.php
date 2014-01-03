@@ -5,8 +5,11 @@ namespace PhproSmartCrud\Listener;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use PhproSmartCrud\Event\CrudEvent;
 use PhproSmartCrud\Exception\SmartCrudException;
+use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class Authorize
@@ -16,7 +19,8 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @package PhproSmartCrud\Listener
  */
-class BjyAuthorize extends AbstractListener
+class BjyAuthorize extends AbstractListenerAggregate
+    implements ServiceManagerAwareInterface
 {
 
     /**
@@ -29,6 +33,27 @@ class BjyAuthorize extends AbstractListener
     const PRIVILEGE_READ = 'read';
     const PRIVILEGE_UPDATE = 'update';
     const PRIVILEGE_DELETE = 'delete';
+
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    /**
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
 
     /**
      * @inheritDoc

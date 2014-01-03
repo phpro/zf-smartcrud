@@ -3,15 +3,18 @@
 namespace PhproSmartCrud\Listener;
 
 use PhproSmartCrud\Event\CrudEvent;
+use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class FlashMessenger
  *
  * @package PhproSmartCrud
  */
-class FlashMessenger extends AbstractListener
+class FlashMessenger extends AbstractListenerAggregate
+    implements ServiceManagerAwareInterface
 {
 
     /**
@@ -23,6 +26,27 @@ class FlashMessenger extends AbstractListener
      * @var \Zend\Mvc\Controller\Plugin\FlashMessenger
      */
     protected $flashMessenger;
+
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    /**
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
 
     /**
      * @inheritDoc
