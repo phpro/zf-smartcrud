@@ -50,3 +50,16 @@ array(
     ),
 );
 */
+/*
+ * Sample crucontroller configuration
+ *
+array(
+    AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
+        $controllerKey => array(
+            AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'PhproSmartCrud\\Controller\\CrudController',
+            AbstractCrudControllerFactory::CONFIG_IDENTIFIER => 'id',
+            AbstractCrudControllerFactory::CONFIG_SMART_SERVICE => 'Admin\Service\UserServiceFactory',
+        ),
+    ),
+),
+ */

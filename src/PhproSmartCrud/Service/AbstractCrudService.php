@@ -19,6 +19,7 @@ use Zend\EventManager\EventManager;
  * @package PhproSmartCrud\Service
  */
 abstract class AbstractCrudService
+    implements CrudServiceInterface
 {
     /**
      * @var ParametersService
@@ -225,8 +226,6 @@ abstract class AbstractCrudService
 
         return $this;
     }
-
-    abstract public function run($id, $data);
 
     /**
      * @return string

@@ -25,7 +25,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    public function mockConfiguration($serviceLocator)
+    protected function mockConfiguration($serviceLocator)
     {
         $serviceLocator->has('Config')->willReturn(true);
         $serviceLocator->get('Config')->willReturn(array(
