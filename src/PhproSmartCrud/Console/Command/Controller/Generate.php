@@ -9,6 +9,7 @@
 
 namespace PhproSmartCrud\Console\Command\Controller;
 
+use PhproSmartCrud\Controller\AbstractCrudControllerFactory;
 use PhproSmartCrud\Service\AbstractSmartCrudServiceFactory;
 use Symfony\Component\Console\Command\Command as CliCommand;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -197,7 +198,9 @@ class Generate extends CliCommand
     protected function parseConfig($gateway, $routePrefix, $controller, $entity, $form)
     {
 
-        $serviceKey = 'SmartCrudService\\' . ltrim($entity, '\\');
+        $entitySuffix = ltrim($entity, '\\');
+        $serviceKey = 'SmartCrudService\\' . $entitySuffix;
+        $controllerKey = 'SmartCrudController\\' . $entitySuffix;
         $routeName = str_replace('\\', '-', strtolower($serviceKey));
         $routePrefix = ltrim($routePrefix, '/');
 
@@ -228,6 +231,14 @@ class Generate extends CliCommand
                 ),
             ),
 
+            AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
+                $controllerKey => array(
+                    AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'PhproSmartCrud\\Controller\\CrudController',
+                    AbstractCrudControllerFactory::CONFIG_IDENTIFIER => 'id',
+                    AbstractCrudControllerFactory::CONFIG_SMART_SERVICE => $serviceKey,
+                ),
+            ),
+
             'router' => array(
                 'routes' => array(
                     $routeName => array(
@@ -240,18 +251,10 @@ class Generate extends CliCommand
                             ),
                             'defaults' => array(
                                 'controller' => $controller,
-                                'smart-service'   => $serviceKey ,
                                 'action' => 'list',
-                                'identifier-name' => 'id',
                             )
                         ),
                     ),
-                ),
-            ),
-
-            'controllers' => array(
-                'invokables' => array(
-                    $controller => 'PhproSmartCrud\\Controller\\CrudController',
                 ),
             ),
         );

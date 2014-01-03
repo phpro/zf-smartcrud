@@ -49,6 +49,9 @@ return array(
         'invokables' => array(
             'PhproSmartCrud\Controller\CrudController' => 'PhproSmartCrud\Controller\CrudController'
         ),
+        'abstract_factories' => array(
+            'PhproSmartCrud\\Controller\\AbstractCrudControllerFactory',
+        ),
     ),
     'view_manager' => array(
         'template_path_stack' => array(
