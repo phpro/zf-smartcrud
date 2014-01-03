@@ -11,6 +11,7 @@ namespace PhproSmartCrud\Controller;
 
 use PhproSmartCrud\Exception\SmartCrudException;
 use PhproSmartCrud\Service\CrudServiceInterface;
+use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -41,6 +42,11 @@ class AbstractCrudControllerFactory
      * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
+
+    /**
+     * @var ControllerManager
+     */
+    protected $controllerManager;
 
     /**
      * @return array
@@ -75,6 +81,22 @@ class AbstractCrudControllerFactory
     }
 
     /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     */
+    public function setControllerManager($controllerManager)
+    {
+        $this->controllerManager = $controllerManager;
+    }
+
+    /**
+     * @return \Zend\Mvc\Controller\ControllerManager
+     */
+    public function getControllerManager()
+    {
+        return $this->controllerManager;
+    }
+
+    /**
      * @return \Zend\Mvc\Router\RouteMatch
      * @throws \Zend\Mvc\Exception\DomainException
      */
@@ -101,8 +123,13 @@ class AbstractCrudControllerFactory
      *
      * @return bool
      */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreateServiceWithName(ServiceLocatorInterface $controllers, $name, $requestedName)
     {
+        $this->setControllerManager($controllers);
+        $this->setServiceLocator($controllers->getServiceLocator());
+        $serviceLocator = $this->getServiceLocator();
+
+
         if (array_key_exists($requestedName, $this->lookupCache)) {
             return $this->lookupCache[$requestedName];
         }
@@ -133,8 +160,12 @@ class AbstractCrudControllerFactory
      * @return \PhproSmartCrud\Controller\CrudControllerInterface
      * @throws SmartCrudException
      */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function createServiceWithName(ServiceLocatorInterface $controllers, $name, $requestedName)
     {
+        $this->setControllerManager($controllers);
+        $this->setServiceLocator($controllers->getServiceLocator());
+        $serviceLocator = $this->getServiceLocator();
+
         $config   = $serviceLocator->get('Config');
         $config   = $config[self::FACTORY_NAMESPACE][$requestedName];
         $config     = array_merge($this->getDefaultConfiguration(), $config);
@@ -154,8 +185,7 @@ class AbstractCrudControllerFactory
      */
     public function createController($controllerName)
     {
-        $serviceManager = $this->getServiceLocator();
-        $controllerManager = $serviceManager->get('ControllerLoader');
+        $controllerManager = $this->getControllerManager();
         if (!$controllerManager->has($controllerName)) {
             throw new SmartCrudException(sprintf('The controller %s could not be found.', $controllerName));
         }

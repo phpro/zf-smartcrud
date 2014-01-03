@@ -11,14 +11,17 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
 {
 
     /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param array $routeParams
      */
-    protected function mockConfiguration($serviceLocator, $routeParams = array('action' => 'list'))
+    protected function mockConfiguration($controllerManager, $serviceLocator, $routeParams = array('action' => 'list'))
     {
         $prophet = new Prophet();
         $controllerKey = 'PhproSmartCrud\Controller\CrudController';
         $serviceKey = 'PhproSmartCrud\Service\AbstractCrudService';
+
+        $controllerManager->getServiceLocator()->willReturn($serviceLocator);
 
         // Mock config
         $serviceLocator->has('Config')->willReturn(true);
@@ -38,10 +41,11 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
             )
         ));
 
-
         // Mock controller
         $controller = $prophet->prophesize('\PhproSmartCrud\Controller\CrudController');
-        $this->mockControllerManager($serviceLocator, $controllerKey, $controller);
+        $controllerManager->has($controllerKey)->willReturn(true);
+        $controllerManager->get($controllerKey)->willReturn($controller);
+        $controllerManager->has('invalid-controller')->willReturn(false);
 
         // Mock route
         $this->mockRouteMatch($serviceLocator, $routeParams);
@@ -79,27 +83,6 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
                 $routeMatch->getParam($key, Argument::any())->willReturn($value);
             }
         }
-
-        $this->setServiceLocator($serviceLocator);
-    }
-
-    /**
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param string $controllername
-     * @param \PhproSmartCrud\Controller\CrudControllerInterface $controller
-     */
-    protected function mockControllerManager($serviceLocator, $controllername, $controller)
-    {
-        $prophet = new Prophet();
-        $controllerManager = $prophet->prophesize('\Zend\Mvc\Controller\ControllerManager');
-
-        $serviceLocator->has('ControllerLoader')->willReturn(true);
-        $serviceLocator->get('ControllerLoader')->willReturn($controllerManager);
-
-        $controllerManager->has($controllername)->willReturn(true);
-        $controllerManager->get($controllername)->willReturn($controller);
-
-        $controllerManager->has('invalid-controller')->willReturn(false);
 
         $this->setServiceLocator($serviceLocator);
     }
@@ -147,61 +130,66 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
     }
 
     /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    public function it_should_be_able_to_create_crud_controller_services($serviceLocator)
+    public function it_should_be_able_to_create_crud_controller_services($controllerManager, $serviceLocator)
     {
-        $this->mockConfiguration($serviceLocator);
+        $this->mockConfiguration($controllerManager, $serviceLocator);
         $name = 'custom-controller';
-        $this->canCreateServiceWithName($serviceLocator, $name, $name)->shouldReturn(true);
+        $this->canCreateServiceWithName($controllerManager, $name, $name)->shouldReturn(true);
     }
 
     /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    public function it_should_not_be_able_to_create_other_objects($serviceLocator)
+    public function it_should_not_be_able_to_create_other_objects($controllerManager, $serviceLocator)
     {
-        $this->mockConfiguration($serviceLocator);
+        $this->mockConfiguration($controllerManager, $serviceLocator);
         $name = 'other-controller';
-        $this->canCreateServiceWithName($serviceLocator, $name, $name)->shouldReturn(false);
+        $this->canCreateServiceWithName($controllerManager, $name, $name)->shouldReturn(false);
     }
 
 
     /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    public function it_should_create_controllers($serviceLocator)
+    public function it_should_create_controllers($controllerManager, $serviceLocator)
     {
-        $this->mockConfiguration($serviceLocator);
+        $this->mockConfiguration($controllerManager, $serviceLocator);
 
         $name = 'custom-controller';
-        $controller =$this->createServiceWithName($serviceLocator, $name, $name);
+        $controller =$this->createServiceWithName($controllerManager, $name, $name);
 
         $controller->shouldBeAnInstanceOf('PhproSmartCrud\Controller\CrudControllerInterface');
     }
 
     /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    public function it_should_throw_exception_when_controller_does_not_exist($serviceLocator)
+    public function it_should_throw_exception_when_controller_does_not_exist($controllerManager, $serviceLocator)
     {
-        $this->mockConfiguration($serviceLocator);
+        $this->mockConfiguration($controllerManager, $serviceLocator);
         $name = 'fault-controller';
 
         $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')
-            ->duringCreateServiceWithName($serviceLocator, $name, $name);
+            ->duringCreateServiceWithName($controllerManager, $name, $name);
     }
 
     /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
-    public function it_should_throw_exception_when_service_does_not_exist($serviceLocator)
+    public function it_should_throw_exception_when_service_does_not_exist($controllerManager, $serviceLocator)
     {
-        $this->mockConfiguration($serviceLocator);
+        $this->mockConfiguration($controllerManager, $serviceLocator);
         $name = 'fault-service';
 
         $this->shouldThrow('PhproSmartCrud\Exception\SmartCrudException')
-            ->duringCreateServiceWithName($serviceLocator, $name, $name);
+            ->duringCreateServiceWithName($controllerManager, $name, $name);
     }
 
 }
