@@ -5,7 +5,7 @@ namespace PhproSmartCrud\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
-use \PhproSmartCrud\Service\AbstractCrudService;
+use \PhproSmartCrud\Service\CrudServiceInterface;
 use Zend\Stdlib\ArrayObject;
 
 /**
@@ -20,7 +20,7 @@ class AbstractSmartCrudServiceFactory
     /**
      * The config key in the service manager
      */
-    const CONFIG_KEY = 'PhproSmartcrudConfig';
+    const CONFIG_KEY = 'phpro-smart-service';
 
     const CONFIG_ENTITY_CLASS   = 'entity-class';
     const CONFIG_PARAMETERS_KEY = 'parameters';
@@ -147,12 +147,12 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param AbstractCrudService $smartCrudService
+     * @param CrudServiceInterface $smartCrudService
      * @param ArrayObject         $config
      *
      * @return $this
      */
-    private function injectDependencies(AbstractCrudService $smartCrudService,ArrayObject $config)
+    private function injectDependencies(CrudServiceInterface $smartCrudService,ArrayObject $config)
     {
         $this
             ->injectEntityClass($smartCrudService,$config)
@@ -165,11 +165,11 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param AbstractCrudService $smartCrudService
+     * @param CrudServiceInterface $smartCrudService
      *
      * @return $this
      */
-    private function injectOutputModel(AbstractCrudService $smartCrudService, ArrayObject $config)
+    private function injectOutputModel(CrudServiceInterface $smartCrudService, ArrayObject $config)
     {
         if(!$config->offsetExists($this::CONFIG_OUTPUT_MODEL)) {
             return $this;
@@ -179,11 +179,11 @@ class AbstractSmartCrudServiceFactory
         return $this;
     }
     /**
-     * @param AbstractCrudService $smartCrudService
+     * @param CrudServiceInterface $smartCrudService
      *
      * @return $this
      */
-    private function injectEntityClass(AbstractCrudService $smartCrudService, ArrayObject $config)
+    private function injectEntityClass(CrudServiceInterface $smartCrudService, ArrayObject $config)
     {
         if(!$config->offsetExists($this::CONFIG_ENTITY_CLASS)) {
             return $this;
@@ -194,11 +194,11 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param AbstractCrudService $smartCrudService
+     * @param CrudServiceInterface $smartCrudService
      *
      * @return $this
      */
-    private function injectParameterService(AbstractCrudService $smartCrudService, ArrayObject $config)
+    private function injectParameterService(CrudServiceInterface $smartCrudService, ArrayObject $config)
     {
         if(!$config->offsetExists($this::CONFIG_PARAMETERS_KEY)) {
             return $this;
@@ -211,12 +211,12 @@ class AbstractSmartCrudServiceFactory
 
 
     /**
-     * @param AbstractCrudService $smartCrudService
+     * @param CrudServiceInterface $smartCrudService
      * @param ArrayObject         $config
      *
      * @return $this
      */
-    private function injectForm(AbstractCrudService $smartCrudService, ArrayObject $config)
+    private function injectForm(CrudServiceInterface $smartCrudService, ArrayObject $config)
     {
         if(!$config->offsetExists($this::CONFIG_FORM_KEY)) {
             return $this;
@@ -228,12 +228,12 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param AbstractCrudService $smartCrudService
+     * @param CrudServiceInterface $smartCrudService
      * @param ArrayObject         $config
      *
      * @return $this
      */
-    private function injectGateway(AbstractCrudService $smartCrudService,ArrayObject $config)
+    private function injectGateway(CrudServiceInterface $smartCrudService,ArrayObject $config)
     {
         if(!$config->offsetExists($this::CONFIG_GATEWAY_KEY)) {
             return $this;
@@ -245,12 +245,12 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param AbstractCrudService $smartCrudService
+     * @param CrudServiceInterface $smartCrudService
      * @param ArrayObject         $config
      *
      * @return $this
      */
-    private function injectListeners(AbstractCrudService $smartCrudService,ArrayObject $config)
+    private function injectListeners(CrudServiceInterface $smartCrudService,ArrayObject $config)
     {
         if($config->offsetExists($this::CONFIG_LISTENERS_KEY) && count($config[$this::CONFIG_LISTENERS_KEY]) < 1) {
             return $this;

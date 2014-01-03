@@ -8,10 +8,8 @@
  */
 
 namespace PhproSmartCrud\Controller;
-use PhproSmartCrud\Exception\SmartCrudException;
-use PhproSmartCrud\Service\AbstractCrudService;
+use PhproSmartCrud\Service\CrudServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Exception;
 use Zend\View\Model\ModelInterface;
 
@@ -19,10 +17,11 @@ use Zend\View\Model\ModelInterface;
  * Class CrudController
  */
 class CrudController extends AbstractActionController
+    implements CrudControllerInterface
 {
 
     /**
-     * @var AbstractCrudService
+     * @var CrudServiceInterface
      */
     protected $smartService;
 
@@ -56,6 +55,25 @@ class CrudController extends AbstractActionController
     }
 
     /**
+     * @param CrudServiceInterface $service
+     *
+     * @return $this
+     */
+    public function setSmartService(CrudServiceInterface $service)
+    {
+        $this->smartService = $service;
+        return $this;
+    }
+
+    /**
+     * @return CrudServiceInterface
+     */
+    public function getSmartService()
+    {
+        return $this->smartService;
+    }
+
+    /**
      * Returns the id specified by the identifier name
      *
      * @return mixed
@@ -64,37 +82,6 @@ class CrudController extends AbstractActionController
     {
         return $this->params()->fromRoute($this->getIdentifierName(), null);
     }
-
-    /**
-     * Inject parameters from the router directly in the controller
-     *
-     * @param MvcEvent $e
-     *
-     * @return mixed
-     * @throws \Zend\Mvc\Exception\DomainException
-     * @throws SmartCrudException
-     */
-    public function onDispatch(MvcEvent $e)
-    {
-        $routeMatch = $e->getRouteMatch();
-        if (!$routeMatch) {
-            throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
-        }
-
-        $this->setIdentifierName($routeMatch->getParam('identifier-name', 'id'));
-
-        $action = $routeMatch->getParam('action', 'not-found');
-
-        $serviceKey = $routeMatch->getParam('smart-service', null);
-        if (!$serviceKey) {
-            throw new Exception\DomainException('Missing smart service key');
-        }
-
-        $this->setSmartService($this->getServiceLocator()->get($serviceKey . '::' . $action));
-
-        return parent::onDispatch($e);
-    }
-
 
     /**
      * @return ModelInterface
@@ -168,22 +155,4 @@ class CrudController extends AbstractActionController
         return $model;
     }
 
-    /**
-     * @param AbstractCrudService $service
-     *
-     * @return $this
-     */
-    public function setSmartService(AbstractCrudService $service)
-    {
-        $this->smartService = $service;
-        return $this;
-    }
-
-    /**
-     * @return AbstractCrudService
-     */
-    public function getSmartService()
-    {
-        return $this->smartService;
-    }
 }
