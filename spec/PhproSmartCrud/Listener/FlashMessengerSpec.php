@@ -12,7 +12,7 @@ use Prophecy\Prophet;
  *
  * @package spec\PhproSmartCrud\Listener
  */
-class FlashMessengerSpec extends AbstractListenerSpec
+class FlashMessengerSpec extends ObjectBehavior
 {
 
     /**
@@ -36,9 +36,15 @@ class FlashMessengerSpec extends AbstractListenerSpec
         $this->shouldHaveType('PhproSmartCrud\Listener\FlashMessenger');
     }
 
-    public function it_should_extend_abstract_listener()
+    public function it_should_extend_zend_listener_aggregate()
     {
-        $this->shouldBeAnInstanceOf('PhproSmartCrud\Listener\AbstractListener');
+        $this->shouldHaveType('Zend\EventManager\AbstractListenerAggregate');
+    }
+
+
+    public function it_should_implement_zend_ServiceManagerAwareInterface()
+    {
+        $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
     }
 
     /**
@@ -74,18 +80,6 @@ class FlashMessengerSpec extends AbstractListenerSpec
         $events->attach(CrudEvent::INVALID_CREATE, $callback, $priority)->shouldBeCalled();
         $events->attach(CrudEvent::INVALID_UPDATE, $callback, $priority)->shouldBeCalled();
         $events->attach(CrudEvent::INVALID_DELETE, $callback, $priority)->shouldBeCalled();
-    }
-
-    /**
-     * @param \Zend\EventManager\EventManagerInterface $events
-     *
-     * @TODO find a way to count the amount of attached listeners without hardcoding it
-     */
-    public function it_should_detach_all_listeners($events)
-    {
-        $this->attach($events);
-        $this->detach($events);
-        $events->detach(Argument::any())->shouldBeCalledTimes(6);
     }
 
     /**

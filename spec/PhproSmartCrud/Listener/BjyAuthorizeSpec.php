@@ -8,7 +8,7 @@ use PhproSmartCrud\Listener\BjyAuthorize;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 
-class BjyAuthorizeSpec extends AbstractListenerSpec
+class BjyAuthorizeSpec extends ObjectBehavior
 {
 
     /**
@@ -60,9 +60,14 @@ class BjyAuthorizeSpec extends AbstractListenerSpec
         $this->shouldHaveType('PhproSmartCrud\Listener\BjyAuthorize');
     }
 
-    public function it_should_extend_abstract_listener()
+    public function it_should_extend_zend_listener_aggregate()
     {
-        $this->shouldBeAnInstanceOf('PhproSmartCrud\Listener\AbstractListener');
+        $this->shouldHaveType('Zend\EventManager\AbstractListenerAggregate');
+    }
+
+    public function it_should_implement_zend_ServiceManagerAwareInterface()
+    {
+        $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
     }
 
     /**
@@ -78,18 +83,6 @@ class BjyAuthorizeSpec extends AbstractListenerSpec
         $events->attach(CrudEvent::BEFORE_READ, $callback, $priority)->shouldBeCalled();
         $events->attach(CrudEvent::BEFORE_UPDATE, $callback, $priority)->shouldBeCalled();
         $events->attach(CrudEvent::BEFORE_DELETE, $callback, $priority)->shouldBeCalled();
-    }
-
-    /**
-     * @param \Zend\EventManager\EventManagerInterface $events
-     *
-     * @TODO find a way to count the amount of attached listeners without hardcoding it
-     */
-    public function it_should_detach_all_listeners($events)
-    {
-        $this->attach($events);
-        $this->detach($events);
-        $events->detach(Argument::any())->shouldBeCalledTimes(5);
     }
 
     /**
