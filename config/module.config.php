@@ -7,6 +7,11 @@ return array(
         ),
         'factories' => array(
             'PhproSmartCrud\Service\ParametersService'    => 'PhproSmartCrud\Service\ParametersService',
+
+            // Listeners
+            'PhproSmartCrud\Listener\BjyAuthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
+            'PhproSmartCrud\Listener\FlashMessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
+
         ),
         'invokables' => array(
             // Services
@@ -20,10 +25,6 @@ return array(
             // Gateways
             'PhproSmartCrud\Gateway\DoctrineCrudGateway'  => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
             'PhproSmartCrud\Gateway\ZendDbCrudGateway'    => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
-
-            // Listeners
-            'PhproSmartCrud\Listener\BjyAuthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
-            'PhproSmartCrud\Listener\FlashMessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
 
             // View models
             'PhproSmartCrud\View\Model\JsonModel'       =>  'PhproSmartCrud\View\Model\JsonModel',
