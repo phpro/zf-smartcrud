@@ -118,6 +118,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
         $config[AbstractCrudControllerFactory::CONFIG_CONTROLLER]->shouldBeString();
         $config[AbstractCrudControllerFactory::CONFIG_IDENTIFIER]->shouldBeString();
         $config[AbstractCrudControllerFactory::CONFIG_SMART_SERVICE]->shouldBeString();
+        $config[AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER]->shouldBeString();
     }
 
     /**

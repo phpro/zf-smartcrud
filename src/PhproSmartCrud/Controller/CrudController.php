@@ -10,6 +10,7 @@
 namespace PhproSmartCrud\Controller;
 use PhproSmartCrud\Service\CrudServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
+use PhproSmartCrud\View\Model\ViewModelBuilder;
 use Zend\Mvc\Exception;
 use Zend\View\Model\ModelInterface;
 
@@ -24,6 +25,12 @@ class CrudController extends AbstractActionController
      * @var CrudServiceInterface
      */
     protected $smartService;
+
+
+    /**
+     * @var ViewModelBuilder
+     */
+    protected $viewModelBuilder;
 
     /**
      * Name of request or query parameter containing identifier
@@ -71,6 +78,25 @@ class CrudController extends AbstractActionController
     public function getSmartService()
     {
         return $this->smartService;
+    }
+
+    /**
+     * @param ViewModelBuilder $viewModelBuilder
+     *
+     * @return $this
+     */
+    public function setViewModelBuilder(ViewModelBuilder $viewModelBuilder)
+    {
+        $this->viewModelBuilder = $viewModelBuilder;
+        return $this;
+    }
+
+    /**
+     * @return \PhproSmartCrud\View\Model\ViewModelBuilder
+     */
+    public function getViewModelBuilder()
+    {
+        return $this->viewModelBuilder;
     }
 
     /**
@@ -142,17 +168,7 @@ class CrudController extends AbstractActionController
      */
     public function prepareModel($action)
     {
-        $service = $this->getSmartService();
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $model = $this->getServiceLocator()->get('PhproSmartCrud\View\Model\JsonModel');
-            $service->setOutputModel($model);
-        }
-        $model = $service->getOutputModel();
-        $model->setTemplate(sprintf('phpro-smartcrud/%s', $action));
-        if($this->getRequest()->isXmlHttpRequest()) {
-            $model->setTerminal(true);
-        }
-        return $model;
+        return $this->getViewModelBuilder()->build($this->getRequest(), $this->getSmartService(), $action);
     }
 
 }

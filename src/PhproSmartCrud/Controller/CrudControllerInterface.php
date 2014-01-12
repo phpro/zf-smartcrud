@@ -9,7 +9,7 @@
 
 namespace PhproSmartCrud\Controller;
 use PhproSmartCrud\Service\CrudServiceInterface;
-
+use PhproSmartCrud\View\Model\ViewModelBuilder;
 /**
  * Class CrudControllerInterface
  *
@@ -33,4 +33,11 @@ interface CrudControllerInterface
      */
     public function setSmartService(CrudServiceInterface $service);
 
+
+    /**
+     * @param 'PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     *
+     * @return $this
+     */
+    public function setViewModelBuilder(ViewModelBuilder $viewModelBuilder);
 }

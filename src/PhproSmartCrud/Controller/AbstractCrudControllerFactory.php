@@ -11,6 +11,7 @@ namespace PhproSmartCrud\Controller;
 
 use PhproSmartCrud\Exception\SmartCrudException;
 use PhproSmartCrud\Service\CrudServiceInterface;
+use PhproSmartCrud\View\Model\ViewModelBuilder;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -31,7 +32,7 @@ class AbstractCrudControllerFactory
     const CONFIG_CONTROLLER = 'controller';
     const CONFIG_IDENTIFIER = 'identifier-name';
     const CONFIG_SMART_SERVICE = 'smart-service';
-
+    const CONFIG_VIEW_MODEL_BUILDER = 'view-builder';
     /**
      * Cache of canCreateServiceWithName lookups
      * @var array
@@ -57,6 +58,7 @@ class AbstractCrudControllerFactory
             self::CONFIG_CONTROLLER => 'PhproSmartCrud\Controller\CrudController',
             self::CONFIG_IDENTIFIER => 'id',
             self::CONFIG_SMART_SERVICE => 'PhproSmartCrud\Service\AbstractCrudService',
+            self::CONFIG_VIEW_MODEL_BUILDER => 'PhproSmartCrud\View\Model\ViewModelBuilder',
         );
     }
 
@@ -208,7 +210,18 @@ class AbstractCrudControllerFactory
     {
         $this->injectSmartService($controller, $config[self::CONFIG_SMART_SERVICE]);
         $this->injectIdentifierName($controller, $config[self::CONFIG_IDENTIFIER]);
+        $this->injectViewModelBuilder($controller, $config[self::CONFIG_VIEW_MODEL_BUILDER]);
 
+        return $this;
+    }
+
+    /**
+     * @param CrudControllerInterface $controller
+     *
+     * @return $this
+     */
+    protected function injectViewModelBuilder(CrudControllerInterface $controller, $smartServiceKey) {
+        $controller->setViewModelBuilder(new $smartServiceKey());
         return $this;
     }
 

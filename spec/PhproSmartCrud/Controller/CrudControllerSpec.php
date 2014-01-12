@@ -52,18 +52,27 @@ class CrudControllerSpec extends ObjectBehavior
         $this->setSmartService($smartService)->shouldReturn($this);
         $this->getSmartService()->shouldReturn($smartService);
     }
+    /**
+     * @param \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     */
+    public function it_should_have_a_view_model_builder($viewModelBuilder)
+    {
+        $this->setViewModelBuilder($viewModelBuilder)->shouldReturn($this);
+        $this->getViewModelBuilder()->shouldReturn($viewModelBuilder);
+    }
 
     /**
      * @param \Zend\Http\PhpEnvironment\Request $request
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \PhproSmartCrud\Service\CreateService $smartService
      * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
-    public function it_should_handle_get_to_a_create_action($request, $mvcEvent, $smartService, $params)
+    public function it_should_handle_get_to_a_create_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
         $action = 'create';
         $smartService->run(null,Argument::any())->shouldNotBeCalled();
-        $this->mockGet($request, $mvcEvent, $params, $smartService, $action);
+        $this->mockGet($request, $mvcEvent, $params, $smartService, $action, $viewModelBuilder);
     }
 
     /**
@@ -93,14 +102,15 @@ class CrudControllerSpec extends ObjectBehavior
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \PhproSmartCrud\Service\CreateService $smartService
      * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
-    public function it_should_handle_invalid_post_to_create_action($request, $mvcEvent, $smartService, $params)
+    public function it_should_handle_invalid_post_to_create_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
         $postParameters = array('property' => 'value');
         $action = 'create';
         $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
 
-        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters);
+        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters, $viewModelBuilder);
     }
 
     /**
@@ -133,13 +143,14 @@ class CrudControllerSpec extends ObjectBehavior
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \PhproSmartCrud\Service\UpdateService $smartService
      * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
-    public function it_should_handle_a_get_to_an_update_action($request, $mvcEvent, $smartService, $params)
+    public function it_should_handle_a_get_to_an_update_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
         $action = 'update';
         $smartService->run(Argument::any(), Argument::any())->shouldNotBeCalled();
 
-        $this->mockGet($request, $mvcEvent, $params, $smartService, $action);
+        $this->mockGet($request, $mvcEvent, $params, $smartService, $action, $viewModelBuilder);
     }
 
     /**
@@ -147,14 +158,15 @@ class CrudControllerSpec extends ObjectBehavior
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \PhproSmartCrud\Service\UpdateService $smartService
      * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
-    public function it_should_handle_invalid_post_to__an_update_action($request, $mvcEvent, $smartService, $params)
+    public function it_should_handle_invalid_post_to_an_update_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
         $postParameters = array('property' => 'value');
         $action = 'update';
         $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
 
-        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters);
+        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters, $viewModelBuilder);
     }
 
     /**
@@ -162,13 +174,14 @@ class CrudControllerSpec extends ObjectBehavior
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \PhproSmartCrud\Service\DeleteService $smartService
      * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
-    public function it_should_handle_a_get_to_an_delete_action($request, $mvcEvent, $smartService, $params)
+    public function it_should_handle_a_get_to_an_delete_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
         $action = 'update';
         $smartService->run(Argument::any(), Argument::any())->shouldNotBeCalled();
 
-        $this->mockGet($request, $mvcEvent, $params, $smartService, $action);
+        $this->mockGet($request, $mvcEvent, $params, $smartService, $action, $viewModelBuilder);
     }
     /**
      * @param \Zend\Http\PhpEnvironment\Request $request
@@ -199,14 +212,15 @@ class CrudControllerSpec extends ObjectBehavior
      * @param \Zend\Mvc\MvcEvent $mvcEvent
      * @param \PhproSmartCrud\Service\DeleteService $smartService
      * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
-    public function it_should_handle_invalid_post_to__an_delete_action($request, $mvcEvent, $smartService, $params)
+    public function it_should_handle_invalid_post_to__an_delete_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
         $postParameters = array('property' => 'value');
         $action = 'delete';
         $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn(false);
 
-        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters);
+        $this->mockInvalidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters, $viewModelBuilder);
     }
 
     /**
@@ -215,8 +229,9 @@ class CrudControllerSpec extends ObjectBehavior
      * @param $params
      * @param $smartService
      * @param $action
+     * @param $viewModelBuilder
      */
-    private function mockGet($request, $mvcEvent, $params, $smartService, $action)
+    private function mockGet($request, $mvcEvent, $params, $smartService, $action, $viewModelBuilder)
     {
 
         $prophet = new Prophet();
@@ -225,8 +240,8 @@ class CrudControllerSpec extends ObjectBehavior
         $routeMatch->getParam('action', Argument::any())->willReturn($action);
         $routeMatch->getParam('id', Argument::any())->willReturn(1);
 
-        $ouput = $prophet->prophesize('PhproSmartCrud\View\Model\ViewModel');
-        $smartService->getOutputModel()->shouldBeCalled()->willReturn($ouput);
+        $viewModelBuilder->build($request, $smartService, $action)->shouldBeCalled();
+        $this->setViewModelBuilder($viewModelBuilder);
         $this->setSmartService($smartService);
 
         $request->isXmlHttpRequest()->willReturn(false);
@@ -294,8 +309,9 @@ class CrudControllerSpec extends ObjectBehavior
      * @param $params
      * @param $action
      * @param $postParameters
+     * @param $viewModelBuilder
      */
-    private function mockInValidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters)
+    private function mockInValidPost($request, $mvcEvent, $smartService, $params, $action, $postParameters, $viewModelBuilder)
     {
         $prophet = new Prophet();
 
@@ -303,8 +319,8 @@ class CrudControllerSpec extends ObjectBehavior
         $routeMatch->getParam('action', Argument::any())->willReturn($action);
         $routeMatch->getParam('id', Argument::any())->willReturn(1);
 
-        $ouput = $prophet->prophesize('PhproSmartCrud\View\Model\ViewModel');
-        $smartService->getOutputModel()->shouldBeCalled()->willReturn($ouput);
+        $viewModelBuilder->build($request, $smartService, $action)->shouldBeCalled();
+        $this->setViewModelBuilder($viewModelBuilder);
         $this->setSmartService($smartService);
 
         $request->isXmlHttpRequest()->willReturn(false);
