@@ -17,7 +17,7 @@ use Prophecy\Argument;
  *
  * @package spec\Phpro\SmartCrud\Service
  */
-class ListServiceSpec extends AbstractCrudServiceSpec
+class ListServiceSpec extends AbstractSmartServiceSpec
 {
 
     public function it_is_initializable()
@@ -25,9 +25,9 @@ class ListServiceSpec extends AbstractCrudServiceSpec
         $this->shouldHaveType('Phpro\SmartCrud\Service\ListService');
     }
 
-    public function it_should_extend_Phpro_SmartCrud_AbstractCrudService()
+    public function it_should_extend_Phpro_SmartCrud_AbstractSmartService()
     {
-        $this->shouldBeAnInstanceOf('Phpro\SmartCrud\Service\AbstractCrudService');
+        $this->shouldBeAnInstanceOf('Phpro\SmartCrud\Service\AbstractSmartService');
     }
 
     /**

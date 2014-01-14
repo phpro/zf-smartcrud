@@ -8,7 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Controller;
-use Phpro\SmartCrud\Service\CrudServiceInterface;
+use Phpro\SmartCrud\Service\SmartServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Phpro\SmartCrud\View\Model\ViewModelBuilder;
 use Zend\View\Model\ModelInterface;
@@ -21,7 +21,7 @@ class CrudController extends AbstractActionController
 {
 
     /**
-     * @var CrudServiceInterface
+     * @var SmartServiceInterface
      */
     protected $smartService;
 
@@ -61,11 +61,11 @@ class CrudController extends AbstractActionController
     }
 
     /**
-     * @param CrudServiceInterface $service
+     * @param SmartServiceInterface $service
      *
      * @return $this
      */
-    public function setSmartService(CrudServiceInterface $service)
+    public function setSmartService(SmartServiceInterface $service)
     {
         $this->smartService = $service;
 
@@ -73,7 +73,7 @@ class CrudController extends AbstractActionController
     }
 
     /**
-     * @return CrudServiceInterface
+     * @return SmartServiceInterface
      */
     public function getSmartService()
     {

@@ -43,7 +43,7 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Phpro\SmartCrud\Service\AbstractCrudService $smartService
+     * @param \Phpro\SmartCrud\Service\AbstractSmartService $smartService
      */
     public function it_should_have_an_action_service($smartService)
     {

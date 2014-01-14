@@ -18,7 +18,7 @@ use Prophecy\Prophet;
  *
  * @package spec\Phpro\SmartCrud\Service
  */
-abstract class AbstractCrudServiceSpec extends ObjectBehavior
+abstract class AbstractSmartServiceSpec extends ObjectBehavior
 {
 
     /**

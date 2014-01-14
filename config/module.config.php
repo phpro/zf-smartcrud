@@ -3,7 +3,7 @@ return array(
     'service_manager' => array(
         "abstract_factories" => array(
             'Phpro\SmartCrud\Gateway\AbstractGatewayFactory',
-            'Phpro\SmartCrud\Service\AbstractSmartCrudServiceFactory',
+            'Phpro\SmartCrud\Service\AbstractSmartServiceFactory',
         ),
         'factories' => array(
             'Phpro\SmartCrud\Service\ParametersService'    => 'Phpro\SmartCrud\Service\ParametersService',
@@ -26,14 +26,6 @@ return array(
             'Phpro\SmartCrud\Listener\BjyAuthorize'     => 'Phpro\SmartCrud\Listener\BjyAuthorize',
             'Phpro\SmartCrud\Listener\FlashMessenger'   => 'Phpro\SmartCrud\Listener\FlashMessenger',
 
-            // View models
-            'Phpro\SmartCrud\View\Model\JsonModel'       =>  'Phpro\SmartCrud\View\Model\JsonModel',
-            'Phpro\SmartCrud\View\Model\RedirectModel'   =>  'Phpro\SmartCrud\View\Model\RedirectModel',
-            'Phpro\SmartCrud\View\Model\ViewModel'       =>  'Phpro\SmartCrud\View\Model\ViewModel',
-
-            // View strategies
-            'Phpro\SmartCrud\View\Strategy\JsonStrategy'        =>  'Phpro\SmartCrud\View\Strategy\JsonStrategy',
-            'Phpro\SmartCrud\View\Strategy\RedirectStrategy'    =>  'Phpro\SmartCrud\View\Strategy\RedirectStrategy',
         ),
         'aliases' => array(
             'zf-smartcrud.cli' => 'Phpro\SmartCrud\Console\Application'
@@ -56,10 +48,6 @@ return array(
     'view_manager' => array(
         'template_path_stack' => array(
             'phpro-smartcrud' => __DIR__ . '/../view',
-        ),
-        'strategies' => array(
-            'Phpro\SmartCrud\View\Strategy\JsonStrategy',
-            'Phpro\SmartCrud\View\Strategy\RedirectStrategy',
-       )
+        )
     ),
 );

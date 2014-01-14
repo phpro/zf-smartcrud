@@ -19,7 +19,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
     {
         $prophet = new Prophet();
         $controllerKey = 'Phpro\SmartCrud\Controller\CrudController';
-        $serviceKey = 'Phpro\SmartCrud\Service\AbstractCrudService';
+        $serviceKey = 'Phpro\SmartCrud\Service\AbstractSmartService';
 
         $controllerManager->getServiceLocator()->willReturn($serviceLocator);
 
@@ -52,7 +52,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
 
         // Mock service
         $serviceKey = $serviceKey . '::' . $routeParams['action'];
-        $service = $prophet->prophesize('\Phpro\SmartCrud\Service\AbstractCrudService');
+        $service = $prophet->prophesize('\Phpro\SmartCrud\Service\AbstractSmartService');
         $serviceLocator->has($serviceKey)->willReturn(true);
         $serviceLocator->get($serviceKey)->willReturn($service);
         $serviceLocator->has('invalid-service::' . $routeParams['action'])->willReturn(false);

@@ -10,7 +10,7 @@
 namespace Phpro\SmartCrud\Console\Helper;
 
 use Symfony\Component\Console\Helper\Helper;
-use Phpro\SmartCrud\Service\AbstractSmartCrudServiceFactory;
+use Phpro\SmartCrud\Service\AbstractSmartServiceFactory;
 use Phpro\SmartCrud\Gateway\AbstractGatewayFactory;
 
 /**
@@ -27,9 +27,9 @@ class GatewayListHelper extends Helper
     public function getDefault()
     {
         $config = $this->getHelperSet()->get('Config')->getConfig();
-        $configKey = AbstractSmartCrudServiceFactory::CONFIG_KEY;
-        $section = AbstractSmartCrudServiceFactory::CONFIG_DEFAULT;
-        $gateway = AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY;
+        $configKey = AbstractSmartServiceFactory::CONFIG_KEY;
+        $section = AbstractSmartServiceFactory::CONFIG_DEFAULT;
+        $gateway = AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY;
         if (!isset($config[$configKey][$section][$gateway])) {
             return '';
         }

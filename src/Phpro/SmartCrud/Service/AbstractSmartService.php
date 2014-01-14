@@ -14,12 +14,12 @@ use Phpro\SmartCrud\Gateway\CrudGatewayInterface;
 use Zend\EventManager\EventManager;
 
 /**
- * Class AbstractCrudService
+ * Class AbstractSmartService
  *
  * @package Phpro\SmartCrud\Service
  */
-abstract class AbstractCrudService
-    implements CrudServiceInterface
+abstract class AbstractSmartService
+    implements SmartServiceInterface
 {
     /**
      * @var ParametersService

@@ -1,6 +1,6 @@
 <?php
 namespace Phpro\SmartCrud;
-use \Phpro\SmartCrud\Service\AbstractSmartCrudServiceFactory;
+use \Phpro\SmartCrud\Service\AbstractSmartServiceFactory;
 
 
 return array(
@@ -23,25 +23,25 @@ return array(
  * Sample crudservice configuration
  *
 array(
-    AbstractSmartCrudServiceFactory::CONFIG_KEY => array(
+    AbstractSmartServiceFactory::CONFIG_KEY => array(
         'default' => array(
-            AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
+            AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
         ),
         'Admin\Service\UserServiceFactory' => array(
             'default' => array(
-                AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'App\Entity\Country',
-                AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'Phpro\SmartCrud\View\Model\ViewModel',
-                AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'App\Form\Country'
+                AbstractSmartServiceFactory::CONFIG_ENTITY_CLASS => 'App\Entity\Country',
+                AbstractSmartServiceFactory::CONFIG_OUTPUT_MODEL => 'Phpro\SmartCrud\View\Model\ViewModel',
+                AbstractSmartServiceFactory::CONFIG_FORM_KEY     => 'App\Form\Country'
             ),
             'create' => array(
-                AbstractSmartCrudServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\CreateService',
-                AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(
+                AbstractSmartServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\CreateService',
+                AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(
 
                 ),
             ),
             'update' => array(
-                AbstractSmartCrudServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\UpdateService',
-                AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(
+                AbstractSmartServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\UpdateService',
+                AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(
 
                 ),
             )

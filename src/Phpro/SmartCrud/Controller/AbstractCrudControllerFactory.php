@@ -10,7 +10,7 @@
 namespace Phpro\SmartCrud\Controller;
 
 use Phpro\SmartCrud\Exception\SmartCrudException;
-use Phpro\SmartCrud\Service\CrudServiceInterface;
+use Phpro\SmartCrud\Service\SmartServiceInterface;
 use Phpro\SmartCrud\View\Model\ViewModelBuilder;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\AbstractFactoryInterface;
@@ -57,7 +57,7 @@ class AbstractCrudControllerFactory
         return array(
             self::CONFIG_CONTROLLER => 'Phpro\SmartCrud\Controller\CrudController',
             self::CONFIG_IDENTIFIER => 'id',
-            self::CONFIG_SMART_SERVICE => 'Phpro\SmartCrud\Service\AbstractCrudService',
+            self::CONFIG_SMART_SERVICE => 'Phpro\SmartCrud\Service\AbstractSmartService',
             self::CONFIG_VIEW_MODEL_BUILDER => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
         );
     }
@@ -247,8 +247,8 @@ class AbstractCrudControllerFactory
         }
 
         $smartService = $serviceManager->get($smartServiceKey);
-        if (!($smartService instanceof CrudServiceInterface)) {
-            throw new SmartCrudException(sprintf('Invalid type of smart service configured. %s needs to be a CrudServiceInterface.', $smartServiceKey));
+        if (!($smartService instanceof SmartServiceInterface)) {
+            throw new SmartCrudException(sprintf('Invalid type of smart service configured. %s needs to be a SmartServiceInterface.', $smartServiceKey));
         }
 
         $controller->setSmartService($smartService);

@@ -2,7 +2,7 @@
 
 namespace Phpro\SmartCrud\View\Model;
 
-use Phpro\SmartCrud\Service\CrudServiceInterface;
+use Phpro\SmartCrud\Service\SmartServiceInterface;
 use Zend\Http\Request as HttpRequest;
 use Zend\View\Model\JsonModel;
 
@@ -21,7 +21,7 @@ class ViewModelBuilder
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function build(HttpRequest $request, CrudServiceInterface $service, $action)
+    public function build(HttpRequest $request, SmartServiceInterface $service, $action)
     {
         $viewModel = null;
         if ($request->isXmlHttpRequest()) {

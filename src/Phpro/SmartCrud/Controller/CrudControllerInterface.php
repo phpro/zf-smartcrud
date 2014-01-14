@@ -8,7 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Controller;
-use Phpro\SmartCrud\Service\CrudServiceInterface;
+use Phpro\SmartCrud\Service\SmartServiceInterface;
 use Phpro\SmartCrud\View\Model\ViewModelBuilder;
 /**
  * Class CrudControllerInterface
@@ -26,11 +26,11 @@ interface CrudControllerInterface
     public function setIdentifierName($name);
 
     /**
-     * @param CrudServiceInterface $service
+     * @param SmartServiceInterface $service
      *
      * @return $this
      */
-    public function setSmartService(CrudServiceInterface $service);
+    public function setSmartService(SmartServiceInterface $service);
 
     /**
      * @param 'Phpro\SmartCrud\View\Model\ViewModelBuilder $viewModelBuilder

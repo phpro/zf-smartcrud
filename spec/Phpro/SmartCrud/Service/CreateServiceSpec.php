@@ -17,7 +17,7 @@ use Prophecy\Argument;
  *
  * @package spec\Phpro\SmartCrud\Service
  */
-class CreateServiceSpec extends AbstractCrudServiceSpec
+class CreateServiceSpec extends AbstractSmartServiceSpec
 {
 
     public function it_is_initializable()
@@ -25,9 +25,9 @@ class CreateServiceSpec extends AbstractCrudServiceSpec
         $this->shouldHaveType('Phpro\SmartCrud\Service\CreateService');
     }
 
-    public function it_should_extend_Phpro_SmartCrud_AbstractCrudService()
+    public function it_should_extend_Phpro_SmartCrud_AbstractSmartService()
     {
-        $this->shouldBeAnInstanceOf('Phpro\SmartCrud\Service\AbstractCrudService');
+        $this->shouldBeAnInstanceOf('Phpro\SmartCrud\Service\AbstractSmartService');
     }
     /**
      * @param \Zend\EventManager\EventManager $eventManager

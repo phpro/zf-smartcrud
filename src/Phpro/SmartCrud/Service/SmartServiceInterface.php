@@ -8,7 +8,7 @@
  */
 namespace Phpro\SmartCrud\Service;
 
-interface CrudServiceInterface
+interface SmartServiceInterface
 {
 
     /**

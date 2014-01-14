@@ -10,7 +10,7 @@
 namespace Phpro\SmartCrud\Console\Command\Controller;
 
 use Phpro\SmartCrud\Controller\AbstractCrudControllerFactory;
-use Phpro\SmartCrud\Service\AbstractSmartCrudServiceFactory;
+use Phpro\SmartCrud\Service\AbstractSmartServiceFactory;
 use Symfony\Component\Console\Command\Command as CliCommand;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -204,28 +204,28 @@ class Generate extends CliCommand
         $routePrefix = ltrim($routePrefix, '/');
 
         return array(
-            AbstractSmartCrudServiceFactory::CONFIG_KEY => array(
+            AbstractSmartServiceFactory::CONFIG_KEY => array(
                 $serviceKey => array(
                     'default' => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY  => $gateway,
-                        AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => $entity,
-                        AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'Phpro\SmartCrud\View\Model\ViewModel',
-                        AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => $form,
+                        AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY  => $gateway,
+                        AbstractSmartServiceFactory::CONFIG_ENTITY_CLASS => $entity,
+                        AbstractSmartServiceFactory::CONFIG_OUTPUT_MODEL => 'Phpro\SmartCrud\View\Model\ViewModel',
+                        AbstractSmartServiceFactory::CONFIG_FORM_KEY     => $form,
                     ),
                     'list' => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                        AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(),
                     ),
                     'create' => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                        AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(),
                     ),
                     'read' => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                        AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(),
                     ),
                     'update' => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                        AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(),
                     ),
                     'delete' => array(
-                        AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
+                        AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(),
                     ),
                 ),
             ),

@@ -3,7 +3,7 @@
 namespace spec\Phpro\SmartCrud\Console\Helper;
 
 use Phpro\SmartCrud\Gateway\AbstractGatewayFactory;
-use Phpro\SmartCrud\Service\AbstractSmartCrudServiceFactory;
+use Phpro\SmartCrud\Service\AbstractSmartServiceFactory;
 
 class GatewayListHelperSpec extends AbstractHelperSpec
 {
@@ -31,9 +31,9 @@ class GatewayListHelperSpec extends AbstractHelperSpec
     public function it_should_know_the_default_gateway()
     {
         $this->mockConfig(array(
-                               AbstractSmartCrudServiceFactory::CONFIG_KEY => array(
-                                   AbstractSmartCrudServiceFactory::CONFIG_DEFAULT => array(
-                                       AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => 'default.key',
+                               AbstractSmartServiceFactory::CONFIG_KEY => array(
+                                   AbstractSmartServiceFactory::CONFIG_DEFAULT => array(
+                                       AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => 'default.key',
                                    ),
                                )
                           )

@@ -12,7 +12,7 @@ use Zend\Stdlib\ArrayObject;
  *
  * @package Phpro\SmartCrud\Service
  */
-class AbstractSmartCrudServiceFactory
+class AbstractSmartServiceFactory
     implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
 
@@ -47,7 +47,7 @@ class AbstractSmartCrudServiceFactory
                 self::CONFIG_GATEWAY_KEY => null,
                 self::CONFIG_ENTITY_CLASS => null,
                 self::CONFIG_FORM_KEY     => null,
-                AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array()
+                AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array()
             ),
             self::CONFIG_LIST => array(
                 self::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\ListService'
@@ -146,12 +146,12 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param CrudServiceInterface $smartCrudService
+     * @param SmartServiceInterface $smartCrudService
      * @param ArrayObject          $config
      *
      * @return $this
      */
-    private function injectDependencies(CrudServiceInterface $smartCrudService,ArrayObject $config)
+    private function injectDependencies(SmartServiceInterface $smartCrudService,ArrayObject $config)
     {
         $this
             ->injectEntityClass($smartCrudService,$config)
@@ -164,11 +164,11 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param CrudServiceInterface $smartCrudService
+     * @param SmartServiceInterface $smartCrudService
      *
      * @return $this
      */
-    private function injectEntityClass(CrudServiceInterface $smartCrudService, ArrayObject $config)
+    private function injectEntityClass(SmartServiceInterface $smartCrudService, ArrayObject $config)
     {
         if (!$config->offsetExists($this::CONFIG_ENTITY_CLASS)) {
             return $this;
@@ -180,11 +180,11 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param CrudServiceInterface $smartCrudService
+     * @param SmartServiceInterface $smartCrudService
      *
      * @return $this
      */
-    private function injectParameterService(CrudServiceInterface $smartCrudService, ArrayObject $config)
+    private function injectParameterService(SmartServiceInterface $smartCrudService, ArrayObject $config)
     {
         if (!$config->offsetExists($this::CONFIG_PARAMETERS_KEY)) {
             return $this;
@@ -197,12 +197,12 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param CrudServiceInterface $smartCrudService
+     * @param SmartServiceInterface $smartCrudService
      * @param ArrayObject          $config
      *
      * @return $this
      */
-    private function injectForm(CrudServiceInterface $smartCrudService, ArrayObject $config)
+    private function injectForm(SmartServiceInterface $smartCrudService, ArrayObject $config)
     {
         if (!$config->offsetExists($this::CONFIG_FORM_KEY)) {
             return $this;
@@ -215,12 +215,12 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param CrudServiceInterface $smartCrudService
+     * @param SmartServiceInterface $smartCrudService
      * @param ArrayObject          $config
      *
      * @return $this
      */
-    private function injectGateway(CrudServiceInterface $smartCrudService,ArrayObject $config)
+    private function injectGateway(SmartServiceInterface $smartCrudService,ArrayObject $config)
     {
         if (!$config->offsetExists($this::CONFIG_GATEWAY_KEY)) {
             return $this;
@@ -233,12 +233,12 @@ class AbstractSmartCrudServiceFactory
     }
 
     /**
-     * @param CrudServiceInterface $smartCrudService
+     * @param SmartServiceInterface $smartCrudService
      * @param ArrayObject          $config
      *
      * @return $this
      */
-    private function injectListeners(CrudServiceInterface $smartCrudService,ArrayObject $config)
+    private function injectListeners(SmartServiceInterface $smartCrudService,ArrayObject $config)
     {
         if ($config->offsetExists($this::CONFIG_LISTENERS_KEY) && count($config[$this::CONFIG_LISTENERS_KEY]) < 1) {
             return $this;
