@@ -20,13 +20,6 @@ interface CrudServiceInterface
     public function run($id, $data);
 
     /**
-     * @param string $outputModel
-     *
-     * @return $this
-     */
-    public function setOutputModel($outputModel);
-
-    /**
      * @param string $entityKey
      *
      * @return $this

@@ -50,10 +50,6 @@ abstract class AbstractCrudService
      * @var string
      */
     protected $entityKey;
-    /**
-     * @var string
-     */
-    protected $outputModel;
 
     /**
      * @var string
@@ -215,24 +211,4 @@ abstract class AbstractCrudService
         $event = new CrudEvent($eventName, $target, $this->getParameters());
         return $event;
     }
-
-    /**
-     * @param string $outputModel
-     */
-    public function setOutputModel($outputModel)
-    {
-
-        $this->outputModel = $outputModel;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOutputModel()
-    {
-        return $this->outputModel;
-    }
-
 }

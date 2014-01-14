@@ -26,7 +26,6 @@ class AbstractSmartCrudServiceFactory
     const CONFIG_PARAMETERS_KEY = 'parameters';
     const CONFIG_GATEWAY_KEY    = 'gateway';
     const CONFIG_FORM_KEY       = 'form';
-    const CONFIG_OUTPUT_MODEL   = 'output-model';
     const CONFIG_LISTENERS_KEY  = 'listeners';
     const CONFIG_SERVICE_KEY    = 'service';
 
@@ -49,7 +48,6 @@ class AbstractSmartCrudServiceFactory
                 self::CONFIG_GATEWAY_KEY => null,
                 self::CONFIG_ENTITY_CLASS => null,
                 self::CONFIG_FORM_KEY     => null,
-                self::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                 AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array()
             ),
             self::CONFIG_LIST => array(
@@ -156,7 +154,6 @@ class AbstractSmartCrudServiceFactory
     {
         $this
             ->injectEntityClass($smartCrudService,$config)
-            ->injectOutputModel($smartCrudService,$config)
             ->injectParameterService($smartCrudService, $config)
             ->injectGateway($smartCrudService, $config)
             ->injectForm($smartCrudService, $config)
@@ -164,20 +161,6 @@ class AbstractSmartCrudServiceFactory
         return $this;
     }
 
-    /**
-     * @param CrudServiceInterface $smartCrudService
-     *
-     * @return $this
-     */
-    private function injectOutputModel(CrudServiceInterface $smartCrudService, ArrayObject $config)
-    {
-        if(!$config->offsetExists($this::CONFIG_OUTPUT_MODEL)) {
-            return $this;
-        }
-
-        $smartCrudService->setOutputModel($config->offsetGet($this::CONFIG_OUTPUT_MODEL));
-        return $this;
-    }
     /**
      * @param CrudServiceInterface $smartCrudService
      *

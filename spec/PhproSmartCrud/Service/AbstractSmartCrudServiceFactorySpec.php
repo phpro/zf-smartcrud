@@ -46,7 +46,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                  AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => null,
                  AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => null,
                  AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => null,
-                 AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                  AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(),
                  AbstractSmartCrudServiceFactory::CONFIG_SERVICE_KEY => '\PhproSmartCrud\Service\CreateService'
             )
@@ -65,7 +64,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                 'Admin\Service\UserServiceFactory' => array(
                     AbstractSmartCrudServiceFactory::CONFIG_DEFAULT => array(
                         AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
-                        AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                         AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm'
                     ),
                     'create' => array(
@@ -93,7 +91,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                  AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
                  AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                  AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm',
-                 AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                  AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(
                      'Admin\Listener\User'
                  ),
@@ -105,7 +102,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                  AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
                  AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                  AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm',
-                 AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                  AbstractSmartCrudServiceFactory::CONFIG_LISTENERS_KEY => array(
                      'Admin\Listener\UserUpdate'
                  ),
@@ -130,7 +126,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                 $requestedName => array(
                     AbstractSmartCrudServiceFactory::CONFIG_DEFAULT => array(
                         AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
-                        AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => 'PhproSmartCrud\View\Model\ViewModel',
                         AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm'
                     ),
                     'create' => array(
@@ -169,7 +164,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
         $formKey       = 'module/form';
         $parameterServiceKey = 'module/ParameterService';
         $entityClassName = 'module/Entity/ClassName';
-        $outputModel = 'module\output\model';
         $name = "Create service";
         $requestedName = 'classpath/to/service';
         $config = array(
@@ -178,7 +172,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
                     AbstractSmartCrudServiceFactory::CONFIG_CREATE => array(
                         AbstractSmartCrudServiceFactory::CONFIG_SERVICE_KEY => $serviceKey,
                         AbstractSmartCrudServiceFactory::CONFIG_ENTITY_CLASS => $entityClassName,
-                        AbstractSmartCrudServiceFactory::CONFIG_OUTPUT_MODEL => $outputModel,
                         AbstractSmartCrudServiceFactory::CONFIG_GATEWAY_KEY => $gatewayKey,
                         AbstractSmartCrudServiceFactory::CONFIG_PARAMETERS_KEY => $parameterServiceKey,
                         AbstractSmartCrudServiceFactory::CONFIG_FORM_KEY  => $formKey,
@@ -198,7 +191,6 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
         $serviceLocator->get($formKey)->shouldBeCalled()->willReturn($form);
 
         $smartService->setEntityKey($entityClassName)->shouldBeCalled()->willReturn($smartService);
-        $smartService->setOutputModel($outputModel)->shouldBeCalled()->willReturn($smartService);
         $smartService->setParameters($parameterService)->shouldBeCalled()->willReturn($smartService);
         $smartService->setGateway($crudGateway)->shouldBeCalled()->willReturn($smartService);
         $smartService->setForm($form)->shouldBeCalled()->willReturn($smartService);
