@@ -28,7 +28,7 @@ class UpdateService extends AbstractCrudService
         $entity = $this->loadEntity($id);
         $form = $this->getForm($entity)->setData($data);
         $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form));
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $em->trigger($this->createEvent(CrudEvent::BEFORE_UPDATE, $entity));
             $gateway = $this->getGateway();
             $result = $gateway->update($this->loadEntity($id), $data);

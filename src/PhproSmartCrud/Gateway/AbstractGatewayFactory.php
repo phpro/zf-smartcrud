@@ -42,10 +42,12 @@ class AbstractGatewayFactory
         $namespace = self::FACTORY_NAMESPACE;
         if (!isset($config[$namespace]) || !is_array($config[$namespace]) || !isset($config[$namespace][$requestedName])) {
             $this->lookupCache[$requestedName] = false;
+
             return false;
         }
 
         $this->lookupCache[$requestedName] = true;
+
         return true;
     }
 
@@ -84,8 +86,8 @@ class AbstractGatewayFactory
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @param CrudGatewayInterface $gateway
-     * @param $options
+     * @param CrudGatewayInterface    $gateway
+     *                                                @param $options
      */
     protected function configureGateway($serviceLocator, $gateway, $options)
     {

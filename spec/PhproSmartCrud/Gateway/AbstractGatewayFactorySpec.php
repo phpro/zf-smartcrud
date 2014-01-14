@@ -3,7 +3,6 @@
 namespace spec\PhproSmartCrud\Gateway;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Prophecy\Prophet;
 
 /**

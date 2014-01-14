@@ -31,6 +31,7 @@ class ListService extends AbstractCrudService
         $result = $gateway->getList($this->getEntity(), $this->getParameters()->fromQuery());
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_LIST, null));
+
         return $result;
     }
 

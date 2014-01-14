@@ -113,6 +113,7 @@ class AbstractCrudControllerFactory
         if (!$routeMatch) {
             throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
         }
+
         return $routeMatch;
     }
 
@@ -131,7 +132,6 @@ class AbstractCrudControllerFactory
         $this->setServiceLocator($controllers->getServiceLocator());
         $serviceLocator = $this->getServiceLocator();
 
-
         if (array_key_exists($requestedName, $this->lookupCache)) {
             return $this->lookupCache[$requestedName];
         }
@@ -145,10 +145,12 @@ class AbstractCrudControllerFactory
         $namespace = self::FACTORY_NAMESPACE;
         if (!isset($config[$namespace]) || !is_array($config[$namespace]) || !isset($config[$namespace][$requestedName])) {
             $this->lookupCache[$requestedName] = false;
+
             return false;
         }
 
         $this->lookupCache[$requestedName] = true;
+
         return true;
     }
 
@@ -220,8 +222,10 @@ class AbstractCrudControllerFactory
      *
      * @return $this
      */
-    protected function injectViewModelBuilder(CrudControllerInterface $controller, $smartServiceKey) {
+    protected function injectViewModelBuilder(CrudControllerInterface $controller, $smartServiceKey)
+    {
         $controller->setViewModelBuilder(new $smartServiceKey());
+
         return $this;
     }
 

@@ -2,7 +2,6 @@
 
 namespace spec\PhproSmartCrud\Console\Helper;
 
-use Prophecy\Argument;
 use Prophecy\Prophet;
 
 class ConfigHelperSpec extends AbstractHelperSpec
@@ -33,7 +32,6 @@ class ConfigHelperSpec extends AbstractHelperSpec
         $this->mockConfig('Config', $config);
         $this->getConfig()->shouldBe($config);
     }
-
 
     public function it_should_load_application_config_from_servicemanager()
     {

@@ -129,6 +129,7 @@ class BjyAuthorize extends AbstractListenerAggregate
         if (!$serviceManager->has('BjyAuthorize\Service\Authorize')) {
             throw new SmartCrudException('The BjyAuthorize listener needs bjyAuthorize module installed');
         }
+
         return $serviceManager->get('BjyAuthorize\Service\Authorize');
     }
 
@@ -151,6 +152,7 @@ class BjyAuthorize extends AbstractListenerAggregate
         if (!$allowed) {
             throw new UnAuthorizedException(sprintf('You are unauthorized to %s the current page.', $privilege));
         }
+
         return $allowed;
     }
 

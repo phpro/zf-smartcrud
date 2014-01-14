@@ -5,7 +5,6 @@ namespace PhproSmartCrud\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
-use \PhproSmartCrud\Service\CrudServiceInterface;
 use Zend\Stdlib\ArrayObject;
 
 /**
@@ -89,7 +88,6 @@ class AbstractSmartCrudServiceFactory
             return null;
         }
 
-
         $defaultConfiguration = $this::getDefaultConfiguration();
 
         $result = array_merge(
@@ -99,6 +97,7 @@ class AbstractSmartCrudServiceFactory
             isset($smartCrudConfig[$service][$this::CONFIG_DEFAULT]) ? $smartCrudConfig[$service][$this::CONFIG_DEFAULT] : array(),
             isset($smartCrudConfig[$service][$action]) ? $smartCrudConfig[$service][$action] : array()
         );
+
         return $result;
     }
 
@@ -114,10 +113,11 @@ class AbstractSmartCrudServiceFactory
         $this->setServiceLocator($serviceLocator);
         $serviceAndAction = explode('::',$requestedName);
 
-        if(count($serviceAndAction) != 2) {
+        if (count($serviceAndAction) != 2) {
             return false;
         }
         $config = $this->getConfig($serviceAndAction[0], $serviceAndAction[1]);
+
         return !is_null($config);
     }
 
@@ -134,19 +134,20 @@ class AbstractSmartCrudServiceFactory
         $this->setServiceLocator($serviceLocator);
         $serviceAndAction = explode('::',$requestedName);
 
-        if(count($serviceAndAction) != 2) {
+        if (count($serviceAndAction) != 2) {
             return false;
         }
         $config = new ArrayObject($this->getConfig($serviceAndAction[0], $serviceAndAction[1]));
 
         $smartCrudService = $serviceLocator->get($config->offsetGet('service'));
         $this->injectDependencies($smartCrudService, $config);
+
         return $smartCrudService;
     }
 
     /**
      * @param CrudServiceInterface $smartCrudService
-     * @param ArrayObject         $config
+     * @param ArrayObject          $config
      *
      * @return $this
      */
@@ -158,6 +159,7 @@ class AbstractSmartCrudServiceFactory
             ->injectGateway($smartCrudService, $config)
             ->injectForm($smartCrudService, $config)
             ->injectListeners($smartCrudService, $config);
+
         return $this;
     }
 
@@ -168,11 +170,12 @@ class AbstractSmartCrudServiceFactory
      */
     private function injectEntityClass(CrudServiceInterface $smartCrudService, ArrayObject $config)
     {
-        if(!$config->offsetExists($this::CONFIG_ENTITY_CLASS)) {
+        if (!$config->offsetExists($this::CONFIG_ENTITY_CLASS)) {
             return $this;
         }
 
         $smartCrudService->setEntityKey($config->offsetGet($this::CONFIG_ENTITY_CLASS));
+
         return $this;
     }
 
@@ -183,59 +186,61 @@ class AbstractSmartCrudServiceFactory
      */
     private function injectParameterService(CrudServiceInterface $smartCrudService, ArrayObject $config)
     {
-        if(!$config->offsetExists($this::CONFIG_PARAMETERS_KEY)) {
+        if (!$config->offsetExists($this::CONFIG_PARAMETERS_KEY)) {
             return $this;
         }
 
         $serviceLocator = $this->getServiceLocator();
         $smartCrudService->setParameters($serviceLocator->get($config->offsetGet($this::CONFIG_PARAMETERS_KEY)));
+
         return $this;
     }
 
-
     /**
      * @param CrudServiceInterface $smartCrudService
-     * @param ArrayObject         $config
+     * @param ArrayObject          $config
      *
      * @return $this
      */
     private function injectForm(CrudServiceInterface $smartCrudService, ArrayObject $config)
     {
-        if(!$config->offsetExists($this::CONFIG_FORM_KEY)) {
+        if (!$config->offsetExists($this::CONFIG_FORM_KEY)) {
             return $this;
         }
 
         $serviceLocator = $this->getServiceLocator();
         $smartCrudService->setForm($serviceLocator->get($config->offsetGet($this::CONFIG_FORM_KEY)));
+
         return $this;
     }
 
     /**
      * @param CrudServiceInterface $smartCrudService
-     * @param ArrayObject         $config
+     * @param ArrayObject          $config
      *
      * @return $this
      */
     private function injectGateway(CrudServiceInterface $smartCrudService,ArrayObject $config)
     {
-        if(!$config->offsetExists($this::CONFIG_GATEWAY_KEY)) {
+        if (!$config->offsetExists($this::CONFIG_GATEWAY_KEY)) {
             return $this;
         }
 
         $serviceLocator = $this->getServiceLocator();
         $smartCrudService->setGateway($serviceLocator->get($config->offsetGet($this::CONFIG_GATEWAY_KEY)));
+
         return $this;
     }
 
     /**
      * @param CrudServiceInterface $smartCrudService
-     * @param ArrayObject         $config
+     * @param ArrayObject          $config
      *
      * @return $this
      */
     private function injectListeners(CrudServiceInterface $smartCrudService,ArrayObject $config)
     {
-        if($config->offsetExists($this::CONFIG_LISTENERS_KEY) && count($config[$this::CONFIG_LISTENERS_KEY]) < 1) {
+        if ($config->offsetExists($this::CONFIG_LISTENERS_KEY) && count($config[$this::CONFIG_LISTENERS_KEY]) < 1) {
             return $this;
         }
 
@@ -243,6 +248,7 @@ class AbstractSmartCrudServiceFactory
         foreach ($config->offsetGet($this::CONFIG_LISTENERS_KEY) as $listener) {
             $smartCrudService->getEventManager()->attach($serviceLocator->get($listener));
         }
+
         return $this;
     }
 
@@ -254,6 +260,7 @@ class AbstractSmartCrudServiceFactory
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
+
         return $this;
     }
 

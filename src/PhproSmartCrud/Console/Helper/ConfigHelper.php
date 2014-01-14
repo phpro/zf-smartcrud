@@ -26,6 +26,7 @@ class ConfigHelper extends Helper
     {
         $serviceManager = $this->getHelperSet()->get('serviceManager')->getServiceManager();
         $config = $serviceManager->get('Config');
+
         return $config;
     }
 
@@ -36,6 +37,7 @@ class ConfigHelper extends Helper
     {
         $serviceManager = $this->getHelperSet()->get('serviceManager')->getServiceManager();
         $config = $serviceManager->get('ApplicationConfig');
+
         return $config;
     }
 

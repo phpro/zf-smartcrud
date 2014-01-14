@@ -62,6 +62,7 @@ abstract class AbstractCrudService
     public function setFormKey($formKey)
     {
         $this->formKey = $formKey;
+
         return $this;
     }
 
@@ -79,6 +80,7 @@ abstract class AbstractCrudService
     public function setEntityKey($entityKey)
     {
         $this->entityKey = $entityKey;
+
         return $this;
     }
 
@@ -97,6 +99,7 @@ abstract class AbstractCrudService
     public function setEntity($entity)
     {
         $this->entity = $entity;
+
         return $this;
     }
 
@@ -127,6 +130,7 @@ abstract class AbstractCrudService
     public function setEventManager($eventManager)
     {
         $this->eventManager = $eventManager;
+
         return $this;
     }
 
@@ -138,6 +142,7 @@ abstract class AbstractCrudService
         if (!$this->eventManager) {
             $this->eventManager = new EventManager();
         }
+
         return $this->eventManager;
     }
 
@@ -149,6 +154,7 @@ abstract class AbstractCrudService
     public function setGateway($gateway)
     {
         $this->gateway = $gateway;
+
         return $this;
     }
 
@@ -168,6 +174,7 @@ abstract class AbstractCrudService
     public function setParameters($parameters)
     {
         $this->parameters = $parameters;
+
         return $this;
     }
 
@@ -187,6 +194,7 @@ abstract class AbstractCrudService
     public function setForm($form)
     {
         $this->form = $form;
+
         return $this;
     }
 
@@ -198,6 +206,7 @@ abstract class AbstractCrudService
         $this->form->bind($entity);
         $this->form->bindOnValidate();
         $this->getEventManager()->trigger($this->createEvent(CrudEvent::FORM_READY, $this->form));
+
         return $this->form;
     }
 
@@ -209,6 +218,7 @@ abstract class AbstractCrudService
     public function createEvent($eventName, $target)
     {
         $event = new CrudEvent($eventName, $target, $this->getParameters());
+
         return $event;
     }
 }

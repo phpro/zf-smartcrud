@@ -41,7 +41,6 @@ class FlashMessengerSpec extends ObjectBehavior
         $this->shouldHaveType('Zend\EventManager\AbstractListenerAggregate');
     }
 
-
     public function it_should_implement_zend_ServiceManagerAwareInterface()
     {
         $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
@@ -84,7 +83,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \PhproSmartCrud\Event\CrudEvent            $event
      */
     public function it_should_add_create_succeeded_message($flashMessenger, $event)
     {
@@ -96,7 +95,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \PhproSmartCrud\Event\CrudEvent            $event
      */
     public function it_should_add_update_succeeded_message($flashMessenger, $event)
     {
@@ -108,7 +107,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \PhproSmartCrud\Event\CrudEvent            $event
      */
     public function it_should_add_delete_succeeded_message($flashMessenger, $event)
     {
@@ -121,7 +120,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \PhproSmartCrud\Event\CrudEvent            $event
      */
     public function it_should_add_create_failed_message($flashMessenger, $event)
     {
@@ -133,7 +132,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \PhproSmartCrud\Event\CrudEvent            $event
      */
     public function it_should_add_update_failed_message($flashMessenger, $event)
     {
@@ -145,7 +144,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \PhproSmartCrud\Event\CrudEvent            $event
      */
     public function it_should_add_delete_failed_message($flashMessenger, $event)
     {

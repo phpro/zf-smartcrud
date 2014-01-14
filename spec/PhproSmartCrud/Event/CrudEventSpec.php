@@ -10,7 +10,6 @@
 namespace spec\PhproSmartCrud\Event;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class CrudEventSpec

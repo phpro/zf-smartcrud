@@ -2,9 +2,7 @@
 
 namespace spec\PhproSmartCrud\Service;
 
-use PhproSmartCrud\Service\AbstractActionServiceFactory;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use \PhproSmartCrud\Service\AbstractSmartCrudServiceFactory;
 
 /**
@@ -144,12 +142,12 @@ class AbstractSmartCrudServiceFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \PhproSmartCrud\Service\AbstractCrudService $smartService
-     * @param \Zend\EventManager\EventManager $eventManager
-     * @param \StdClass $listener
+     * @param \PhproSmartCrud\Service\AbstractCrudService  $smartService
+     * @param \Zend\EventManager\EventManager              $eventManager
+     * @param \StdClass                                    $listener
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $crudGateway
-     * @param \Zend\Form\Form $form
-     * @param \PhproSmartCrud\Service\ParametersService $parameterService
+     * @param \Zend\Form\Form                              $form
+     * @param \PhproSmartCrud\Service\ParametersService    $parameterService
      *
      */
     public function it_should_create_a_service_and_inject_the_dependencies(

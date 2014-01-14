@@ -42,6 +42,7 @@ class DoctrineCrudGateway
             $rc = new \ReflectionClass($entityKey);
             $entity = $rc->newInstance();
         }
+
         return $entity;
     }
 
@@ -141,6 +142,7 @@ class DoctrineCrudGateway
         if (!$this->objectManager || !$this->objectManager instanceof ObjectManager) {
             throw new SmartCrudException('Invalid object manager configured.');
         }
+
         return $this->objectManager;
     }
 
@@ -152,6 +154,7 @@ class DoctrineCrudGateway
     public function getRepository($entity)
     {
         $entityKey = is_string($entity) ? $entity : get_class($entity);
+
         return $this->getObjectManager()->getRepository($entityKey);
     }
 

@@ -3,7 +3,6 @@
 namespace spec\PhproSmartCrud;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class VersionSpec extends ObjectBehavior
 {

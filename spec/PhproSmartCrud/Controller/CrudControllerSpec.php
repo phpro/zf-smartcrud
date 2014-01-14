@@ -9,11 +9,9 @@
 
 namespace spec\PhproSmartCrud\Controller;
 
-use PhproSmartCrud\Router\SmartCrudRouter;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Prophet;
-use Zend\View\Model\ViewModel;
 
 /**
  * Class CrudControllerSpec
@@ -62,11 +60,11 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \PhproSmartCrud\Service\CreateService $smartService
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
-     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Zend\Mvc\MvcEvent                          $mvcEvent
+     * @param \PhproSmartCrud\Service\CreateService       $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params          $params
+     * @param \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
     public function it_should_handle_get_to_a_create_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
@@ -76,12 +74,12 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Http\PhpEnvironment\Request     $request
+     * @param \Zend\Mvc\MvcEvent                    $mvcEvent
      * @param \PhproSmartCrud\Service\CreateService $smartService
-     * @param \Zend\Mvc\Controller\PluginManager $pluginManager
-     * @param \Zend\Mvc\Controller\Plugin\Redirect $redirectPlugin
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param \Zend\Mvc\Controller\PluginManager    $pluginManager
+     * @param \Zend\Mvc\Controller\Plugin\Redirect  $redirectPlugin
+     * @param \Zend\Mvc\Controller\Plugin\Params    $params
      */
     public function it_should_handle_valid_post_to_create_action($request, $mvcEvent, $smartService, $pluginManager, $redirectPlugin, $params)
     {
@@ -98,11 +96,11 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \PhproSmartCrud\Service\CreateService $smartService
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
-     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Zend\Mvc\MvcEvent                          $mvcEvent
+     * @param \PhproSmartCrud\Service\CreateService       $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params          $params
+     * @param \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
     public function it_should_handle_invalid_post_to_create_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
@@ -114,12 +112,12 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Http\PhpEnvironment\Request     $request
+     * @param \Zend\Mvc\MvcEvent                    $mvcEvent
      * @param \PhproSmartCrud\Service\UpdateService $smartService
-     * @param \Zend\Mvc\Controller\PluginManager $pluginManager
-     * @param \Zend\Mvc\Controller\Plugin\Redirect $redirectPlugin
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param \Zend\Mvc\Controller\PluginManager    $pluginManager
+     * @param \Zend\Mvc\Controller\Plugin\Redirect  $redirectPlugin
+     * @param \Zend\Mvc\Controller\Plugin\Params    $params
      */
     public function it_should_handle_a_valid_post_to_an_update_action($request, $mvcEvent, $smartService, $pluginManager, $redirectPlugin, $params)
     {
@@ -139,11 +137,11 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \PhproSmartCrud\Service\UpdateService $smartService
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
-     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Zend\Mvc\MvcEvent                          $mvcEvent
+     * @param \PhproSmartCrud\Service\UpdateService       $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params          $params
+     * @param \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
     public function it_should_handle_a_get_to_an_update_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
@@ -154,11 +152,11 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \PhproSmartCrud\Service\UpdateService $smartService
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
-     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Zend\Mvc\MvcEvent                          $mvcEvent
+     * @param \PhproSmartCrud\Service\UpdateService       $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params          $params
+     * @param \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
     public function it_should_handle_invalid_post_to_an_update_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
@@ -170,11 +168,11 @@ class CrudControllerSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \PhproSmartCrud\Service\DeleteService $smartService
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
-     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Zend\Mvc\MvcEvent                          $mvcEvent
+     * @param \PhproSmartCrud\Service\DeleteService       $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params          $params
+     * @param \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
     public function it_should_handle_a_get_to_an_delete_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {
@@ -184,12 +182,12 @@ class CrudControllerSpec extends ObjectBehavior
         $this->mockGet($request, $mvcEvent, $params, $smartService, $action, $viewModelBuilder);
     }
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
+     * @param \Zend\Http\PhpEnvironment\Request     $request
+     * @param \Zend\Mvc\MvcEvent                    $mvcEvent
      * @param \PhproSmartCrud\Service\DeleteService $smartService
-     * @param \Zend\Mvc\Controller\PluginManager $pluginManager
-     * @param \Zend\Mvc\Controller\Plugin\Redirect $redirectPlugin
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
+     * @param \Zend\Mvc\Controller\PluginManager    $pluginManager
+     * @param \Zend\Mvc\Controller\Plugin\Redirect  $redirectPlugin
+     * @param \Zend\Mvc\Controller\Plugin\Params    $params
      */
     public function it_should_handle_valid_post_to_a_delete_action($request, $mvcEvent, $smartService, $pluginManager, $redirectPlugin, $params)
     {
@@ -208,11 +206,11 @@ class CrudControllerSpec extends ObjectBehavior
         $this->mockValidPost($request, $mvcEvent, $pluginManager, $params, $action, $postParameters);
     }
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
-     * @param \Zend\Mvc\MvcEvent $mvcEvent
-     * @param \PhproSmartCrud\Service\DeleteService $smartService
-     * @param \Zend\Mvc\Controller\Plugin\Params $params
-     * @param  \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Zend\Mvc\MvcEvent                          $mvcEvent
+     * @param \PhproSmartCrud\Service\DeleteService       $smartService
+     * @param \Zend\Mvc\Controller\Plugin\Params          $params
+     * @param \PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
      */
     public function it_should_handle_invalid_post_to__an_delete_action($request, $mvcEvent, $smartService, $params, $viewModelBuilder)
     {

@@ -10,7 +10,6 @@
 namespace spec\PhproSmartCrud\Console;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class ApplicationSpec

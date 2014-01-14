@@ -40,8 +40,8 @@ class ModuleSpec extends ObjectBehavior
 
     /**
      * @param \Zend\EventManager\EventInterface $event
-     * @param \Zend\Mvc\Application $app
-     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Zend\Mvc\Application             $app
+     * @param \Zend\EventManager\EventManager   $eventManager
      */
     public function it_should_attach_cli_listener_on_bootstrap($event, $app, $eventManager)
     {
@@ -55,9 +55,9 @@ class ModuleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\EventManager\EventInterface $event
-     * @param \Symfony\Component\Console\Application $cli
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \Zend\EventManager\EventInterface           $event
+     * @param \Symfony\Component\Console\Application      $cli
+     * @param \Zend\ServiceManager\ServiceManager         $serviceManager
      * @param \Symfony\Component\Console\Helper\HelperSet $helperSet
      */
     public function it_should_configure_cli($event, $cli, $serviceManager, $helperSet)

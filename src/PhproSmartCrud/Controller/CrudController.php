@@ -11,7 +11,6 @@ namespace PhproSmartCrud\Controller;
 use PhproSmartCrud\Service\CrudServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use PhproSmartCrud\View\Model\ViewModelBuilder;
-use Zend\Mvc\Exception;
 use Zend\View\Model\ModelInterface;
 
 /**
@@ -25,7 +24,6 @@ class CrudController extends AbstractActionController
      * @var CrudServiceInterface
      */
     protected $smartService;
-
 
     /**
      * @var ViewModelBuilder
@@ -48,6 +46,7 @@ class CrudController extends AbstractActionController
     public function setIdentifierName($name)
     {
         $this->identifierName = (string) $name;
+
         return $this;
     }
 
@@ -69,6 +68,7 @@ class CrudController extends AbstractActionController
     public function setSmartService(CrudServiceInterface $service)
     {
         $this->smartService = $service;
+
         return $this;
     }
 
@@ -88,6 +88,7 @@ class CrudController extends AbstractActionController
     public function setViewModelBuilder(ViewModelBuilder $viewModelBuilder)
     {
         $this->viewModelBuilder = $viewModelBuilder;
+
         return $this;
     }
 
@@ -126,6 +127,7 @@ class CrudController extends AbstractActionController
             && $this->getSmartService()->run(null, $this->getRequest()->getPost())) {
                 return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
+
         return $this->prepareModel('create');
     }
 
@@ -138,6 +140,7 @@ class CrudController extends AbstractActionController
             && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
             return $this->redirect()->toRoute(null, array('action' => 'view'));
         }
+
         return $this->prepareModel('update');
     }
 
@@ -158,6 +161,7 @@ class CrudController extends AbstractActionController
             && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
             return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
+
         return $this->prepareModel('delete');
     }
 

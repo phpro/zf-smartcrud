@@ -39,8 +39,8 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \PhproSmartCrud\Event\CrudEvent $event
-     * @param \BjyAuthorize\Service\Authorize $authorizeService
+     * @param \PhproSmartCrud\Event\CrudEvent                  $event
+     * @param \BjyAuthorize\Service\Authorize                  $authorizeService
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $resource
      */
     protected function mockEvent($authorizeService, $event, $resource)
@@ -87,7 +87,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \BjyAuthorize\Service\Authorize $authorize
+     * @param \BjyAuthorize\Service\Authorize     $authorize
      */
     public function it_should_have_an_authorization_service($serviceManager, $authorize)
     {
@@ -110,7 +110,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \BjyAuthorize\Service\Authorize $authorizeService
+     * @param \BjyAuthorize\Service\Authorize                  $authorizeService
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $entity
      */
     public function it_should_use_ResourceInterface_by_default($authorizeService, $entity)
@@ -125,7 +125,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
 
     /**
      * @param \BjyAuthorize\Service\Authorize $authorizeService
-     * @param \stdClass $entity
+     * @param \stdClass                       $entity
      */
     public function it_should_use_classname_if_entity_is_no_ResourceInterface($authorizeService, $entity)
     {
@@ -149,8 +149,8 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \BjyAuthorize\Service\Authorize $authorizeService
-     *  @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \BjyAuthorize\Service\Authorize                  $authorizeService
+     *                                                                           @param \PhproSmartCrud\Event\CrudEvent $event
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $resource
      */
     public function it_should_validate_list_privilege($authorizeService, $event, $resource)
@@ -162,8 +162,8 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \BjyAuthorize\Service\Authorize $authorizeService
-     *  @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \BjyAuthorize\Service\Authorize                  $authorizeService
+     *                                                                           @param \PhproSmartCrud\Event\CrudEvent $event
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $resource
      */
     public function it_should_validate_create_privilege($authorizeService, $event, $resource)
@@ -175,8 +175,8 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \BjyAuthorize\Service\Authorize $authorizeService
-     *  @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \BjyAuthorize\Service\Authorize                  $authorizeService
+     *                                                                           @param \PhproSmartCrud\Event\CrudEvent $event
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $resource
      */
     public function it_should_validate_read_privilege($authorizeService, $event, $resource)
@@ -188,8 +188,8 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \BjyAuthorize\Service\Authorize $authorizeService
-     *  @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \BjyAuthorize\Service\Authorize                  $authorizeService
+     *                                                                           @param \PhproSmartCrud\Event\CrudEvent $event
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $resource
      */
     public function it_should_validate_update_privilege($authorizeService, $event, $resource)
@@ -201,8 +201,8 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \BjyAuthorize\Service\Authorize $authorizeService
-     *  @param \PhproSmartCrud\Event\CrudEvent $event
+     * @param \BjyAuthorize\Service\Authorize                  $authorizeService
+     *                                                                           @param \PhproSmartCrud\Event\CrudEvent $event
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $resource
      */
     public function it_should_validate_delete_privilege($authorizeService, $event, $resource)

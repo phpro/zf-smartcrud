@@ -13,12 +13,10 @@ use PhproSmartCrud\Controller\AbstractCrudControllerFactory;
 use PhproSmartCrud\Service\AbstractSmartCrudServiceFactory;
 use Symfony\Component\Console\Command\Command as CliCommand;
 use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zend\Config\Writer\PhpArray as PhpArrayWriter;
 use Zend\Stdlib\ArrayUtils;
-
 
 /**
  * Class Generate
@@ -79,7 +77,7 @@ class Generate extends CliCommand
         $dialog = $this->getDialog();
         $moduleList = $this->getHelper('moduleList')->getList();
         $module = $dialog->askAndValidate($output, 'Please enter the name of the module: ', function ($module) use ($moduleList) {
-                if (!in_array($module, $moduleList))  {
+                if (!in_array($module, $moduleList)) {
                     throw new \RunTimeException('Invalid module: ' . $module);
                 }
 
@@ -153,9 +151,10 @@ class Generate extends CliCommand
     {
         $dialog = $this->getDialog();
         $route = $dialog->askAndValidate($output, 'Please enter the prefix of the route: ', function ($route) {
-                if (false)  {
+                if (false) {
                     throw new \RunTimeException('Invalid route: ' . $route);
                 }
+
                 return $route;
             }, false, '');
 
@@ -163,7 +162,7 @@ class Generate extends CliCommand
     }
 
     /**
-     * @param OutputInterface $output
+     * @param  OutputInterface   $output
      * @return string
      * @throws \RunTimeException
      */
@@ -176,7 +175,7 @@ class Generate extends CliCommand
 
         $question = sprintf('Please enter the service key of the gateway <fg=yellow>(Default: %s)</fg=yellow>:', $defaultGateway);
         $gateway = $dialog->askAndValidate($output, $question, function ($gateway) use ($gatewayList) {
-                if (!in_array($gateway, $gatewayList))  {
+                if (!in_array($gateway, $gatewayList)) {
                     throw new \RunTimeException('Invalid gateway: ' . $gateway);
                 }
 

@@ -32,7 +32,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
 
     /**
      * @param \Zend\EventManager\EventManager $eventManager
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form                 $form
      */
     public function it_should_trigger_invalid_update_event($eventManager,$form)
     {
@@ -48,7 +48,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
 
     /**
      * @param \Zend\EventManager\EventManager $eventManager
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form                 $form
      */
     public function it_should_trigger_before_data_validation_event($eventManager,$form)
     {
@@ -63,7 +63,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
     }
     /**
      * @param \Zend\EventManager\EventManager $eventManager
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form                 $form
      */
     public function it_should_trigger_before_update_event($eventManager, $form)
     {
@@ -79,7 +79,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
 
     /**
      * @param \Zend\EventManager\EventManager $eventManager
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form                 $form
      */
     public function it_should_trigger_after_update_event($eventManager, $form)
     {
@@ -95,8 +95,8 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
 
     /**
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
-     * @param \StdClass $entity
-     * @param \Zend\Form\Form $form
+     * @param \StdClass                                    $entity
+     * @param \Zend\Form\Form                              $form
      */
     public function it_should_call_update_function_on_gateway($gateway, $entity, $form)
     {
@@ -118,7 +118,7 @@ class UpdateServiceSpec extends AbstractCrudServiceSpec
 
     /**
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form                              $form
      */
     public function it_should_return_gateway_return_value($gateway, $form)
     {

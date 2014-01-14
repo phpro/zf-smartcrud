@@ -12,7 +12,7 @@ interface CrudServiceInterface
 {
 
     /**
-     * @param int $id
+     * @param int                $id
      * @param array|\Traversable $data
      *
      * @return mixed

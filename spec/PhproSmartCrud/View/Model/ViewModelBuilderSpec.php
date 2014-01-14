@@ -10,8 +10,6 @@
 namespace spec\PhproSmartCrud\View\Model;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class ViewModelSpec
@@ -26,19 +24,20 @@ class ViewModelBuilderSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Http\PhpEnvironment\Request     $request
      * @param \PhproSmartCrud\Service\CreateService $smartService
      */
-    public function it_should_build_a_view_model($request, $smartService) {
-
+    public function it_should_build_a_view_model($request, $smartService)
+    {
         $this->build($request, $smartService, 'create')->shouldBeAnInstanceOf('\Zend\View\Model\ViewModel');
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request $request
+     * @param \Zend\Http\PhpEnvironment\Request     $request
      * @param \PhproSmartCrud\Service\CreateService $smartService
      */
-    public function it_should_build_a_json_model_when_request_is_xml_http_request($request, $smartService) {
+    public function it_should_build_a_json_model_when_request_is_xml_http_request($request, $smartService)
+    {
         $request->isXmlHttpRequest()->willReturn(true);
         $this->build($request, $smartService, 'create')->shouldBeAnInstanceOf('\Zend\View\Model\JsonModel');
     }

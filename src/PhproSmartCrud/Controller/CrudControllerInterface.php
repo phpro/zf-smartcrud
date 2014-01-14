@@ -25,14 +25,12 @@ interface CrudControllerInterface
      */
     public function setIdentifierName($name);
 
-
     /**
      * @param CrudServiceInterface $service
      *
      * @return $this
      */
     public function setSmartService(CrudServiceInterface $service);
-
 
     /**
      * @param 'PhproSmartCrud\View\Model\ViewModelBuilder $viewModelBuilder

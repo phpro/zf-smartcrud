@@ -50,7 +50,7 @@ class DeleteServiceSpec extends AbstractCrudServiceSpec
 
     /**
      * @param \PhproSmartCrud\Gateway\CrudGatewayInterface $gateway
-     * @param \StdClass $entity
+     * @param \StdClass                                    $entity
      */
     public function it_should_call_delete_function_on_gateway($gateway, $entity)
     {

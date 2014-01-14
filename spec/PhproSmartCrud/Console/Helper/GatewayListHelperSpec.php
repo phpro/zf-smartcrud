@@ -4,9 +4,6 @@ namespace spec\PhproSmartCrud\Console\Helper;
 
 use PhproSmartCrud\Gateway\AbstractGatewayFactory;
 use PhproSmartCrud\Service\AbstractSmartCrudServiceFactory;
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
-use Prophecy\Prophet;
 
 class GatewayListHelperSpec extends AbstractHelperSpec
 {

@@ -10,7 +10,6 @@
 namespace spec\PhproSmartCrud\Exception;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class SmartCrudExceptionSpec

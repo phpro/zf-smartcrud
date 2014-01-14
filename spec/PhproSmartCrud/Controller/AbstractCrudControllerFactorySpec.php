@@ -11,9 +11,9 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
 {
 
     /**
-     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     * @param \Zend\Mvc\Controller\ControllerManager       $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param array $routeParams
+     * @param array                                        $routeParams
      */
     protected function mockConfiguration($controllerManager, $serviceLocator, $routeParams = array('action' => 'list'))
     {
@@ -62,7 +62,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
 
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param array $params
+     * @param array                                        $params
      */
     protected function mockRouteMatch($serviceLocator, $params = array())
     {
@@ -131,7 +131,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     * @param \Zend\Mvc\Controller\ControllerManager       $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
     public function it_should_be_able_to_create_crud_controller_services($controllerManager, $serviceLocator)
@@ -142,7 +142,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     * @param \Zend\Mvc\Controller\ControllerManager       $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
     public function it_should_not_be_able_to_create_other_objects($controllerManager, $serviceLocator)
@@ -152,9 +152,8 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
         $this->canCreateServiceWithName($controllerManager, $name, $name)->shouldReturn(false);
     }
 
-
     /**
-     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     * @param \Zend\Mvc\Controller\ControllerManager       $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
     public function it_should_create_controllers($controllerManager, $serviceLocator)
@@ -168,7 +167,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     * @param \Zend\Mvc\Controller\ControllerManager       $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
     public function it_should_throw_exception_when_controller_does_not_exist($controllerManager, $serviceLocator)
@@ -181,7 +180,7 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     * @param \Zend\Mvc\Controller\ControllerManager       $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
     public function it_should_throw_exception_when_service_does_not_exist($controllerManager, $serviceLocator)

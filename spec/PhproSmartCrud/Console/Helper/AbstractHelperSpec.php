@@ -3,7 +3,6 @@
 namespace spec\PhproSmartCrud\Console\Helper;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Prophecy\Prophet;
 
 abstract class AbstractHelperSpec extends ObjectBehavior

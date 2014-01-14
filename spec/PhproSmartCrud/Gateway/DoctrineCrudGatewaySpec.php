@@ -11,7 +11,6 @@ namespace spec\PhproSmartCrud\Gateway;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Prophecy\Prophet;
 
 /**
  * Class DoctrineCrudGatewaySpec
@@ -53,9 +52,9 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectManager    $objectManager
      * @param \Doctrine\Common\Persistence\ObjectRepository $repository
-     * @param \stdClass $entity
+     * @param \stdClass                                     $entity
      */
     public function it_should_load_object_repositories($objectManager, $repository, $entity)
     {
@@ -69,7 +68,7 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectManager    $objectManager
      * @param \Doctrine\Common\Persistence\ObjectRepository $repository
      */
     public function it_should_load_an_entity($objectManager, $repository, $entity)
@@ -85,9 +84,9 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectManager    $objectManager
      * @param \Doctrine\Common\Persistence\ObjectRepository $repository
-     * @param \stdClass $entity
+     * @param \stdClass                                     $entity
      */
     public function it_should_generate_list($objectManager, $repository, $entity)
     {
@@ -99,7 +98,7 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
 
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param \stdClass $entity
+     * @param \stdClass                                  $entity
      */
     public function it_should_create_entity($objectManager, $entity)
     {
@@ -111,7 +110,7 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
 
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param \stdClass $entity
+     * @param \stdClass                                  $entity
      */
     public function it_should_not_create_invalid_entity($objectManager, $entity)
     {
@@ -121,9 +120,9 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectManager    $objectManager
      * @param \Doctrine\Common\Persistence\ObjectRepository $repository
-     * @param \stdClass $entity
+     * @param \stdClass                                     $entity
      */
     public function it_should_read_entity($objectManager, $repository, $entity)
     {
@@ -135,7 +134,7 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
 
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param \stdClass $entity
+     * @param \stdClass                                  $entity
      */
     public function it_should_update_entity($objectManager, $entity)
     {
@@ -147,7 +146,7 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
 
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param \stdClass $entity
+     * @param \stdClass                                  $entity
      */
     public function it_should_not_update_invalid_entity($objectManager, $entity)
     {
@@ -156,10 +155,9 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
         $this->update($entity, array())->shouldReturn(false);
     }
 
-
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param \stdClass $entity
+     * @param \stdClass                                  $entity
      */
     public function it_should_delete_entity($objectManager, $entity)
     {
@@ -171,7 +169,7 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
 
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param \stdClass $entity
+     * @param \stdClass                                  $entity
      */
     public function it_should_not_delete_invalid_entity($objectManager, $entity)
     {

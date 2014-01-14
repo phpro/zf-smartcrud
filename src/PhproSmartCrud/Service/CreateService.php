@@ -31,7 +31,7 @@ class CreateService extends AbstractCrudService
         $entity = $this->getEntity();
         $form = $this->getForm($entity)->setData($data);
         $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form));
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $em->trigger($this->createEvent(CrudEvent::BEFORE_CREATE, $entity));
             $result = $this->getGateway()->create($entity, $data);
             $em->trigger($this->createEvent(CrudEvent::AFTER_CREATE, $entity));
@@ -39,6 +39,7 @@ class CreateService extends AbstractCrudService
             $result = false;
             $em->trigger($this->createEvent(CrudEvent::INVALID_CREATE, $form));
         }
+
         return $result;
     }
 

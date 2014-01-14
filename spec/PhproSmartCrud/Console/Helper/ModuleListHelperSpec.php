@@ -2,9 +2,6 @@
 
 namespace spec\PhproSmartCrud\Console\Helper;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
-
 class ModuleListHelperSpec extends AbstractHelperSpec
 {
     public function it_is_initializable()

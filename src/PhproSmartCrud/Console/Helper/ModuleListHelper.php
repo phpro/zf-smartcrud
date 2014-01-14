@@ -25,6 +25,7 @@ class ModuleListHelper extends Helper
     public function getList()
    {
        $config = $this->getHelperSet()->get('Config')->getApplicationConfig();
+
        return isset($config['modules']) ? $config['modules'] : array();
    }
 

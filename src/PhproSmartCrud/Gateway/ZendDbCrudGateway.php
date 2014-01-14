@@ -82,5 +82,4 @@ class ZendDbCrudGateway implements CrudGatewayInterface
         // TODO: Implement delete() method.
     }
 
-
 }

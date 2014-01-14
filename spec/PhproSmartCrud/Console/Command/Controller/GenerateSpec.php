@@ -10,7 +10,6 @@
 namespace spec\PhproSmartCrud\Console\Command\Controller;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class GenerateSpec

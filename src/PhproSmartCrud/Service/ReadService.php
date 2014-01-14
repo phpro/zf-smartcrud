@@ -31,6 +31,7 @@ class ReadService extends AbstractCrudService
         $result = $gateway->read($this->getEntity(), $id);
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_READ, null));
+
         return $result;
     }
 

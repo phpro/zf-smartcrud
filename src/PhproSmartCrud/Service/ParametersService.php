@@ -58,6 +58,7 @@ class ParametersService implements FactoryInterface
 
         // Return params plugin
         $this->paramsPlugin = $controller->plugin('params');
+
         return $this;
     }
 
@@ -72,6 +73,7 @@ class ParametersService implements FactoryInterface
         if (!$this->paramsPlugin || !method_exists($this->paramsPlugin, $method)) {
             return null;
         }
+
         return call_user_func_array(array($this->paramsPlugin, $method), $arguments);
     }
 
