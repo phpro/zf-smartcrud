@@ -1,2 +1,2 @@
 <?php
-require __DIR__ . '/src/PhproSmartCrud/Module.php';
+require __DIR__ . '/src/Phpro/SmartCrud/Module.php';

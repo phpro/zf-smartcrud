@@ -47,7 +47,7 @@
     },
     "autoload": {
         "psr-0": {
-            "PhproSmartCrud": "src/"
+            "Phpro\\SmartCrud": "src/"
         }
     },
     "extra": {

@@ -16,7 +16,7 @@ while (!file_exists('config/application.config.php')) {
     if ($previousDir === $dir) {
         throw new RuntimeException(
             'Unable to locate "config/application.config.php": ' .
-            'is PhproSmartCrud in a subdir of your application skeleton?'
+            'is Phpro\SmartCrud in a subdir of your application skeleton?'
         );
     }
 
