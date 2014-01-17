@@ -83,7 +83,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \Phpro\SmartCrud\Event\CrudEvent            $event
+     * @param \Phpro\SmartCrud\Event\CrudEvent           $event
      */
     public function it_should_add_create_succeeded_message($flashMessenger, $event)
     {
@@ -95,7 +95,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \Phpro\SmartCrud\Event\CrudEvent            $event
+     * @param \Phpro\SmartCrud\Event\CrudEvent           $event
      */
     public function it_should_add_update_succeeded_message($flashMessenger, $event)
     {
@@ -107,7 +107,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \Phpro\SmartCrud\Event\CrudEvent            $event
+     * @param \Phpro\SmartCrud\Event\CrudEvent           $event
      */
     public function it_should_add_delete_succeeded_message($flashMessenger, $event)
     {
@@ -120,7 +120,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \Phpro\SmartCrud\Event\CrudEvent            $event
+     * @param \Phpro\SmartCrud\Event\CrudEvent           $event
      */
     public function it_should_add_create_failed_message($flashMessenger, $event)
     {
@@ -132,7 +132,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \Phpro\SmartCrud\Event\CrudEvent            $event
+     * @param \Phpro\SmartCrud\Event\CrudEvent           $event
      */
     public function it_should_add_update_failed_message($flashMessenger, $event)
     {
@@ -144,7 +144,7 @@ class FlashMessengerSpec extends ObjectBehavior
 
     /**
      * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
-     * @param \Phpro\SmartCrud\Event\CrudEvent            $event
+     * @param \Phpro\SmartCrud\Event\CrudEvent           $event
      */
     public function it_should_add_delete_failed_message($flashMessenger, $event)
     {

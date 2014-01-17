@@ -27,8 +27,9 @@ class CreateService extends AbstractSmartService
      */
     public function run($id = null, $data)
     {
+
         $em = $this->getEventManager();
-        $entity = $this->getEntity();
+        $entity = $this->loadEntity($id);
         $form = $this->getForm($entity)->setData($data);
         $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form));
         if ($form->isValid()) {

@@ -30,19 +30,13 @@ return array(
         'aliases' => array(
             'zf-smartcrud.cli' => 'Phpro\SmartCrud\Console\Application'
         ),
-        // Make sure to generate new instances ...
-        'shared' => array(
-            'Phpro\SmartCrud\View\Model\JsonModel'       =>  false,
-            'Phpro\SmartCrud\View\Model\RedirectModel'   =>  false,
-            'Phpro\SmartCrud\View\Model\ViewModel'       =>  false,
-        ),
     ),
     'controllers' => array(
         'invokables' => array(
             'Phpro\SmartCrud\Controller\CrudController' => 'Phpro\SmartCrud\Controller\CrudController'
         ),
         'abstract_factories' => array(
-            'Phpro\SmartCrud\\Controller\\AbstractCrudControllerFactory',
+            'Phpro\SmartCrud\Controller\AbstractCrudControllerFactory',
         ),
     ),
     'view_manager' => array(

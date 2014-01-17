@@ -13,15 +13,36 @@ use Zend\View\Model\JsonModel;
  */
 class ViewModelBuilder
 {
+
+    /** @var string  */
+    private $template = 'phpro-smartcrud/%s';
+
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @param string $template
+     *
+     * @return $this
      */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
     /**
      * @param HttpRequest $request
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function build(HttpRequest $request, SmartServiceInterface $service, $action)
+    public function build(HttpRequest $request, $entity, SmartServiceInterface $service, $action)
     {
         $viewModel = null;
         if ($request->isXmlHttpRequest()) {
@@ -30,7 +51,8 @@ class ViewModelBuilder
         } else {
             $viewModel = new \Zend\View\Model\ViewModel();
             $viewModel->setVariable('service', $service);
-            $viewModel->setTemplate(sprintf('phpro-smartcrud/%s', $action));
+            $viewModel->setVariable('form', $service->getForm($entity));
+            $viewModel->setTemplate(sprintf($this->getTemplate(), $action));
         }
 
         return $viewModel;

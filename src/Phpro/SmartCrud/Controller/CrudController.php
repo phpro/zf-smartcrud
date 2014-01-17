@@ -172,7 +172,10 @@ class CrudController extends AbstractActionController
      */
     public function prepareModel($action)
     {
-        return $this->getViewModelBuilder()->build($this->getRequest(), $this->getSmartService(), $action);
+//        $this->getSmartService()->setParameters($this->getServiceLocator()->get('Phpro\SmartCrud\Service\ParametersService'));
+        $entity = $this->getSmartService()->loadEntity($this->getEntityId());
+
+        return $this->getViewModelBuilder()->build($this->getRequest(), $entity, $this->getSmartService(), $action);
     }
 
 }

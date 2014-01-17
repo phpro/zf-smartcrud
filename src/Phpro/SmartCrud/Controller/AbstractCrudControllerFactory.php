@@ -169,7 +169,6 @@ class AbstractCrudControllerFactory
         $this->setControllerManager($controllers);
         $this->setServiceLocator($controllers->getServiceLocator());
         $serviceLocator = $this->getServiceLocator();
-
         $config   = $serviceLocator->get('Config');
         $config   = $config[self::FACTORY_NAMESPACE][$requestedName];
         $config     = array_merge($this->getDefaultConfiguration(), $config);
@@ -223,7 +222,7 @@ class AbstractCrudControllerFactory
      */
     protected function injectViewModelBuilder(CrudControllerInterface $controller, $smartServiceKey)
     {
-        $controller->setViewModelBuilder(new $smartServiceKey());
+        $controller->setViewModelBuilder($this->getServiceLocator()->get($smartServiceKey));
 
         return $this;
     }

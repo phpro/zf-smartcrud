@@ -49,7 +49,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param \Zend\ServiceManager\ServiceLocatorInterface  $serviceLocator
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function mockBaseGateway($serviceLocator, $gateway)
@@ -80,7 +80,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param \Zend\ServiceManager\ServiceLocatorInterface  $serviceLocator
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_create_gateway_services($serviceLocator, $gateway)
@@ -93,7 +93,7 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param \Zend\ServiceManager\ServiceLocatorInterface  $serviceLocator
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_throw_exception_when_base_gateway_does_not_exist($serviceLocator, $gateway)

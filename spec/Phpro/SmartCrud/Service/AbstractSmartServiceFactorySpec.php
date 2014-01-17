@@ -39,11 +39,14 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
         );
         $serviceLocator->get('Config')->shouldBeCalled()->willReturn($config);
         $this->setServiceLocator($serviceLocator);
+        /** @var \PhpSpec\Wrapper\Subject $data */
+       $data = $this->getConfig('Admin\Service\UserServiceFactory', 'create');
         $this->getConfig('Admin\Service\UserServiceFactory', 'create')->shouldReturn(
             array(
                  AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => null,
                  AbstractSmartServiceFactory::CONFIG_ENTITY_CLASS => null,
                  AbstractSmartServiceFactory::CONFIG_FORM_KEY     => null,
+                 AbstractSmartServiceFactory::CONFIG_PARAMETERS_KEY => 'Phpro\SmartCrud\Service\ParametersService',
                  AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(),
                  AbstractSmartServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\CreateService'
             )
@@ -89,6 +92,7 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
                  AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
                  AbstractSmartServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                  AbstractSmartServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm',
+                 AbstractSmartServiceFactory::CONFIG_PARAMETERS_KEY => 'Phpro\SmartCrud\Service\ParametersService',
                  AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(
                      'Admin\Listener\User'
                  ),
@@ -100,6 +104,7 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
                  AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => 'Phpro\SmartCrud\Gateway\ZendDbCrudGateway',
                  AbstractSmartServiceFactory::CONFIG_ENTITY_CLASS => 'SomeModule\Entity\User',
                  AbstractSmartServiceFactory::CONFIG_FORM_KEY     => 'Admin\Form\UserForm',
+                 AbstractSmartServiceFactory::CONFIG_PARAMETERS_KEY => 'Phpro\SmartCrud\Service\ParametersService',
                  AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(
                      'Admin\Listener\UserUpdate'
                  ),
@@ -141,12 +146,12 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @param \Phpro\SmartCrud\Service\AbstractSmartService  $smartService
-     * @param \Zend\EventManager\EventManager              $eventManager
-     * @param \StdClass                                    $listener
+     * @param \Zend\ServiceManager\ServiceLocatorInterface  $serviceLocator
+     * @param \Phpro\SmartCrud\Service\AbstractSmartService $smartService
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \StdClass                                     $listener
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $crudGateway
-     * @param \Zend\Form\Form                              $form
+     * @param \Zend\Form\Form                               $form
      * @param \Phpro\SmartCrud\Service\ParametersService    $parameterService
      *
      */
@@ -183,13 +188,11 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
 
         $serviceLocator->get('Config')->shouldBeCalled()->willReturn($config);
         $serviceLocator->get($serviceKey)->shouldBeCalled()->willReturn($smartService);
-        $serviceLocator->get($parameterServiceKey)->shouldBeCalled()->willReturn($parameterService);
         $serviceLocator->get($listenerKey)->shouldBeCalled()->willReturn($listener);
         $serviceLocator->get($gatewayKey)->shouldBeCalled()->willReturn($crudGateway);
         $serviceLocator->get($formKey)->shouldBeCalled()->willReturn($form);
 
         $smartService->setEntityKey($entityClassName)->shouldBeCalled()->willReturn($smartService);
-        $smartService->setParameters($parameterService)->shouldBeCalled()->willReturn($smartService);
         $smartService->setGateway($crudGateway)->shouldBeCalled()->willReturn($smartService);
         $smartService->setForm($form)->shouldBeCalled()->willReturn($smartService);
         $smartService->getEventManager()->shouldBeCalled()->willReturn($eventManager);

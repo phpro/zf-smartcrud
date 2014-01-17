@@ -47,6 +47,7 @@ class AbstractSmartServiceFactory
                 self::CONFIG_GATEWAY_KEY => null,
                 self::CONFIG_ENTITY_CLASS => null,
                 self::CONFIG_FORM_KEY     => null,
+                self::CONFIG_PARAMETERS_KEY => 'Phpro\SmartCrud\Service\ParametersService',
                 AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array()
             ),
             self::CONFIG_LIST => array(
@@ -147,7 +148,7 @@ class AbstractSmartServiceFactory
 
     /**
      * @param SmartServiceInterface $smartCrudService
-     * @param ArrayObject          $config
+     * @param ArrayObject           $config
      *
      * @return $this
      */
@@ -155,7 +156,8 @@ class AbstractSmartServiceFactory
     {
         $this
             ->injectEntityClass($smartCrudService,$config)
-            ->injectParameterService($smartCrudService, $config)
+            // TODO: Parameter services can not be injected at this point because we would get into an infinite loop
+            //->injectParameterService($smartCrudService, $config)
             ->injectGateway($smartCrudService, $config)
             ->injectForm($smartCrudService, $config)
             ->injectListeners($smartCrudService, $config);
@@ -198,7 +200,7 @@ class AbstractSmartServiceFactory
 
     /**
      * @param SmartServiceInterface $smartCrudService
-     * @param ArrayObject          $config
+     * @param ArrayObject           $config
      *
      * @return $this
      */
@@ -216,7 +218,7 @@ class AbstractSmartServiceFactory
 
     /**
      * @param SmartServiceInterface $smartCrudService
-     * @param ArrayObject          $config
+     * @param ArrayObject           $config
      *
      * @return $this
      */
@@ -234,7 +236,7 @@ class AbstractSmartServiceFactory
 
     /**
      * @param SmartServiceInterface $smartCrudService
-     * @param ArrayObject          $config
+     * @param ArrayObject           $config
      *
      * @return $this
      */

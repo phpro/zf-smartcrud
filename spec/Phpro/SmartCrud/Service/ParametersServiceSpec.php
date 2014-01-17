@@ -20,7 +20,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\StdLib\RequestInterface                $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     protected function mockServiceLocator($serviceLocator, $request, $controller, $params)
@@ -53,7 +53,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\Http\Request                           $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     public function it_should_return_params_plugin($serviceLocator, $request, $controller, $params)
@@ -67,7 +67,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\StdLib\RequestInterface                $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     public function it_should_return_null_on_invalid_request($serviceLocator, $request, $controller, $params)
@@ -80,7 +80,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\Http\Request                           $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      */
     public function it_should_return_null_on_invalid_controller($serviceLocator, $request, $controller)
     {
@@ -93,7 +93,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\Http\Request                           $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     public function it_should_load_file_data_from_plugin($serviceLocator, $request, $controller, $params)
@@ -108,7 +108,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\Http\Request                           $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     public function it_should_load_header_data_from_plugin($serviceLocator, $request, $controller, $params)
@@ -123,7 +123,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\Http\Request                           $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     public function it_should_load_post_data_from_plugin($serviceLocator, $request, $controller, $params)
@@ -138,7 +138,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\Http\Request                           $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     public function it_should_load_query_data_from_plugin($serviceLocator, $request, $controller, $params)
@@ -153,7 +153,7 @@ class ParametersServiceSpec extends ObjectBehavior
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Zend\Http\Request                           $request
-     * @param \Phpro\SmartCrud\Controller\CrudController    $controller
+     * @param \Phpro\SmartCrud\Controller\CrudController   $controller
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
      */
     public function it_should_load_route_data_from_plugin($serviceLocator, $request, $controller, $params)

@@ -39,7 +39,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Phpro\SmartCrud\Event\CrudEvent                  $event
+     * @param \Phpro\SmartCrud\Event\CrudEvent                 $event
      * @param \BjyAuthorize\Service\Authorize                  $authorizeService
      * @param \Zend\Permissions\Acl\Resource\ResourceInterface $resource
      */

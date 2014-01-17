@@ -42,7 +42,7 @@ abstract class AbstractSmartService
     protected $eventManager;
 
     /**
-     * @var Form
+     * @var \Zend\Form\Form
      */
     protected $form;
 
@@ -203,6 +203,11 @@ abstract class AbstractSmartService
      */
     public function getForm($entity)
     {
+
+        if ($this->form->hasValidated()) {
+            return $this->form;
+        }
+
         $this->form->bind($entity);
         $this->form->bindOnValidate();
         $this->getEventManager()->trigger($this->createEvent(CrudEvent::FORM_READY, $this->form));

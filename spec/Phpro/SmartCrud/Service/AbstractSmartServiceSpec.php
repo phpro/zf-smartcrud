@@ -43,8 +43,8 @@ abstract class AbstractSmartServiceSpec extends ObjectBehavior
 
     /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
-     * @param \Zend\EventManager\EventManager              $eventManager
-     * @param \Zend\Form\Form                              $form
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Zend\Form\Form                               $form
      */
     public function let($gateway, $eventManager, $entity)
     {
