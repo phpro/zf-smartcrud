@@ -2,57 +2,46 @@
 return array(
     'service_manager' => array(
         "abstract_factories" => array(
-            'PhproSmartCrud\Gateway\AbstractCrudFactory',
-            'PhproSmartCrud\Service\AbstractSmartCrudServiceFactory',
+            'Phpro\SmartCrud\Gateway\AbstractGatewayFactory',
+            'Phpro\SmartCrud\Service\AbstractSmartServiceFactory',
         ),
         'factories' => array(
-            'PhproSmartCrud\Service\ParametersService'    => 'PhproSmartCrud\Service\ParametersService',
+            'Phpro\SmartCrud\Service\ParametersService'    => 'Phpro\SmartCrud\Service\ParametersService',
+            'Phpro\SmartCrud\Console\Application'          => 'Phpro\SmartCrud\Console\ApplicationFactory',
         ),
         'invokables' => array(
             // Services
-            'PhproSmartCrud\Service\CrudService'     => 'PhproSmartCrud\Service\CrudService',
-            'PhproSmartCrud\Service\ListService'     => 'PhproSmartCrud\Service\ListService',
-            'PhproSmartCrud\Service\CreateService'   => 'PhproSmartCrud\Service\CreateService',
-            'PhproSmartCrud\Service\ReadService'     => 'PhproSmartCrud\Service\ReadService',
-            'PhproSmartCrud\Service\UpdateService'   => 'PhproSmartCrud\Service\UpdateService',
-            'PhproSmartCrud\Service\DeleteService'   => 'PhproSmartCrud\Service\DeleteService',
+            'Phpro\SmartCrud\Service\CrudService'     => 'Phpro\SmartCrud\Service\CrudService',
+            'Phpro\SmartCrud\Service\ListService'     => 'Phpro\SmartCrud\Service\ListService',
+            'Phpro\SmartCrud\Service\CreateService'   => 'Phpro\SmartCrud\Service\CreateService',
+            'Phpro\SmartCrud\Service\ReadService'     => 'Phpro\SmartCrud\Service\ReadService',
+            'Phpro\SmartCrud\Service\UpdateService'   => 'Phpro\SmartCrud\Service\UpdateService',
+            'Phpro\SmartCrud\Service\DeleteService'   => 'Phpro\SmartCrud\Service\DeleteService',
 
             // Gateways
-            'PhproSmartCrud\Gateway\DoctrineCrudGateway'  => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
-            'PhproSmartCrud\Gateway\ZendDbCrudGateway'    => 'PhproSmartCrud\Gateway\ZendDbCrudGateway',
+            'Phpro\SmartCrud\Gateway\DoctrineCrudGateway'  => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
+            'Phpro\SmartCrud\Gateway\ZendDbCrudGateway'    => 'Phpro\SmartCrud\Gateway\ZendDbCrudGateway',
 
             // Listeners
-            'PhproSmartCrud\Listener\BjyAuthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
-            'PhproSmartCrud\Listener\FlashMessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
+            'Phpro\SmartCrud\Listener\BjyAuthorize'     => 'Phpro\SmartCrud\Listener\BjyAuthorize',
+            'Phpro\SmartCrud\Listener\FlashMessenger'   => 'Phpro\SmartCrud\Listener\FlashMessenger',
 
-            // View models
-            'PhproSmartCrud\View\Model\JsonModel'       =>  'PhproSmartCrud\View\Model\JsonModel',
-            'PhproSmartCrud\View\Model\RedirectModel'   =>  'PhproSmartCrud\View\Model\RedirectModel',
-            'PhproSmartCrud\View\Model\ViewModel'       =>  'PhproSmartCrud\View\Model\ViewModel',
-
-            // View strategies
-            'PhproSmartCrud\View\Strategy\JsonStrategy'        =>  'PhproSmartCrud\View\Strategy\JsonStrategy',
-            'PhproSmartCrud\View\Strategy\RedirectStrategy'    =>  'PhproSmartCrud\View\Strategy\RedirectStrategy',
         ),
-        // Make sure to generate new instances ...
-        'shared' => array(
-            'PhproSmartCrud\View\Model\JsonModel'       =>  false,
-            'PhproSmartCrud\View\Model\RedirectModel'   =>  false,
-            'PhproSmartCrud\View\Model\ViewModel'       =>  false,
+        'aliases' => array(
+            'zf-smartcrud.cli' => 'Phpro\SmartCrud\Console\Application'
         ),
     ),
     'controllers' => array(
         'invokables' => array(
-            'PhproSmartCrud\Controller\CrudController' => 'PhproSmartCrud\Controller\CrudController'
+            'Phpro\SmartCrud\Controller\CrudController' => 'Phpro\SmartCrud\Controller\CrudController'
+        ),
+        'abstract_factories' => array(
+            'Phpro\SmartCrud\Controller\AbstractCrudControllerFactory',
         ),
     ),
     'view_manager' => array(
         'template_path_stack' => array(
             'phpro-smartcrud' => __DIR__ . '/../view',
-        ),
-        'strategies' => array(
-            'PhproSmartCrud\View\Strategy\JsonStrategy',
-            'PhproSmartCrud\View\Strategy\RedirectStrategy',
-       )
+        )
     ),
 );
