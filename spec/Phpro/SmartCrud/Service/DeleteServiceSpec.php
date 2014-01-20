@@ -31,55 +31,99 @@ class DeleteServiceSpec extends AbstractSmartServiceSpec
     }
 
     /**
-     * @param \Zend\EventManager\EventManager $eventManager
-     */
-    public function it_should_trigger_before_delete_event($eventManager)
-    {
-        $this->run(1, $this->getMockPostData());
-        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldBeCalled();
-    }
-
-    /**
-     * @param \Zend\EventManager\EventManager $eventManager
-     */
-    public function it_should_trigger_after_delete_event($eventManager)
-    {
-        $this->run(1, $this->getMockPostData());
-        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_DELETE))->shouldBeCalled();
-    }
-
-    /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
-     * @param \StdClass                                     $entity
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Zend\Form\Form                               $form
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_call_delete_function_on_gateway($gateway, $entity)
+    public function it_should_handle_no_data($gateway, $eventManager, $form, $result)
     {
+        $entity = new \StdClass();
+        $entity->id = 1;
 
-        $data = $this->getMockPostData();
-        $this->setEntityKey('stdClass');
-        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->shouldBeCalled();
-        $gateway->loadEntity(Argument::exact('stdClass'), Argument::exact(1))->willReturn($entity);
-        $gateway->delete(Argument::type('stdClass'), Argument::exact($data))->shouldBeCalled();
+        $gateway->loadEntity('entityKey', $entity->id)->shouldBecalled()->willReturn($entity);
+        $gateway->delete(Argument::any(), Argument::any())->shouldNotBeCalled();
+
+        $form->hasValidated()->shouldBeCalled()->willreturn(false);
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::any())->shouldNotBeCalled();
+        $form->isValid()->shouldNotBeCalled();
+
+        $this->setEntityKey('entityKey');
         $this->setGateway($gateway);
-        $this->run(1, $data);
+        $this->setForm($form);
 
+        $this->run($entity->id,null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_DELETE))->shouldNotBeCalled();
     }
 
     /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Zend\Form\Form                               $form
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_return_gateway_return_value($gateway)
+    public function it_should_handle_invalid_data($gateway, $eventManager, $form, $result)
     {
-        $data = $this->getMockPostData();
+        $entity = new \StdClass();
 
-        $arguments = Argument::cetera();
+        $gateway->loadEntity('entityKey', null)->shouldBecalled()->willReturn($entity);
 
-        $gateway->loadEntity($arguments, Argument::exact(1))->shouldBeCalled();
-        $gateway->delete($arguments, 1)->willReturn(true);
-        $this->run(1, $data)->shouldReturn(true);
+        $form->hasValidated()->shouldBeCalled()->willreturn(false);
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(false);
 
-        $gateway->delete($arguments, 1)->willReturn(false);
-        $this->run(1, $data)->shouldReturn(false);
+        $this->setEntityKey('entityKey');
+        $this->setGateway($gateway);
+        $this->setForm($form);
+
+        $this->run(null,$this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_DELETE))->shouldNotBeCalled();
+    }
+
+    /**
+     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Zend\Form\Form                               $form
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
+     */
+    public function it_should_handle_valid_data($gateway, $eventManager, $form, $result)
+    {
+        $entity = new \StdClass();
+        $postData = $this->getMockPostData();
+
+        $gateway->loadEntity('entityKey', null)->shouldBecalled()->willReturn($entity);
+        $gateway->delete($entity, $postData)->shouldBecalled()->willReturn(true);
+
+        $form->hasValidated()->shouldBeCalled()->willreturn(false);
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
+        $form->isValid()->shouldBeCalled()->willreturn(true);
+
+        $result->setSuccess(true)->shouldBeCalled();
+        $result->setForm($form)->shouldBeCalled();
+        $result->setEntity($entity)->shouldBeCalled();
+
+        $this->setEntityKey('entityKey');
+        $this->setGateway($gateway);
+        $this->setResult($result);
+        $this->setForm($form);
+
+        $this->run(null,$this->getMockPostData())->shouldReturn($result);;
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_DELETE))->shouldBeCalled();
     }
 
     protected function getMockPostData()

@@ -25,22 +25,30 @@ class CreateService extends AbstractSmartService
      *
      * @return bool
      */
-    public function run($id = null, $data)
+    public function run($id = null, $data = null)
     {
 
+        $result = $this->getResult();
         $em = $this->getEventManager();
         $entity = $this->loadEntity($id);
-        $form = $this->getForm($entity)->setData($data);
-        $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form));
-        if ($form->isValid()) {
-            $em->trigger($this->createEvent(CrudEvent::BEFORE_CREATE, $entity));
-            $result = $this->getGateway()->create($entity, $data);
-            $em->trigger($this->createEvent(CrudEvent::AFTER_CREATE, $entity));
+        $form = $this->getForm($entity);
+        if ($data === null) {
+            $result->setSuccess(true);
         } else {
-            $result = false;
-            $em->trigger($this->createEvent(CrudEvent::INVALID_CREATE, $form));
+            $form->setData($data);
+            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, ['postData' => $data]));
+            if ($form->isValid()) {
+                $em->trigger($this->createEvent(CrudEvent::BEFORE_CREATE, $entity));
+                $result->setSuccess($this->getGateway()->create($entity, $data));
+                $em->trigger($this->createEvent(CrudEvent::AFTER_CREATE, $entity));
+            } else {
+
+                $em->trigger($this->createEvent(CrudEvent::INVALID_CREATE, $form));
+            }
         }
 
+        $result->setEntity($entity);
+        $result->setForm($form);
         return $result;
     }
 

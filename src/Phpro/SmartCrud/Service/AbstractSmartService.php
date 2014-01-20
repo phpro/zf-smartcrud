@@ -57,6 +57,27 @@ abstract class AbstractSmartService
     protected $formKey;
 
     /**
+     * @var SmartServiceResult
+     */
+    private $result = null;
+
+    public function setResult(SmartServiceResult $result)
+    {
+        $this->result = $result;
+    }
+
+    /**
+     * @return SmartServiceResult
+     */
+    protected function getResult($id = null)
+    {
+        if ($this->result) {
+            return $this->result;
+        }
+        return $this->result ? $this->result : new SmartServiceResult();
+    }
+
+    /**
      * @param string $formKey
      */
     public function setFormKey($formKey)
@@ -220,9 +241,9 @@ abstract class AbstractSmartService
      *
      * @return CrudEvent
      */
-    public function createEvent($eventName, $target)
+    public function createEvent($eventName, $target, $params = null)
     {
-        $event = new CrudEvent($eventName, $target, $this->getParameters());
+        $event = new CrudEvent($eventName, $target, $params);
 
         return $event;
     }

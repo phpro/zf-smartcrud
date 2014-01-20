@@ -70,6 +70,18 @@ abstract class AbstractSmartServiceSpec extends ObjectBehavior
     }
 
     /**
+     * @param \Zend\Form\Form $form
+     */
+    public function it_should_have_a_form($form)
+    {
+        $entity = new \StdClass();
+        $form->hasValidated()->shouldBeCalled()->willreturn(false);
+        $form->bind($entity)->shouldBeCalled()->willreturn($form);
+        $form->bindOnValidate()->shouldBeCalled()->willreturn($form);
+        $this->setForm($form)->getForm($entity)->shouldReturn($form);
+    }
+
+    /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      */
     public function it_should_have_a_gateway($gateway)
@@ -102,7 +114,7 @@ abstract class AbstractSmartServiceSpec extends ObjectBehavior
     public function it_should_create_crud_event($entity)
     {
         $eventName = 'test-event-name';
-        $crudEvent = $this->createEvent($eventName, $entity);
+        $crudEvent = $this->createEvent($eventName, $entity, $this->getParameters());
         $crudEvent->shouldBeAnInstanceOf('Phpro\SmartCrud\Event\CrudEvent');
         $crudEvent->getName()->shouldReturn($eventName);
         $crudEvent->getTarget()->shouldReturn($entity);

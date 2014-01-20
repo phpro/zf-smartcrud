@@ -34,12 +34,12 @@ class DoctrineCrudGateway
      *
      * @return mixed
      */
-    public function loadEntity($entityKey, $id = null)
+    public function loadEntity($classNameOrEntity, $id = null)
     {
         if ($id) {
-            $entity = $this->getRepository($entityKey)->find($id);
+            $entity = $this->getRepository($classNameOrEntity)->find($id);
         } else {
-            $rc = new \ReflectionClass($entityKey);
+            $rc = new \ReflectionClass($classNameOrEntity);
             $entity = $rc->newInstance();
         }
 
@@ -47,14 +47,14 @@ class DoctrineCrudGateway
     }
 
     /**
-     * @param $entity
+     * @param $entityClassName
      * @param $parameters
      *
      * @return array|\Traversable
      */
-    public function getList($entity, $parameters)
+    public function getList($classNameOrEntity, $parameters)
     {
-        return $this->getRepository($entity)->findAll();
+        return $this->getRepository($classNameOrEntity)->findAll();
     }
 
     /**
@@ -151,11 +151,11 @@ class DoctrineCrudGateway
      *
      * @return ObjectRepository
      */
-    public function getRepository($entity)
+    public function getRepository($classNameOrEntity)
     {
-        $entityKey = is_string($entity) ? $entity : get_class($entity);
+        $className = is_string($classNameOrEntity) ? $classNameOrEntity : get_class($classNameOrEntity);
 
-        return $this->getObjectManager()->getRepository($entityKey);
+        return $this->getObjectManager()->getRepository($className);
     }
 
 }

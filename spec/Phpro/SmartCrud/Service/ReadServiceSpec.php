@@ -31,44 +31,30 @@ class ReadServiceSpec extends AbstractSmartServiceSpec
     }
 
     /**
-     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_trigger_before_read_event($eventManager)
+    public function it_should_return_a_result($gateway, $eventManager, $result)
     {
-        $this->run(1, null);
+        $entity = new \StdClass();
+        $entity->id = 1;
+        $postData = null;
+
+        $gateway->loadEntity('entityKey', $entity->id)->shouldBecalled()->willReturn($entity);
+
+        $result->setSuccess(Argument::any())->shouldBeCalled();
+        $result->setForm(Argument::any())->shouldNotBeCalled();
+        $result->setEntity($entity)->shouldBeCalled();
+
+        $this->setEntityKey('entityKey');
+        $this->setGateway($gateway);
+        $this->setResult($result);
+
+        $this->run($entity->id, $postData)->shouldReturn($result);;
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_READ))->shouldBeCalled();
-    }
-
-    /**
-     * @param \Zend\EventManager\EventManager $eventManager
-     */
-    public function it_should_trigger_after_read_event($eventManager)
-    {
-        $this->run(1, null);
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_READ))->shouldBeCalled();
-    }
-
-    /**
-     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
-     */
-    public function it_should_call_read_function_on_gateway($gateway)
-    {
-        $this->run(1, null);
-        $gateway->read(Argument::type('stdClass'), 1)->shouldBeCalled();
-    }
-
-    /**
-     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
-     */
-    public function it_should_return_gateway_return_value($gateway)
-    {
-        $arguments = Argument::cetera();
-        $data = array('column1' => 'value1', 'column2' => 'value2');
-
-        $gateway->read($arguments, 1)->willReturn($data);
-        $this->run(1, null)->shouldReturn($data);
-        $gateway->read($arguments, 1)->willReturn(null);
-        $this->run(1, null)->shouldReturn(null);
     }
 
 }

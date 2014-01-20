@@ -115,7 +115,7 @@ class CrudController extends AbstractActionController
      */
     public function listAction()
     {
-        return $this->prepareModel('list');
+        return array();
     }
 
     /**
@@ -123,12 +123,12 @@ class CrudController extends AbstractActionController
      */
     public function createAction()
     {
-        if ($this->getRequest()->isPost()
-            && $this->getSmartService()->run(null, $this->getRequest()->getPost())) {
-                return $this->redirect()->toRoute(null, array('action' => 'index'));
+        $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
+        $result = $this->getSmartService()->run(null, $data);
+        if($this->getRequest()->isPost() && $result->isSuccessFull()) {
+            return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
-
-        return $this->prepareModel('create');
+        return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'create');
     }
 
     /**
@@ -136,12 +136,12 @@ class CrudController extends AbstractActionController
      */
     public function updateAction()
     {
-        if ($this->getRequest()->isPost()
-            && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
-            return $this->redirect()->toRoute(null, array('action' => 'view'));
+        $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
+        $result = $this->getSmartService()->run($this->getEntityId(), $data);
+        if($this->getRequest()->isPost() && $result->isSuccessFull()) {
+            return $this->redirect()->toRoute(null, array('action' => 'update'));
         }
-
-        return $this->prepareModel('update');
+        return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'update');
     }
 
     /**
@@ -149,7 +149,7 @@ class CrudController extends AbstractActionController
      */
     public function readAction()
     {
-        return $this->prepareModel('read');
+        return array();
     }
 
     /**
@@ -157,25 +157,11 @@ class CrudController extends AbstractActionController
      */
     public function deleteAction()
     {
-        if ($this->getRequest()->isPost()
-            && $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getPost())) {
+        $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
+        $result = $this->getSmartService()->run($this->getEntityId(), $data);
+        if($this->getRequest()->isPost() && $result->isSuccessFull()) {
             return $this->redirect()->toRoute(null, array('action' => 'index'));
         }
-
-        return $this->prepareModel('delete');
+        return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'delete');
     }
-
-    /**
-     * @param $action
-     *
-     * @return \Phpro\SmartCrud\View\Model\JsonModel|\Phpro\SmartCrud\View\Model\ViewModel
-     */
-    public function prepareModel($action)
-    {
-//        $this->getSmartService()->setParameters($this->getServiceLocator()->get('Phpro\SmartCrud\Service\ParametersService'));
-        $entity = $this->getSmartService()->loadEntity($this->getEntityId());
-
-        return $this->getViewModelBuilder()->build($this->getRequest(), $entity, $this->getSmartService(), $action);
-    }
-
 }

@@ -24,15 +24,14 @@ class ReadService extends AbstractSmartService
      */
     public function run($id, $data)
     {
+        $result = $this->getResult();
         $em = $this->getEventManager();
         $em->trigger($this->createEvent(CrudEvent::BEFORE_READ, null));
-
-        $gateway = $this->getGateway();
-        $result = $gateway->read($this->getEntity(), $id);
-
+        $entity = $this->loadEntity($id);
         $em->trigger($this->createEvent(CrudEvent::AFTER_READ, null));
+        $result->setSuccess(true);
+        $result->setEntity($entity);
 
         return $result;
     }
-
 }

@@ -31,28 +31,47 @@ class CreateServiceSpec extends AbstractSmartServiceSpec
     }
 
     /**
-     * @param \Zend\Form\Form $form
+     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Zend\Form\Form                               $form
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_have_a_form($form)
+    public function it_should_handle_no_data($gateway, $eventManager, $form, $result)
     {
         $entity = new \StdClass();
+
+        $gateway->loadEntity('entityKey', null)->shouldBecalled()->willReturn($entity);
+        $gateway->create(Argument::any(), Argument::any())->shouldNotBeCalled();
+
         $form->hasValidated()->shouldBeCalled()->willreturn(false);
-        $form->bind($entity)->shouldBeCalled()->willreturn($form);
-        $form->bindOnValidate()->shouldBeCalled()->willreturn($form);
-        $this->setForm($form)->getForm($entity)->shouldReturn($form);
+        $form->bind(Argument::any())->shouldBeCalled();
+        $form->bindOnValidate()->shouldBeCalled();
+        $form->setData(Argument::any())->shouldNotBeCalled();
+        $form->isValid()->shouldNotBeCalled();
+
+        $this->setEntityKey('entityKey');
+        $this->setGateway($gateway);
+        $this->setForm($form);
+
+        $this->run(null,null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_CREATE))->shouldNotBeCalled();
     }
+
     /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      * @param \Zend\EventManager\EventManager               $eventManager
      * @param \Zend\Form\Form                               $form
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_handle_invalid_data($gateway, $eventManager,$form)
+    public function it_should_handle_invalid_data($gateway, $eventManager, $form, $result)
     {
-
         $entity = new \StdClass();
-        $this->setEntityKey('entityKey');
+
         $gateway->loadEntity('entityKey', null)->shouldBecalled()->willReturn($entity);
-        $this->setGateway($gateway);
+        $gateway->create(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         $form->hasValidated()->shouldBeCalled()->willreturn(false);
         $form->bind(Argument::any())->shouldBeCalled();
@@ -60,35 +79,49 @@ class CreateServiceSpec extends AbstractSmartServiceSpec
         $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
         $form->isValid()->shouldBeCalled()->willreturn(false);
 
+        $this->setEntityKey('entityKey');
+        $this->setGateway($gateway);
         $this->setForm($form);
-        $this->run(null,$this->getMockPostData())->shouldReturn(false);;
+
+        $this->run(null,$this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldNotBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_CREATE))->shouldNotBeCalled();
     }
 
     /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      * @param \Zend\EventManager\EventManager               $eventManager
      * @param \Zend\Form\Form                               $form
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_handle_valid_data($gateway, $eventManager,$form)
+    public function it_should_handle_valid_data($gateway, $eventManager, $form, $result)
     {
         $entity = new \StdClass();
         $postData = $this->getMockPostData();
-        $this->setEntityKey('entityKey');
+
         $gateway->loadEntity('entityKey', null)->shouldBecalled()->willReturn($entity);
         $gateway->create($entity, $postData)->shouldBecalled()->willReturn(true);
-        $this->setGateway($gateway);
 
         $form->hasValidated()->shouldBeCalled()->willreturn(false);
         $form->bind(Argument::any())->shouldBeCalled();
         $form->bindOnValidate()->shouldBeCalled();
         $form->setData(Argument::exact($this->getMockPostData()))->shouldBeCalled()->willReturn($form);
         $form->isValid()->shouldBeCalled()->willreturn(true);
+
+        $result->setSuccess(true)->shouldBeCalled();
+        $result->setForm($form)->shouldBeCalled();
+        $result->setEntity($entity)->shouldBeCalled();
+
+        $this->setEntityKey('entityKey');
+        $this->setGateway($gateway);
+        $this->setResult($result);
         $this->setForm($form);
 
-        $this->run(null,$this->getMockPostData())->shouldReturn(true);
+        $this->run(null,$this->getMockPostData())->shouldReturn($result);;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
+        $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_CREATE))->shouldBeCalled();
     }

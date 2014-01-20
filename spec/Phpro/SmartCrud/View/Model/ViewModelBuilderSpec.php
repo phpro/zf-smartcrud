@@ -24,13 +24,13 @@ class ViewModelBuilderSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request      $request
-     * @param \Phpro\SmartCrud\Service\CreateService $smartService
-     * @param \StdClass                              $entity
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult $SmartServiceResult
+     * @param \StdClass                                   $entity
      */
-    public function it_should_build_a_view_model($request, $smartService, $entity)
+    public function it_should_build_a_view_model($request, $SmartServiceResult)
     {
-        $this->build($request,$entity, $smartService, 'create')->shouldBeAnInstanceOf('\Zend\View\Model\ViewModel');
+        $this->build($request, $SmartServiceResult, 'create')->shouldBeAnInstanceOf('\Zend\View\Model\ViewModel');
     }
 
     public function it_should_have_a_default_template()
@@ -41,13 +41,13 @@ class ViewModelBuilderSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\Http\PhpEnvironment\Request      $request
-     * @param \Phpro\SmartCrud\Service\CreateService $smartService
-     * @param \StdClass                              $entity
+     * @param \Zend\Http\PhpEnvironment\Request           $request
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult $SmartServiceResult
+     * @param \StdClass                                   $entity
      */
-    public function it_should_build_a_json_model_when_request_is_xml_http_request($request, $smartService, $entity)
+    public function it_should_build_a_json_model_when_request_is_xml_http_request($request, $SmartServiceResult)
     {
         $request->isXmlHttpRequest()->willReturn(true);
-        $this->build($request, $entity, $smartService, 'create')->shouldBeAnInstanceOf('\Zend\View\Model\JsonModel');
+        $this->build($request, $SmartServiceResult, 'create')->shouldBeAnInstanceOf('\Zend\View\Model\JsonModel');
     }
 }

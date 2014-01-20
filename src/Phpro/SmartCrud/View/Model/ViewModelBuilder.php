@@ -2,7 +2,7 @@
 
 namespace Phpro\SmartCrud\View\Model;
 
-use Phpro\SmartCrud\Service\SmartServiceInterface;
+use Phpro\SmartCrud\Service\SmartServiceResult;
 use Zend\Http\Request as HttpRequest;
 use Zend\View\Model\JsonModel;
 
@@ -42,7 +42,7 @@ class ViewModelBuilder
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function build(HttpRequest $request, $entity, SmartServiceInterface $service, $action)
+    public function build(HttpRequest $request, SmartServiceResult $result, $action)
     {
         $viewModel = null;
         if ($request->isXmlHttpRequest()) {
@@ -50,8 +50,8 @@ class ViewModelBuilder
             $viewModel->setTerminal(true);
         } else {
             $viewModel = new \Zend\View\Model\ViewModel();
-            $viewModel->setVariable('service', $service);
-            $viewModel->setVariable('form', $service->getForm($entity));
+            $viewModel->setVariable('entity', $result->getEntity());
+            $viewModel->setVariable('form', $result->getForm());
             $viewModel->setTemplate(sprintf($this->getTemplate(), $action));
         }
 

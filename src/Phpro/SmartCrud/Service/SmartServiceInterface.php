@@ -15,7 +15,7 @@ interface SmartServiceInterface
      * @param int                $id
      * @param array|\Traversable $data
      *
-     * @return mixed
+     * @return SmartServiceResult
      */
     public function run($id, $data);
 

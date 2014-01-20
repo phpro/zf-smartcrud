@@ -18,27 +18,36 @@ use Phpro\SmartCrud\Event\CrudEvent;
  */
 class UpdateService extends AbstractSmartService
 {
-
     /**
+     * @param $id
+     * @param array $data
+     *
      * @return bool
      */
-    public function run($id, $data)
+    public function run($id = null, $data = null)
     {
+
+        $result = $this->getResult();
         $em = $this->getEventManager();
         $entity = $this->loadEntity($id);
-        $form = $this->getForm($entity)->setData($data);
-        $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form));
-        if ($form->isValid()) {
-            $em->trigger($this->createEvent(CrudEvent::BEFORE_UPDATE, $entity));
-            $gateway = $this->getGateway();
-            $result = $gateway->update($entity, $data);
-
-            $em->trigger($this->createEvent(CrudEvent::AFTER_UPDATE, $entity));
+        $form = $this->getForm($entity);
+        if ($data === null) {
+            $result->setSuccess(true);
         } else {
-            $em->trigger($this->createEvent(CrudEvent::INVALID_UPDATE, $form));
-            $result = false;
+            $form->setData($data);
+            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, ['postData' => $data]));
+            if ($form->isValid()) {
+                $em->trigger($this->createEvent(CrudEvent::BEFORE_UPDATE, $entity));
+                $result->setSuccess($this->getGateway()->update($entity, $data));
+                $em->trigger($this->createEvent(CrudEvent::AFTER_UPDATE, $entity));
+            } else {
+
+                $em->trigger($this->createEvent(CrudEvent::INVALID_UPDATE, $form));
+            }
         }
 
+        $result->setEntity($entity);
+        $result->setForm($form);
         return $result;
     }
 
