@@ -35,7 +35,7 @@ class UpdateService extends AbstractSmartService
             $result->setSuccess(true);
         } else {
             $form->setData($data);
-            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, ['postData' => $data]));
+            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, array('postData' => $data)));
             if ($form->isValid()) {
                 $em->trigger($this->createEvent(CrudEvent::BEFORE_UPDATE, $entity));
                 $result->setSuccess($this->getGateway()->update($entity, $data));

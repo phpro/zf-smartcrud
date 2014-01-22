@@ -35,7 +35,7 @@ class DeleteService extends AbstractSmartService
             $result->setSuccess(true);
         } else {
             $form->setData($data);
-            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, ['postData' => $data]));
+            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, array('postData' => $data)));
             if ($form->isValid()) {
                 $em->trigger($this->createEvent(CrudEvent::BEFORE_DELETE, $entity));
                 $result->setSuccess($this->getGateway()->delete($entity, $data));
