@@ -44,4 +44,11 @@ class SmartServiceResultSpec extends ObjectBehavior
         $this->setSuccess(true)->shouldReturn($this);
         $this->isSuccessFull()->shouldBe(true);
     }
+
+    public function it_should_have_a_list()
+    {
+        $list = array();
+        $this->setList($list)->shouldReturn($this);
+        $this->getList()->shouldReturn($list);
+    }
 }

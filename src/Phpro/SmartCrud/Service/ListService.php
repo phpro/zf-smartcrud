@@ -20,23 +20,25 @@ class ListService extends AbstractSmartService
 {
 
     /**
-     * @return array|\Traversable
+     * @param int                $id
+     * @param array|\Traversable $data
+     *
+     * @return SmartServiceResult
      */
-    public function getList()
+    public function run($id, $data)
     {
+
+        $result = $this->getResult();
         $em = $this->getEventManager();
         $em->trigger($this->createEvent(CrudEvent::BEFORE_LIST, null));
 
         $gateway = $this->getGateway();
-        $result = $gateway->getList($this->getEntity(), $this->getParameters()->fromQuery());
+        $records = $gateway->getList($this->getEntityKey(), $data);
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_LIST, null));
+        $result->setSuccess(true);
+        $result->setList($records);
 
         return $result;
-    }
-
-    public function run($id, $data)
-    {
-        // TODO: Implement run() method.
     }
 }

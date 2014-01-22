@@ -115,7 +115,8 @@ class CrudController extends AbstractActionController
      */
     public function listAction()
     {
-        return array();
+        $result = $this->getSmartService()->run($this->getEntityId(), $this->getRequest()->getQuery());
+        return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'list');
     }
 
     /**
@@ -149,7 +150,8 @@ class CrudController extends AbstractActionController
      */
     public function readAction()
     {
-        return array();
+        $result = $this->getSmartService()->run($this->getEntityId(), array());
+        return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'read');
     }
 
     /**

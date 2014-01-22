@@ -11,7 +11,7 @@ class ConfigHelperSpec extends AbstractHelperSpec
         $this->shouldHaveType('Phpro\SmartCrud\Console\Helper\ConfigHelper');
     }
 
-    protected function mockConfig($configKey, $config)
+    protected function mockApplicationConfig($configKey, $config)
     {
         // Create mocks
         $prophet = new Prophet();
@@ -29,14 +29,14 @@ class ConfigHelperSpec extends AbstractHelperSpec
     public function it_should_load_config_from_servicemanager()
     {
         $config = array('Sample config');
-        $this->mockConfig('Config', $config);
+        $this->mockApplicationConfig('Config', $config);
         $this->getConfig()->shouldBe($config);
     }
 
     public function it_should_load_application_config_from_servicemanager()
     {
         $config = array('Sample application config');
-        $this->mockConfig('ApplicationConfig', $config);
+        $this->mockApplicationConfig('ApplicationConfig', $config);
         $this->getApplicationConfig()->shouldBe($config);
     }
 

@@ -26,6 +26,9 @@ return array(
             // Gateways
             'Phpro\SmartCrud\Gateway\DoctrineCrudGateway'  => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
             'Phpro\SmartCrud\Gateway\ZendDbCrudGateway'    => 'Phpro\SmartCrud\Gateway\ZendDbCrudGateway',
+
+            // View Model Builder
+            'Phpro\SmartCrud\View\Model\ViewModelBuilder' => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
         ),
         'aliases' => array(
             'zf-smartcrud.cli' => 'Phpro\SmartCrud\Console\Application'

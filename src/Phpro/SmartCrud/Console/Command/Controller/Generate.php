@@ -209,7 +209,6 @@ class Generate extends CliCommand
                     'default' => array(
                         AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY  => $gateway,
                         AbstractSmartServiceFactory::CONFIG_ENTITY_CLASS => $entity,
-                        AbstractSmartServiceFactory::CONFIG_OUTPUT_MODEL => 'Phpro\SmartCrud\View\Model\ViewModel',
                         AbstractSmartServiceFactory::CONFIG_FORM_KEY     => $form,
                     ),
                     'list' => array(
@@ -232,6 +231,7 @@ class Generate extends CliCommand
 
             AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
                 $controllerKey => array(
+                    AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
                     AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'Phpro\SmartCrud\\Controller\\CrudController',
                     AbstractCrudControllerFactory::CONFIG_IDENTIFIER => 'id',
                     AbstractCrudControllerFactory::CONFIG_SMART_SERVICE => $serviceKey,

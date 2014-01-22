@@ -52,6 +52,7 @@ class ViewModelBuilder
             $viewModel = new \Zend\View\Model\ViewModel();
             $viewModel->setVariable('entity', $result->getEntity());
             $viewModel->setVariable('form', $result->getForm());
+            $viewModel->setVariable('list', $result->getList());
             $viewModel->setTemplate(sprintf($this->getTemplate(), $action));
         }
 

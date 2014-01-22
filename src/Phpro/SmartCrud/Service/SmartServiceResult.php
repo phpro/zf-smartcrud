@@ -27,6 +27,11 @@ class SmartServiceResult
     private $form = null;
 
     /**
+     * @var array
+     */
+    private $list = array();
+
+    /**
      * @param mixed|null $form
      */
     public function setForm($form)
@@ -77,6 +82,29 @@ class SmartServiceResult
         return $this->entity;
     }
 
+    /**
+     * @param $list
+     *
+     * @return $this
+     */
+    public function setList($list)
+    {
+        $this->list = $list;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getList()
+    {
+        return $this->list;
+    }
+
+    /**
+     * @return bool
+     */
     public function isSuccessFull()
     {
         return $this->success;

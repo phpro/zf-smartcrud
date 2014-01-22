@@ -100,6 +100,38 @@ class CrudControllerSpec extends ObjectBehavior
     /**
      * @param \Zend\Http\PhpEnvironment\Request            $request
      * @param \Zend\Mvc\MvcEvent                           $mvcEvent
+     * @param \Phpro\SmartCrud\Service\ListService       $smartService
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult  $smartResult
+     * @param \Zend\Mvc\Controller\Plugin\Params           $params
+     * @param \Phpro\SmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     */
+    public function it_should_handle_a_list_action($request, $mvcEvent, $smartService, $smartResult, $params, $viewModelBuilder)
+    {
+        $action = 'list';
+        $smartResult->isSuccessFull()->shouldNotBeCalled();
+        $smartService->run(Argument::any(), Argument::any())->willReturn($smartResult);
+        $this->mockGet($request, $mvcEvent, $params,$smartResult, $smartService, $action, $viewModelBuilder);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request            $request
+     * @param \Zend\Mvc\MvcEvent                           $mvcEvent
+     * @param \Phpro\SmartCrud\Service\ReadService       $smartService
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult  $smartResult
+     * @param \Zend\Mvc\Controller\Plugin\Params           $params
+     * @param \Phpro\SmartCrud\View\Model\ViewModelBuilder $viewModelBuilder
+     */
+    public function it_should_handle_a_read_action($request, $mvcEvent, $smartService, $smartResult, $params, $viewModelBuilder)
+    {
+        $action = 'read';
+        $smartResult->isSuccessFull()->shouldNotBeCalled();
+        $smartService->run(Argument::any(), Argument::any())->willReturn($smartResult);
+        $this->mockGet($request, $mvcEvent, $params,$smartResult, $smartService, $action, $viewModelBuilder);
+    }
+
+    /**
+     * @param \Zend\Http\PhpEnvironment\Request            $request
+     * @param \Zend\Mvc\MvcEvent                           $mvcEvent
      * @param \Phpro\SmartCrud\Service\CreateService       $smartService
      * @param \Phpro\SmartCrud\Service\SmartServiceResult  $smartResult
      * @param \Zend\Mvc\Controller\Plugin\Params           $params
@@ -247,8 +279,9 @@ class CrudControllerSpec extends ObjectBehavior
         $routeMatch->getParam('id', Argument::any())->willReturn(1);
 
         $request->isXmlHttpRequest()->willReturn(false);
-        $request->isPost()->shouldBeCalled()->willReturn(false);
+        $request->isPost()->willReturn(false);
         $request->getPost()->shouldNotBeCalled();
+        $request->getQuery()->willReturn(false);
 
         $viewModelBuilder->build($request, $smartResult, $action)->shouldBeCalled();
 

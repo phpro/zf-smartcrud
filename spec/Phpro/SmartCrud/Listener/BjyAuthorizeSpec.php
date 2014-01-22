@@ -110,7 +110,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
     public function it_should_throw_exception_when_no_authorization_service_exists($serviceManager)
     {
         $serviceManager->has('BjyAuthorize\Service\Authorize')->willReturn(false);
-        $this->shouldThrow('\PhproSmartCrud\Exception\SmartCrudException')->duringCreateService($serviceManager);
+        $this->shouldThrow('\Phpro\SmartCrud\Exception\SmartCrudException')->duringCreateService($serviceManager);
     }
 
     /**

@@ -31,45 +31,27 @@ class ListServiceSpec extends AbstractSmartServiceSpec
     }
 
     /**
-     * @param \Zend\EventManager\EventManager $eventManager
+     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_trigger_before_list_event($eventManager)
+    public function it_should_return_a_result($gateway, $eventManager, $result)
     {
-        $this->getList();
+        $getData = array();
+        $list = array();
+        $gateway->getList('entityKey', $getData)->willReturn($list);
+
+        $result->setSuccess(Argument::any())->shouldBeCalled();
+        $result->setForm(Argument::any())->shouldNotBeCalled();
+        $result->setList($list)->shouldBeCalled();
+
+        $this->setEntityKey('entityKey');
+        $this->setGateway($gateway);
+        $this->setResult($result);
+
+        $this->run(Argument::any(), $getData)->shouldReturn($result);;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_LIST))->shouldBeCalled();
-    }
-
-    /**
-     * @param \Zend\EventManager\EventManager $eventManager
-     */
-    public function it_should_trigger_after_list_event($eventManager)
-    {
-        $this->getList();
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_LIST))->shouldBeCalled();
-    }
-
-    /**
-     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
-     */
-    public function it_should_call_read_function_on_gateway($gateway)
-    {
-        $this->getList();
-        $gateway->getList(Argument::type('stdClass'), Argument::exact(array()))->shouldBeCalled();
-    }
-
-    /**
-     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
-     */
-    public function it_should_return_gateway_return_value($gateway)
-    {
-        $arguments = Argument::cetera();
-        $data = array(array('record1'), array('record2'));
-
-        $gateway->getList($arguments)->willReturn($data);
-        $this->getList()->shouldReturn($data);
-
-        $gateway->getList($arguments)->willReturn(array());
-        $this->getList()->shouldReturn(array());
     }
 
 }
