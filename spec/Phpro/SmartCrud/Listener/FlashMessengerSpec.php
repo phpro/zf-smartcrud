@@ -26,9 +26,10 @@ class FlashMessengerSpec extends ObjectBehavior
         $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
         $pluginManager = $prophet->prophesize('\Zend\Mvc\Controller\PluginManager');
 
-        $this->setServiceManager($serviceManager);
         $serviceManager->get('ControllerPluginManager')->willReturn($pluginManager);
         $pluginManager->get('flashmessenger')->willReturn($flashMessenger->getWrappedObject());
+
+        $this->createService($serviceManager);
     }
 
     public function it_is_initializable()
@@ -41,9 +42,18 @@ class FlashMessengerSpec extends ObjectBehavior
         $this->shouldHaveType('Zend\EventManager\AbstractListenerAggregate');
     }
 
-    public function it_should_implement_zend_ServiceManagerAwareInterface()
+    public function it_should_implement_zend_FactoryInterface()
     {
-        $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
+        $this->shouldImplement('Zend\ServiceManager\FactoryInterface');
+    }
+
+    /**
+     * @param \Zend\Mvc\Controller\Plugin\FlashMessenger $flashMessenger
+     */
+    public function it_should_be_able_to_inject_its_dependencies_as_a_factory($flashMessenger)
+    {
+        $this->mockFlashMessenger($flashMessenger);
+        $this->getFlashMessenger()->shouldReturn($flashMessenger);
     }
 
     /**

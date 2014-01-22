@@ -8,8 +8,8 @@ use Phpro\SmartCrud\Exception\SmartCrudException;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class Authorize
@@ -20,7 +20,7 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
  * @package Phpro\SmartCrud\Listener
  */
 class BjyAuthorize extends AbstractListenerAggregate
-    implements ServiceManagerAwareInterface
+    implements FactoryInterface
 {
 
     /**
@@ -35,24 +35,34 @@ class BjyAuthorize extends AbstractListenerAggregate
     const PRIVILEGE_DELETE = 'delete';
 
     /**
-     * @var ServiceManager
+     * @var \BjyAuthorize\Service\Authorize
      */
-    protected $serviceManager;
+    protected $authorizationService;
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return $this
+     * @throws SmartCrudException
      */
-    public function setServiceManager(ServiceManager $serviceManager)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->serviceManager = $serviceManager;
+        if (!$serviceLocator->has('BjyAuthorize\Service\Authorize')) {
+            throw new SmartCrudException('The BjyAuthorize listener needs bjyAuthorize module installed');
+        }
+
+        $this->authorizationService = $serviceLocator->get('BjyAuthorize\Service\Authorize');
+        return $this;
     }
 
     /**
-     * @return \Zend\ServiceManager\ServiceManager
+     * @return \BjyAuthorize\Service\Authorize
      */
-    public function getServiceManager()
+    public function getAuthorizationService()
     {
-        return $this->serviceManager;
+        return $this->authorizationService;
     }
 
     /**
@@ -118,22 +128,6 @@ class BjyAuthorize extends AbstractListenerAggregate
     }
 
     /**
-     * Load Authorize service
-     *
-     * @return \BjyAuthorize\Service\Authorize
-     * @throws \Phpro\SmartCrud\Exception\SmartCrudException
-     */
-    public function getAuthorizeService()
-    {
-        $serviceManager = $this->getServiceManager();
-        if (!$serviceManager->has('BjyAuthorize\Service\Authorize')) {
-            throw new SmartCrudException('The BjyAuthorize listener needs bjyAuthorize module installed');
-        }
-
-        return $serviceManager->get('BjyAuthorize\Service\Authorize');
-    }
-
-    /**
      * @param $resource
      * @param $privilege
      *
@@ -146,7 +140,7 @@ class BjyAuthorize extends AbstractListenerAggregate
             $resource = get_class($resource);
         }
 
-        $authorizeService = $this->getAuthorizeService();
+        $authorizeService = $this->getAuthorizationService();
         $allowed = $authorizeService->isAllowed($resource, $privilege);
 
         if (!$allowed) {

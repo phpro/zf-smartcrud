@@ -14,14 +14,15 @@ class BjyAuthorizeSpec extends ObjectBehavior
     /**
      * @param \BjyAuthorize\Service\Authorize $authorizeService
      */
-    protected function mockServiceManager($authorizeService)
+    protected function mockListenerFactory($authorizeService)
     {
         $prophet = new Prophet();
         $serviceManager = $prophet->prophesize('\Zend\ServiceManager\ServiceManager');
 
-        $this->setServiceManager($serviceManager);
         $serviceManager->has('BjyAuthorize\Service\Authorize')->willReturn(true);
         $serviceManager->get('BjyAuthorize\Service\Authorize')->willReturn($authorizeService);
+
+        $this->createService($serviceManager);
     }
 
     /**
@@ -35,7 +36,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
         $authorizeService = $prophet->prophesize('\BjyAuthorize\Service\Authorize');
         $authorizeService->isAllowed(Argument::cetera())->willReturn($isAllowed);
 
-        $this->mockServiceManager($authorizeService->reveal());
+        $this->mockListenerFactory($authorizeService->reveal());
     }
 
     /**
@@ -46,7 +47,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
     protected function mockEvent($authorizeService, $event, $resource)
     {
         $authorizeService->isAllowed(Argument::cetera())->willReturn(true);
-        $this->mockServiceManager($authorizeService->getWrappedObject());
+        $this->mockListenerFactory($authorizeService->getWrappedObject());
         $event->getEntity()->willReturn($resource->getWrappedObject());
     }
 
@@ -65,9 +66,9 @@ class BjyAuthorizeSpec extends ObjectBehavior
         $this->shouldHaveType('Zend\EventManager\AbstractListenerAggregate');
     }
 
-    public function it_should_implement_zend_ServiceManagerAwareInterface()
+    public function it_should_implement_zend_FactoryInterface()
     {
-        $this->shouldImplement('Zend\ServiceManager\ServiceManagerAwareInterface');
+        $this->shouldImplement('Zend\ServiceManager\FactoryInterface');
     }
 
     /**
@@ -86,16 +87,21 @@ class BjyAuthorizeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     * @param \BjyAuthorize\Service\Authorize     $authorize
+     * @param \BjyAuthorize\Service\Authorize $authorize
      */
-    public function it_should_have_an_authorization_service($serviceManager, $authorize)
+    public function it_should_be_able_to_inject_its_dependencies_as_a_factory($authorize)
     {
-        $this->setServiceManager($serviceManager);
-        $serviceManager->has('BjyAuthorize\Service\Authorize')->willReturn(true);
-        $serviceManager->get('BjyAuthorize\Service\Authorize')->willReturn($authorize);
+        $this->mockListenerFactory($authorize->getWrappedObject());
+        $this->getAuthorizationService()->shouldReturn($authorize);
+    }
 
-        $this->getAuthorizeService()->shouldReturn($authorize);
+    /**
+     * @param \BjyAuthorize\Service\Authorize $authorize
+     */
+    public function it_should_have_an_authorization_service($authorize)
+    {
+        $this->mockListenerFactory($authorize->getWrappedObject());
+        $this->getAuthorizationService()->shouldReturn($authorize);
     }
 
     /**
@@ -103,10 +109,8 @@ class BjyAuthorizeSpec extends ObjectBehavior
      */
     public function it_should_throw_exception_when_no_authorization_service_exists($serviceManager)
     {
-        $this->setServiceManager($serviceManager);
         $serviceManager->has('BjyAuthorize\Service\Authorize')->willReturn(false);
-
-        $this->shouldThrow('\Phpro\SmartCrud\Exception\SmartCrudException')->duringGetAuthorizeService();
+        $this->shouldThrow('\PhproSmartCrud\Exception\SmartCrudException')->duringCreateService($serviceManager);
     }
 
     /**
@@ -116,7 +120,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
     public function it_should_use_ResourceInterface_by_default($authorizeService, $entity)
     {
         $authorizeService->isAllowed(Argument::cetera())->willReturn(true);
-        $this->mockServiceManager($authorizeService->getWrappedObject());
+        $this->mockListenerFactory($authorizeService->getWrappedObject());
 
         $permission = 'permission';
         $this->isAllowed($entity, $permission);
@@ -130,7 +134,7 @@ class BjyAuthorizeSpec extends ObjectBehavior
     public function it_should_use_classname_if_entity_is_no_ResourceInterface($authorizeService, $entity)
     {
         $authorizeService->isAllowed(Argument::cetera())->willReturn(true);
-        $this->mockServiceManager($authorizeService->getWrappedObject());
+        $this->mockListenerFactory($authorizeService->getWrappedObject());
 
         $className = get_class($entity->getWrappedObject());
         $permission = 'permission';

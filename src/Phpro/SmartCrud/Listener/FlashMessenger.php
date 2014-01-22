@@ -5,8 +5,8 @@ namespace Phpro\SmartCrud\Listener;
 use Phpro\SmartCrud\Event\CrudEvent;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class FlashMessenger
@@ -14,7 +14,7 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
  * @package Phpro\SmartCrud
  */
 class FlashMessenger extends AbstractListenerAggregate
-    implements ServiceManagerAwareInterface
+    implements FactoryInterface
 {
 
     /**
@@ -28,24 +28,18 @@ class FlashMessenger extends AbstractListenerAggregate
     protected $flashMessenger;
 
     /**
-     * @var ServiceManager
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return $this
      */
-    protected $serviceManager;
-
-    /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->serviceManager = $serviceManager;
-    }
+        $controllerPluginManager = $serviceLocator->get('ControllerPluginManager');
+        $this->flashMessenger = $controllerPluginManager->get('flashmessenger');
 
-    /**
-     * @return \Zend\ServiceManager\ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
+        return $this;
     }
 
     /**
@@ -67,11 +61,6 @@ class FlashMessenger extends AbstractListenerAggregate
      */
     public function getFlashMessenger()
     {
-        if (!$this->flashMessenger) {
-            $controllerPluginManager = $this->getServiceManager()->get('ControllerPluginManager');
-            $this->flashMessenger = $controllerPluginManager->get('flashmessenger');
-        }
-
         return $this->flashMessenger;
     }
 

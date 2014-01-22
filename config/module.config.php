@@ -8,8 +8,13 @@ return array(
         'factories' => array(
             'Phpro\SmartCrud\Service\ParametersService'    => 'Phpro\SmartCrud\Service\ParametersService',
             'Phpro\SmartCrud\Console\Application'          => 'Phpro\SmartCrud\Console\ApplicationFactory',
+
+            // Listeners
+            'PhproSmartCrud\Listener\BjyAuthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
+            'PhproSmartCrud\Listener\FlashMessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
         ),
         'invokables' => array(
+
             // Services
             'Phpro\SmartCrud\Service\CrudService'     => 'Phpro\SmartCrud\Service\CrudService',
             'Phpro\SmartCrud\Service\ListService'     => 'Phpro\SmartCrud\Service\ListService',
@@ -21,11 +26,6 @@ return array(
             // Gateways
             'Phpro\SmartCrud\Gateway\DoctrineCrudGateway'  => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
             'Phpro\SmartCrud\Gateway\ZendDbCrudGateway'    => 'Phpro\SmartCrud\Gateway\ZendDbCrudGateway',
-
-            // Listeners
-            'Phpro\SmartCrud\Listener\BjyAuthorize'     => 'Phpro\SmartCrud\Listener\BjyAuthorize',
-            'Phpro\SmartCrud\Listener\FlashMessenger'   => 'Phpro\SmartCrud\Listener\FlashMessenger',
-
         ),
         'aliases' => array(
             'zf-smartcrud.cli' => 'Phpro\SmartCrud\Console\Application'
