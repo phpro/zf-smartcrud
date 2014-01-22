@@ -33,6 +33,8 @@ class AbstractCrudControllerFactory
     const CONFIG_IDENTIFIER = 'identifier-name';
     const CONFIG_SMART_SERVICE = 'smart-service';
     const CONFIG_VIEW_MODEL_BUILDER = 'view-builder';
+    const CONFIG_VIEW_PATH = 'view-path';
+
     /**
      * Cache of canCreateServiceWithName lookups
      * @var array
@@ -59,6 +61,7 @@ class AbstractCrudControllerFactory
             self::CONFIG_IDENTIFIER => 'id',
             self::CONFIG_SMART_SERVICE => 'Phpro\SmartCrud\Service\AbstractSmartService',
             self::CONFIG_VIEW_MODEL_BUILDER => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
+            self::CONFIG_VIEW_PATH => 'phpro-smartcrud',
         );
     }
 
@@ -210,19 +213,24 @@ class AbstractCrudControllerFactory
     {
         $this->injectSmartService($controller, $config[self::CONFIG_SMART_SERVICE]);
         $this->injectIdentifierName($controller, $config[self::CONFIG_IDENTIFIER]);
-        $this->injectViewModelBuilder($controller, $config[self::CONFIG_VIEW_MODEL_BUILDER]);
+        $this->injectViewModelBuilder($controller, $config[self::CONFIG_VIEW_MODEL_BUILDER], $config[self::CONFIG_VIEW_PATH]);
 
         return $this;
     }
 
     /**
      * @param CrudControllerInterface $controller
+     * @param string $viewPath
      *
      * @return $this
      */
-    protected function injectViewModelBuilder(CrudControllerInterface $controller, $smartServiceKey)
+    protected function injectViewModelBuilder(CrudControllerInterface $controller, $smartServiceKey, $viewPath)
     {
-        $controller->setViewModelBuilder($this->getServiceLocator()->get($smartServiceKey));
+        $viewPath = rtrim($viewPath, '/') . '/%s';
+
+        $viewModelBuilder = $this->getServiceLocator()->get($smartServiceKey);
+        $viewModelBuilder->setTemplate($viewPath);
+        $controller->setViewModelBuilder($viewModelBuilder);
 
         return $this;
     }

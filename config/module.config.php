@@ -33,6 +33,9 @@ return array(
         'aliases' => array(
             'zf-smartcrud.cli' => 'Phpro\SmartCrud\Console\Application'
         ),
+        'shared' => array(
+            'Phpro\SmartCrud\View\Model\ViewModelBuilder' => false,
+        )
     ),
     'controllers' => array(
         'invokables' => array(

@@ -231,10 +231,11 @@ class Generate extends CliCommand
 
             AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
                 $controllerKey => array(
-                    AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
                     AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'Phpro\SmartCrud\\Controller\\CrudController',
                     AbstractCrudControllerFactory::CONFIG_IDENTIFIER => 'id',
                     AbstractCrudControllerFactory::CONFIG_SMART_SERVICE => $serviceKey,
+                    AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
+                    AbstractCrudControllerFactory::CONFIG_VIEW_PATH => 'phpro-smartcrud',
                 ),
             ),
 
