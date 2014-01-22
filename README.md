@@ -15,7 +15,7 @@ php composer.phar require phpro/zf-smartcrud
 # (When asked for a version, type `dev-master`)
 ```
 
-Then add `PhproSmartCrud` to your `config/application.config.php`.
+Then add `Phpro\SmartCrud` to your `config/application.config.php`.
 
 Installation without composer is not officially supported and requires you to manually install all dependencies
 that are listed in `composer.json`
