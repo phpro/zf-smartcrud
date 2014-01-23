@@ -91,8 +91,8 @@ class CrudControllerSpec extends ObjectBehavior
         $smartResult->isSuccessFull()->shouldBeCalled()->willReturn(true);
         $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn($smartResult);
         $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
-        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'index')))->shouldBeCalled();
-        $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'index'))->willReturn('mockRedirect');
+        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'list')))->shouldBeCalled();
+        $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'list'))->willReturn('mockRedirect');
         $this->setSmartService($smartService);
         $this->mockValidPost($request, $mvcEvent, $pluginManager, $params, $action, $postParameters);
     }
@@ -197,8 +197,8 @@ class CrudControllerSpec extends ObjectBehavior
         $pluginManager->get(Argument::exact('params'), null)->shouldBeCalled()->willReturn($params);
         $params->fromRoute(Argument::exact('id'), null)->shouldBeCalled()->willReturn(1);
         $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
-        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'update')))->shouldBeCalled();
-        $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'update'))->willReturn('mockRedirect');
+        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'update', 'id' => '1')))->shouldBeCalled();
+        $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'update', 'id' => '1'))->willReturn('mockRedirect');
         $this->setSmartService($smartService);
         $this->mockValidPost($request, $mvcEvent, $pluginManager, $params, $action, $postParameters);
     }
@@ -237,7 +237,7 @@ class CrudControllerSpec extends ObjectBehavior
         $params->fromRoute(Argument::exact('id'), null)->shouldBeCalled()->willReturn(1);
         $pluginManager->get(Argument::exact('params'), null)->shouldBeCalled()->willReturn($params);
         $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
-        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'index')))
+        $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'list')))
                        ->shouldBeCalled()
                        ->willReturn('mockRedirect');
         $this->setSmartService($smartService);
