@@ -84,8 +84,9 @@ class ListService extends AbstractSmartService
             throw new SmartCrudException('The CRUD list service needs paginator configuration.');
         }
 
+        $paginatorOptions = $options['paginator'];
         $factory = $this->getPaginatorFactory();
-        $paginator = $factory->createPaginator($records, $options, $data);
+        $paginator = $factory->createPaginator($records, $paginatorOptions, $data);
         return $paginator;
     }
 }

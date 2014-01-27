@@ -97,6 +97,7 @@ class AbstractSmartServiceFactory
             $defaultConfiguration[$this::CONFIG_DEFAULT],
             isset($defaultConfiguration[$action]) ? $defaultConfiguration[$action] : array(),
             isset($smartCrudConfig[$this::CONFIG_DEFAULT]) ? $smartCrudConfig[$this::CONFIG_DEFAULT] : array(),
+            isset($smartCrudConfig[$this::CONFIG_DEFAULT . '-' . $action]) ? $smartCrudConfig[$this::CONFIG_DEFAULT . '-' . $action] : array(),
             isset($smartCrudConfig[$service][$this::CONFIG_DEFAULT]) ? $smartCrudConfig[$service][$this::CONFIG_DEFAULT] : array(),
             isset($smartCrudConfig[$service][$action]) ? $smartCrudConfig[$service][$action] : array()
         );

@@ -27,7 +27,7 @@ array(
         'default' => array(
             AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
         ),
-        'list => array(
+        'default-list => array(
             'options => array(
                 'paginator' => array(
                     'adapter_class' => 'Zend\Paginator\Adapter\ArrayAdapter',
