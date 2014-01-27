@@ -108,6 +108,13 @@ abstract class AbstractSmartServiceSpec extends ObjectBehavior
         $this->getEventManager()->shouldReturn($eventManager);
     }
 
+    public function it_should_have_options()
+    {
+        $options = array();
+        $this->setOptions($options);
+        $this->getOptions()->shouldReturn($options);
+    }
+
     /**
      * @param \stdClass $entity
      */

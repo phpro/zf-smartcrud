@@ -20,6 +20,20 @@ use Prophecy\Argument;
 class ListServiceSpec extends AbstractSmartServiceSpec
 {
 
+    /**
+     * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
+     * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Zend\Form\Form                               $form
+     */
+    public function let($gateway, $eventManager, $entity)
+    {
+        parent::let($gateway, $eventManager, $entity);
+
+        $this->setOptions(array(
+            'paginator' => array(),
+        ));
+    }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Service\ListService');
@@ -30,20 +44,39 @@ class ListServiceSpec extends AbstractSmartServiceSpec
         $this->shouldBeAnInstanceOf('Phpro\SmartCrud\Service\AbstractSmartService');
     }
 
+    public function it_should_implement_paginatorFactoryAwareInterface()
+    {
+        $this->shouldImplement('\Phpro\SmartCrud\Service\PaginatorFactoryAwareInterface');
+    }
+
+    /**
+     * @param \Phpro\SmartCrud\Service\PaginatorServiceFactory $paginatorFactory
+     */
+    public function it_should_have_paginatorFactory($paginatorFactory)
+    {
+        $this->setPaginatorFactory($paginatorFactory);
+        $this->getPaginatorFactory()->shouldReturn($paginatorFactory);
+    }
+
     /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      * @param \Zend\EventManager\EventManager               $eventManager
+     * @param \Phpro\SmartCrud\Service\PaginatorServiceFactory $paginatorFactory
      * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
+     * @param \Zend\Paginator\Paginator $paginator
      */
-    public function it_should_return_a_result($gateway, $eventManager, $result)
+    public function it_should_return_a_result($gateway, $eventManager, $paginatorFactory, $result, $paginator)
     {
         $getData = array();
         $list = array();
         $gateway->getList('entityKey', $getData)->willReturn($list);
 
+        $paginatorFactory->createPaginator($list, Argument::cetera())->willReturn($paginator);
+        $this->setPaginatorFactory($paginatorFactory);
+
         $result->setSuccess(Argument::any())->shouldBeCalled();
         $result->setForm(Argument::any())->shouldNotBeCalled();
-        $result->setList($list)->shouldBeCalled();
+        $result->setList($paginator)->shouldBeCalled();
 
         $this->setEntityKey('entityKey');
         $this->setGateway($gateway);
@@ -52,6 +85,20 @@ class ListServiceSpec extends AbstractSmartServiceSpec
         $this->run(Argument::any(), $getData)->shouldReturn($result);;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_LIST))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_LIST))->shouldBeCalled();
+    }
+
+    /**
+     * @param \Phpro\SmartCrud\Service\PaginatorServiceFactory $paginatorFactory
+     * @param \Zend\Paginator\Paginator $paginator
+     */
+    public function it_should_create_paginator($paginatorFactory, $paginator)
+    {
+        $records = array();
+        $params = array();
+        $paginatorFactory->createPaginator($records, Argument::any(), $params)->willReturn($paginator);
+        $this->setPaginatorFactory($paginatorFactory);
+
+        $this->getPaginator($records, $params)->shouldReturn($paginator);
     }
 
 }

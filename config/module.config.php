@@ -22,6 +22,7 @@ return array(
             'Phpro\SmartCrud\Service\ReadService'     => 'Phpro\SmartCrud\Service\ReadService',
             'Phpro\SmartCrud\Service\UpdateService'   => 'Phpro\SmartCrud\Service\UpdateService',
             'Phpro\SmartCrud\Service\DeleteService'   => 'Phpro\SmartCrud\Service\DeleteService',
+            'Phpro\SmartCrud\Service\PaginatorServiceFactory' => 'Phpro\SmartCrud\Service\PaginatorServiceFactory',
 
             // Gateways
             'Phpro\SmartCrud\Gateway\DoctrineCrudGateway'  => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',

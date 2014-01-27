@@ -27,6 +27,15 @@ array(
         'default' => array(
             AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => 'Phpro\SmartCrud\Gateway\DoctrineCrudGateway',
         ),
+        'list => array(
+            'options => array(
+                'paginator' => array(
+                    'adapter_class' => 'Zend\Paginator\Adapter\ArrayAdapter',
+                    'page_size' => 50,
+                    'query_key' => 'page',
+                ),
+            ),
+        ),
         'Admin\Service\UserServiceFactory' => array(
             'default' => array(
                 AbstractSmartServiceFactory::CONFIG_ENTITY_CLASS => 'App\Entity\Country',

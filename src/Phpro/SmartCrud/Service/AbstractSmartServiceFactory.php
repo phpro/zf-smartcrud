@@ -27,6 +27,7 @@ class AbstractSmartServiceFactory
     const CONFIG_FORM_KEY       = 'form';
     const CONFIG_LISTENERS_KEY  = 'listeners';
     const CONFIG_SERVICE_KEY    = 'service';
+    const CONFIG_OPTIONS        = 'options';
 
     const CONFIG_DEFAULT        = 'default';
     const CONFIG_CREATE         = 'create';
@@ -48,7 +49,8 @@ class AbstractSmartServiceFactory
                 self::CONFIG_ENTITY_CLASS => null,
                 self::CONFIG_FORM_KEY     => null,
                 self::CONFIG_PARAMETERS_KEY => 'Phpro\SmartCrud\Service\ParametersService',
-                AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array()
+                self::CONFIG_LISTENERS_KEY => array(),
+                self::CONFIG_OPTIONS => array(),
             ),
             self::CONFIG_LIST => array(
                 self::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\ListService'
@@ -160,7 +162,9 @@ class AbstractSmartServiceFactory
             //->injectParameterService($smartCrudService, $config)
             ->injectGateway($smartCrudService, $config)
             ->injectForm($smartCrudService, $config)
-            ->injectListeners($smartCrudService, $config);
+            ->injectListeners($smartCrudService, $config)
+            ->injectOptions($smartCrudService, $config)
+            ->injectPaginatorFactory($smartCrudService, $config);
 
         return $this;
     }
@@ -251,6 +255,39 @@ class AbstractSmartServiceFactory
             $smartCrudService->getEventManager()->attach($serviceLocator->get($listener));
         }
 
+        return $this;
+    }
+
+    /**
+     * @param SmartServiceInterface $smartCrudService
+     * @param ArrayObject           $config
+     *
+     * @return $this
+     */
+    private function injectOptions(SmartServiceInterface $smartCrudService,ArrayObject $config)
+    {
+        if ($config->offsetExists($this::CONFIG_OPTIONS) && count($config[$this::CONFIG_OPTIONS]) < 1) {
+            return $this;
+        }
+
+        $smartCrudService->setOptions($config[$this::CONFIG_OPTIONS]);
+        return $this;
+    }
+
+    /**
+     * @param SmartServiceInterface $smartCrudService
+     * @param ArrayObject           $config
+     *
+     * @return $this
+     */
+    private function injectPaginatorFactory(SmartServiceInterface $smartCrudService, ArrayObject $config)
+    {
+        if (!($smartCrudService instanceof PaginatorFactoryAwareInterface)) {
+            return $this;
+        }
+
+        $paginatorFactory = $this->getServiceLocator()->get('Phpro\SmartCrud\Service\PaginatorServiceFactory');
+        $smartCrudService->setPaginatorFactory($paginatorFactory);
         return $this;
     }
 
