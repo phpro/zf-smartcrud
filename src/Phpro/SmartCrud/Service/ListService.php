@@ -10,6 +10,8 @@
 namespace Phpro\SmartCrud\Service;
 
 use Phpro\SmartCrud\Event\CrudEvent;
+use Phpro\SmartCrud\Exception\SmartCrudException;
+use Zend\Paginator\Paginator;
 
 /**
  * Class ListService
@@ -17,7 +19,31 @@ use Phpro\SmartCrud\Event\CrudEvent;
  * @package Phpro\SmartCrud\Service
  */
 class ListService extends AbstractSmartService
+    implements PaginatorFactoryAwareInterface
 {
+
+    /**
+     * @var PaginatorServiceFactory
+     */
+    protected $paginatorFactory;
+
+    /**
+     * @param PaginatorServiceFactory $paginatorFactory
+     *
+     * @return mixed|void
+     */
+    public function setPaginatorFactory($paginatorFactory)
+    {
+        $this->paginatorFactory = $paginatorFactory;
+    }
+
+    /**
+     * @return PaginatorServiceFactory
+     */
+    public function getPaginatorFactory()
+    {
+        return $this->paginatorFactory;
+    }
 
     /**
      * @param int                $id
@@ -34,11 +60,33 @@ class ListService extends AbstractSmartService
 
         $gateway = $this->getGateway();
         $records = $gateway->getList($this->getEntityKey(), $data);
+        $paginator = $this->getPaginator($records, $data);
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_LIST, null));
         $result->setSuccess(true);
-        $result->setList($records);
+        $result->setList($paginator);
 
         return $result;
+    }
+
+    /**
+     * @param $records
+     * @param $data
+     *
+     * @return Paginator
+     * @throws \Phpro\SmartCrud\Exception\SmartCrudException
+     */
+    public function getPaginator($records, $data)
+    {
+
+        $options = $this->getOptions();
+        if (!isset($options['paginator'])) {
+            throw new SmartCrudException('The CRUD list service needs paginator configuration.');
+        }
+
+        $paginatorOptions = $options['paginator'];
+        $factory = $this->getPaginatorFactory();
+        $paginator = $factory->createPaginator($records, $paginatorOptions, $data);
+        return $paginator;
     }
 }

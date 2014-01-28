@@ -57,6 +57,11 @@ abstract class AbstractSmartService
     protected $formKey;
 
     /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
      * @var SmartServiceResult
      */
     private $result = null;
@@ -247,4 +252,22 @@ abstract class AbstractSmartService
 
         return $event;
     }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+
 }

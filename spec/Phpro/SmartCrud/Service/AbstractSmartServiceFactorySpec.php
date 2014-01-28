@@ -40,7 +40,7 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
         $serviceLocator->get('Config')->shouldBeCalled()->willReturn($config);
         $this->setServiceLocator($serviceLocator);
         /** @var \PhpSpec\Wrapper\Subject $data */
-       $data = $this->getConfig('Admin\Service\UserServiceFactory', 'create');
+        $data = $this->getConfig('Admin\Service\UserServiceFactory', 'create');
         $this->getConfig('Admin\Service\UserServiceFactory', 'create')->shouldReturn(
             array(
                  AbstractSmartServiceFactory::CONFIG_GATEWAY_KEY => null,
@@ -48,7 +48,8 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
                  AbstractSmartServiceFactory::CONFIG_FORM_KEY     => null,
                  AbstractSmartServiceFactory::CONFIG_PARAMETERS_KEY => 'Phpro\SmartCrud\Service\ParametersService',
                  AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(),
-                 AbstractSmartServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\CreateService'
+                 AbstractSmartServiceFactory::CONFIG_OPTIONS => array(),
+                 AbstractSmartServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\CreateService',
             )
         );
     }
@@ -96,6 +97,7 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
                  AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(
                      'Admin\Listener\User'
                  ),
+                 AbstractSmartServiceFactory::CONFIG_OPTIONS => array(),
                  AbstractSmartServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\CreateService',
             )
         );
@@ -108,8 +110,8 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
                  AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(
                      'Admin\Listener\UserUpdate'
                  ),
+                 AbstractSmartServiceFactory::CONFIG_OPTIONS => array(),
                  AbstractSmartServiceFactory::CONFIG_SERVICE_KEY => '\Phpro\SmartCrud\Service\UpdateService',
-
             )
         );
     }
@@ -169,6 +171,7 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
         $entityClassName = 'module/Entity/ClassName';
         $name = "Create service";
         $requestedName = 'classpath/to/service';
+        $options =  array('key' => 'value');
         $config = array(
             AbstractSmartServiceFactory::CONFIG_KEY => array(
                 $requestedName => array(
@@ -180,7 +183,8 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
                         AbstractSmartServiceFactory::CONFIG_FORM_KEY  => $formKey,
                         AbstractSmartServiceFactory::CONFIG_LISTENERS_KEY => array(
                             $listenerKey
-                        )
+                        ),
+                        AbstractSmartServiceFactory::CONFIG_OPTIONS => $options,
                     )
                 )
             )
@@ -195,7 +199,10 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
         $smartService->setEntityKey($entityClassName)->shouldBeCalled()->willReturn($smartService);
         $smartService->setGateway($crudGateway)->shouldBeCalled()->willReturn($smartService);
         $smartService->setForm($form)->shouldBeCalled()->willReturn($smartService);
+        $smartService->setOptions($options)->shouldBeCalled()->willReturn($smartService);
+
         $smartService->getEventManager()->shouldBeCalled()->willReturn($eventManager);
+
         $eventManager->attach($listener)->shouldBeCalled();
         $this->createServiceWithName($serviceLocator, $name, $requestedName . '::' . 'create')->shouldReturn($smartService);
 
