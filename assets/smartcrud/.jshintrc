@@ -1,0 +1,7 @@
+{
+    "es5": true,
+    "globals": {
+        "$": true,
+        "console": true
+    }
+}

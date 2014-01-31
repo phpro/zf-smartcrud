@@ -127,7 +127,7 @@ class CrudController extends AbstractActionController
         $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
         $result = $this->getSmartService()->run(null, $data);
         if($this->getRequest()->isPost() && $result->isSuccessFull()) {
-            return $this->redirect()->toRoute(null, array('action' => 'list'));
+            return $this->redirect()->toRoute(null, array('action' => 'list'), true);
         }
         return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'create');
     }
@@ -140,7 +140,7 @@ class CrudController extends AbstractActionController
         $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
         $result = $this->getSmartService()->run($this->getEntityId(), $data);
         if($this->getRequest()->isPost() && $result->isSuccessFull()) {
-            return $this->redirect()->toRoute(null, array('action' => 'update', $this->getIdentifierName() => $this->getEntityId()));
+            return $this->redirect()->toRoute(null, array('action' => 'update', $this->getIdentifierName() => $this->getEntityId()), true);
         }
         return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'update');
     }
@@ -162,7 +162,7 @@ class CrudController extends AbstractActionController
         $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
         $result = $this->getSmartService()->run($this->getEntityId(), $data);
         if($this->getRequest()->isPost() && $result->isSuccessFull()) {
-            return $this->redirect()->toRoute(null, array('action' => 'list'));
+            return $this->redirect()->toRoute(null, array('action' => 'list'), true);
         }
         return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'delete');
     }
