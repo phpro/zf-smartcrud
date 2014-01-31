@@ -47,8 +47,18 @@ return array(
         ),
     ),
     'view_manager' => array(
+        'template_map' => array(
+            'phpro-smartcrud/partial/module-delete' => __DIR__ . '/../view/partials/modal-delete',
+        ),
         'template_path_stack' => array(
             'phpro-smartcrud' => __DIR__ . '/../view',
         )
+    ),
+    'asset_manager' => array(
+        'resolver_configs' => array(
+            'paths' => array(
+                __DIR__ . '/../assets',
+            ),
+        ),
     ),
 );
