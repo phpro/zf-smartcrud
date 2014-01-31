@@ -27,27 +27,23 @@ class DeleteService extends AbstractSmartService
      */
     public function run($id = null, $data = null)
     {
-        $result = $this->getResult();
         $em = $this->getEventManager();
         $entity = $this->loadEntity($id);
-        $form = $this->getForm($entity);
-        if ($data === null) {
-            $result->setSuccess(true);
-        } else {
-            $form->setData($data);
-            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, array('postData' => $data)));
-            if ($form->isValid()) {
-                $em->trigger($this->createEvent(CrudEvent::BEFORE_DELETE, $entity));
-                $result->setSuccess($this->getGateway()->delete($entity, $data));
-                $em->trigger($this->createEvent(CrudEvent::AFTER_DELETE, $entity));
-            } else {
 
-                $em->trigger($this->createEvent(CrudEvent::INVALID_DELETE, $form));
-            }
+        $result = $this->getResult();
+        $result->setEntity($entity);
+
+        if (!$entity) {
+            $em->trigger($this->createEvent(CrudEvent::INVALID_DELETE, $entity));
+            $result->setSuccess(false);
+            return $result;
         }
 
-        $result->setEntity($entity);
-        $result->setForm($form);
+        $em->trigger($this->createEvent(CrudEvent::BEFORE_DELETE, $entity));
+        $deleted = $this->getGateway()->delete($entity, $data);
+        $em->trigger($this->createEvent(CrudEvent::AFTER_DELETE, $entity));
+
+        $result->setSuccess($deleted);
         return $result;
     }
 
