@@ -11,6 +11,7 @@ $(function()  {
     confirmButton.off('click').on('click', function(e) {
       e.preventDefault();
       $.post(endpoint, {}, function() {
+        modal.modal('hide');
         window.location.reload();
       });
     })
