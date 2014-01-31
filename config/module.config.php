@@ -48,7 +48,7 @@ return array(
     ),
     'view_manager' => array(
         'template_map' => array(
-            'phpro-smartcrud/partial/module-delete' => __DIR__ . '/../view/partials/modal-delete',
+            'phpro-smartcrud/partial/module-delete' => __DIR__ . '/../view/partials/modal-delete.phtml',
         ),
         'template_path_stack' => array(
             'phpro-smartcrud' => __DIR__ . '/../view',
