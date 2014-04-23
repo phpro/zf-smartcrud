@@ -41,7 +41,9 @@ return array(
 );
 ```
 
-##### listeners: Array of service manager keys, which return EventListenerAggregateInterface. These listeners can be used listen to SmartCrud events on entities.
+##### listeners:
+
+Array of service manager keys, which return EventListenerAggregateInterface. These listeners can be used listen to SmartCrud events on entities.
 
 ###### Available SmartCrud events:
 
