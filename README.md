@@ -24,21 +24,35 @@ that are listed in `composer.json`
 
 ### SmartCrud Configuration
 
+### Gateways
+
+It is possible to configure multiple data-source gateways.
+Those gateways are being used by the services to load and save the data.
+
+```php
+'phpro-smartcrud-gateway' => array(
+    'smartcrud.gateway.doctrine.default' => array(
+        'type' => 'PhproSmartCrud\Gateway\DoctrineCrudGateway',
+        'options' => array(
+            'object_manager' => 'doctrine.documentmanager.odm_default',
+        ),
+    )
+),
+```
+
 #### Services
 
-```sh
-return array(
-    'phpro-smartcrud-service' => array(
-        'SmartCrudServiceKey' => array(
-            'default' => array(
-                'gateway' => 'smartcrud.gateway.doctrine.tenant',
-                'entity-class' => 'entity-key',
-                'form' => 'form-key',
-                'listeners' => []
-            ),
+```php
+'phpro-smartcrud-service' => array(
+    'SmartCrudServiceKey' => array(
+        'default' => array(
+            'gateway' => 'smartcrud.gateway.doctrine.default',
+            'entity-class' => 'entity-key',
+            'form' => 'form-key',
+            'listeners' => []
         ),
     ),
-);
+),
 ```
 
 ##### listeners:
@@ -47,40 +61,38 @@ Array of service manager keys, which return EventListenerAggregateInterface. The
 
 ###### Available SmartCrud events:
 
-```sh
-BEFORE_LIST
-AFTER_LIST
-BEFORE_DATA_VALIDATION
-BEFORE_CREATE
-AFTER_CREATE
-INVALID_CREATE
-BEFORE_READ
-AFTER_READ
-BEFORE_UPDATE
-AFTER_UPDATE
-INVALID_UPDATE
-BEFORE_DELETE
-AFTER_DELETE
-INVALID_DELETE
-BEFORE_VALIDATE
-AFTER_VALIDATE
-FORM_READY
+```php
+CrudEvent::BEFORE_LIST
+CrudEvent::AFTER_LIST
+CrudEvent::BEFORE_DATA_VALIDATION
+CrudEvent::BEFORE_CREATE
+CrudEvent::AFTER_CREATE
+CrudEvent::INVALID_CREATE
+CrudEvent::BEFORE_READ
+CrudEvent::AFTER_READ
+CrudEvent::BEFORE_UPDATE
+CrudEvent::AFTER_UPDATE
+CrudEvent::INVALID_UPDATE
+CrudEvent::BEFORE_DELETE
+CrudEvent::AFTER_DELETE
+CrudEvent::INVALID_DELETE
+CrudEvent::BEFORE_VALIDATE
+CrudEvent::AFTER_VALIDATE
+CrudEvent::FORM_READY
 ```
 
 #### Controllers
 
-```sh
-return array(
-    'phpro-smartcrud-controller' => array(
-        'SmartCrudControllerKey' => array(
-            'controller' => 'Phpro\SmartCrud\Controller\CrudController',
-            'identifier-name' => 'identifier',
-            'smart-service' => 'SmartCrudServiceKey',
-            'view-builder' => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
-            'view-path' => 'path',
-        ),
+```php
+'phpro-smartcrud-controller' => array(
+    'SmartCrudControllerKey' => array(
+        'controller' => 'Phpro\SmartCrud\Controller\CrudController',
+        'identifier-name' => 'identifier',
+        'smart-service' => 'SmartCrudServiceKey',
+        'view-builder' => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
+        'view-path' => 'path',
     ),
-);
+),
 ```
 
 
