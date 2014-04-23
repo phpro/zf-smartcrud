@@ -21,4 +21,69 @@ Installation without composer is not officially supported and requires you to ma
 that are listed in `composer.json`
 
 ## Documentation
-Coming soon!
+
+### SmartCrud Configuration
+
+#### Services
+
+```sh
+return array(
+    'phpro-smartcrud-service' => array(
+        'SmartCrudServiceKey' => array(
+            'default' => array(
+                'gateway' => 'smartcrud.gateway.doctrine.tenant',
+                'entity-class' => 'entity-key',
+                'form' => 'form-key',
+                'listeners' => []
+            ),
+        ),
+    ),
+);
+```
+
+##### listeners:
+
+Array of service manager keys, which return EventListenerAggregateInterface. These listeners can be used listen to SmartCrud events on entities.
+
+###### Available SmartCrud events:
+
+```sh
+BEFORE_LIST
+AFTER_LIST
+BEFORE_DATA_VALIDATION
+BEFORE_CREATE
+AFTER_CREATE
+INVALID_CREATE
+BEFORE_READ
+AFTER_READ
+BEFORE_UPDATE
+AFTER_UPDATE
+INVALID_UPDATE
+BEFORE_DELETE
+AFTER_DELETE
+INVALID_DELETE
+BEFORE_VALIDATE
+AFTER_VALIDATE
+FORM_READY
+```
+
+#### Controllers
+
+```sh
+return array(
+    'phpro-smartcrud-controller' => array(
+        'SmartCrudControllerKey' => array(
+            'controller' => 'Phpro\SmartCrud\Controller\CrudController',
+            'identifier-name' => 'identifier',
+            'smart-service' => 'SmartCrudServiceKey',
+            'view-builder' => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
+            'view-path' => 'path',
+        ),
+    ),
+);
+```
+
+
+
+
+More coming soon!
