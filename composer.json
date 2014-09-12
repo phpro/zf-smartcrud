@@ -36,8 +36,8 @@
         "phpspec/phpspec":                   "2.0.*@dev",
         "fabpot/PHP-CS-Fixer":               "*",
 
-        "doctrine/doctrine-orm-module":      "0.8.*@dev",
-        "doctrine/doctrine-mongo-odm-module":      "0.8.*",
+        "doctrine/doctrine-orm-module":      "0.8.*",
+        "doctrine/doctrine-mongo-odm-module":"0.8.*",
         "zendframework/zend-db":             "2.*",
 
         "zendframework/zend-permissions-acl":"2.*",
