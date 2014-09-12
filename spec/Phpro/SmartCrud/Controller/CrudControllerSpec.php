@@ -20,7 +20,6 @@ use Prophecy\Prophet;
  */
 class CrudControllerSpec extends ObjectBehavior
 {
-
     public function let()
     {
         $this->setIdentifierName('id');

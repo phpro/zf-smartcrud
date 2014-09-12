@@ -14,7 +14,6 @@ use Prophecy\Prophet;
  */
 class FlashMessengerSpec extends ObjectBehavior
 {
-
     /**
      * Mock the flashmessenger
      *
@@ -125,7 +124,6 @@ class FlashMessengerSpec extends ObjectBehavior
 
         $this->deleteSucceeded($event);
         $flashMessenger->addSuccessMessage(Argument::type('string'))->shouldBeCalled();
-
     }
 
     /**
@@ -163,5 +161,4 @@ class FlashMessengerSpec extends ObjectBehavior
         $this->deleteFailed($event);
         $flashMessenger->addErrorMessage(Argument::type('string'))->shouldBeCalled();
     }
-
 }

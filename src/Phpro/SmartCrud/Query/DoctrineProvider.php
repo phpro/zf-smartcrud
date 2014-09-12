@@ -2,6 +2,7 @@
 
 
 namespace Phpro\SmartCrud\Query;
+
 use Doctrine\Common\Persistence\ObjectRepository;
 
 /**
@@ -11,7 +12,6 @@ use Doctrine\Common\Persistence\ObjectRepository;
  */
 class DoctrineProvider implements QueryProviderInterface
 {
-
     /**
      * @var ObjectRepository
      */
@@ -34,5 +34,4 @@ class DoctrineProvider implements QueryProviderInterface
         $query = $qb->getQuery();
         return $query;
     }
-
 }

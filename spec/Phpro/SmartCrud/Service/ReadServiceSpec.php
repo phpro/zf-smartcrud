@@ -19,7 +19,6 @@ use Prophecy\Argument;
  */
 class ReadServiceSpec extends AbstractSmartServiceSpec
 {
-
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Service\ReadService');
@@ -51,10 +50,10 @@ class ReadServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setResult($result);
 
-        $this->run($entity->id, $postData)->shouldReturn($result);;
+        $this->run($entity->id, $postData)->shouldReturn($result);
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_READ))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_READ))->shouldBeCalled();
     }
-
 }

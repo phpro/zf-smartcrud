@@ -18,7 +18,6 @@ use Phpro\SmartCrud\Event\CrudEvent;
  */
 class ReadService extends AbstractSmartService
 {
-
     /**
      * @return mixed
      */

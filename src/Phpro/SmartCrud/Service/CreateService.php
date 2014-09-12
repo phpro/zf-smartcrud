@@ -18,7 +18,6 @@ use Phpro\SmartCrud\Event\CrudEvent;
  */
 class CreateService extends AbstractSmartService
 {
-
     /**
      * @param $id
      * @param array $data
@@ -27,7 +26,6 @@ class CreateService extends AbstractSmartService
      */
     public function run($id = null, $data = null)
     {
-
         $result = $this->getResult();
         $em = $this->getEventManager();
         $entity = $this->loadEntity($id);
@@ -42,7 +40,6 @@ class CreateService extends AbstractSmartService
                 $result->setSuccess($this->getGateway()->create($entity, $data));
                 $em->trigger($this->createEvent(CrudEvent::AFTER_CREATE, $entity));
             } else {
-
                 $em->trigger($this->createEvent(CrudEvent::INVALID_CREATE, $form));
             }
         }
@@ -51,5 +48,4 @@ class CreateService extends AbstractSmartService
         $result->setForm($form);
         return $result;
     }
-
 }

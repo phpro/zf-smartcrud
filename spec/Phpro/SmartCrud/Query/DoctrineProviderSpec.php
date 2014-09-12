@@ -37,5 +37,4 @@ class DoctrineProviderSpec extends ObjectBehavior
 
         $this->createQuery(array())->shouldReturn($query);
     }
-
 }

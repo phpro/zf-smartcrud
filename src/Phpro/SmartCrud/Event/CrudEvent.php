@@ -18,7 +18,6 @@ use Zend\EventManager\Event;
  */
 class CrudEvent extends Event
 {
-
     const BEFORE_LIST = 'before-list';
     const AFTER_LIST = 'after-list';
     const BEFORE_DATA_VALIDATION = 'before-data-validation';
@@ -46,5 +45,4 @@ class CrudEvent extends Event
     {
         return $this->getTarget();
     }
-
 }

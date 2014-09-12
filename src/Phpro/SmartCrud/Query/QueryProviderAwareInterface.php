@@ -5,7 +5,6 @@ namespace Phpro\SmartCrud\Query;
 
 interface QueryProviderAwareInterface
 {
-
     /**
      * @param QueryProviderInterface $queryProvider
      */
@@ -15,5 +14,4 @@ interface QueryProviderAwareInterface
      * @return QueryProviderInterface
      */
     public function getQueryProvider();
-
 }

@@ -19,7 +19,6 @@ use Prophecy\Argument;
  */
 class UpdateServiceSpec extends AbstractSmartServiceSpec
 {
-
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Service\UpdateService');
@@ -54,7 +53,8 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setForm($form);
 
-        $this->run($entity->id,null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
+        $this->run($entity->id,null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldNotBeCalled();
@@ -91,7 +91,8 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
         $this->setResult($result);
         $this->setForm($form);
 
-        $this->run($entity->id, $this->getMockPostData())->shouldReturn($result);;
+        $this->run($entity->id, $this->getMockPostData())->shouldReturn($result);
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldNotBeCalled();

@@ -19,7 +19,6 @@ use Prophecy\Argument;
  */
 class DoctrineCrudGatewaySpec extends ObjectBehavior
 {
-
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Gateway\DoctrineCrudGateway');
@@ -180,5 +179,4 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
 
         $this->delete($entity, array())->shouldReturn(false);
     }
-
 }

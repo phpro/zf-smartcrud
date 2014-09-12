@@ -63,7 +63,6 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
      */
     public function it_should_be_able_to_create_gateway_services($serviceLocator)
     {
-
         $this->mockConfiguration($serviceLocator);
         $name = 'custom-gateway';
         $this->canCreateServiceWithName($serviceLocator, $name, $name)->shouldReturn(true);
@@ -107,5 +106,4 @@ class AbstractGatewayFactorySpec extends ObjectBehavior
         $this->shouldThrow('Phpro\SmartCrud\Exception\SmartCrudException')
             ->duringCreateServiceWithName($serviceLocator, $name, $name);
     }
-
 }

@@ -9,7 +9,6 @@ namespace Phpro\SmartCrud\Service;
  */
 interface PaginatorFactoryAwareInterface
 {
-
     /**
      * @param PaginatorServiceFactory $paginatorFactory
      *
@@ -21,5 +20,4 @@ interface PaginatorFactoryAwareInterface
      * @return PaginatorServiceFactory
      */
     public function getPaginatorFactory();
-
 }

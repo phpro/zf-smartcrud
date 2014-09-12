@@ -160,7 +160,6 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
     public function it_should_create_a_service_and_inject_the_dependencies(
         $serviceLocator, $smartService, $eventManager, $listener, $crudGateway, $form, $parameterService)
     {
-
         $name = "Create service";
         $requestedName = 'key_in_configuration';
         $serviceKey    = 'module/service';
@@ -205,7 +204,5 @@ class AbstractSmartServiceFactorySpec extends ObjectBehavior
 
         $eventManager->attach($listener)->shouldBeCalled();
         $this->createServiceWithName($serviceLocator, $name, $requestedName . '::' . 'create')->shouldReturn($smartService);
-
     }
-
 }

@@ -229,7 +229,6 @@ abstract class AbstractSmartService
      */
     public function getForm($entity)
     {
-
         if ($this->form->hasValidated()) {
             return $this->form;
         }
@@ -268,6 +267,4 @@ abstract class AbstractSmartService
     {
         return $this->options;
     }
-
-
 }

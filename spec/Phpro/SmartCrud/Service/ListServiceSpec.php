@@ -19,7 +19,6 @@ use Prophecy\Argument;
  */
 class ListServiceSpec extends AbstractSmartServiceSpec
 {
-
     /**
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      * @param \Zend\EventManager\EventManager               $eventManager
@@ -99,7 +98,8 @@ class ListServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setResult($result);
 
-        $this->run(Argument::any(), $getData)->shouldReturn($result);;
+        $this->run(Argument::any(), $getData)->shouldReturn($result);
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_LIST))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_LIST))->shouldBeCalled();
     }
@@ -117,5 +117,4 @@ class ListServiceSpec extends AbstractSmartServiceSpec
 
         $this->getPaginator($records, $params)->shouldReturn($paginator);
     }
-
 }

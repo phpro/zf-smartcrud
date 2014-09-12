@@ -16,7 +16,6 @@ use Zend\Stdlib\ArrayObject;
 class AbstractSmartServiceFactory
     implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
     /**
      * The config key in the service manager
      */
@@ -135,7 +134,6 @@ class AbstractSmartServiceFactory
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-
         $this->setServiceLocator($serviceLocator);
         $serviceAndAction = explode('::',$requestedName);
 
@@ -339,5 +337,4 @@ class AbstractSmartServiceFactory
     {
         return $this->serviceLocator;
     }
-
 }

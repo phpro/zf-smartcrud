@@ -24,7 +24,6 @@ use Phpro\SmartCrud\Query\QueryProviderInterface;
 class DoctrineCrudGateway
     implements ObjectManagerAwareInterface, CrudGatewayInterface
 {
-
     /**
      * @var ObjectManager
      */
@@ -181,5 +180,4 @@ class DoctrineCrudGateway
 
         return $this->getObjectManager()->getRepository($className);
     }
-
 }

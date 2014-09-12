@@ -18,7 +18,6 @@ use PhpSpec\ObjectBehavior;
  */
 class CrudEventSpec extends ObjectBehavior
 {
-
     /**
      * @param \stdClass $entity
      */

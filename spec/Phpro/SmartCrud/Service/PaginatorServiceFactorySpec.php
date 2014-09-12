@@ -37,5 +37,4 @@ class PaginatorServiceFactorySpec extends ObjectBehavior
         $paginator->getCurrentPageNumber()->shouldReturn($pageNumber);
         $paginator->getItemCountPerPage()->shouldReturn($itemCount);
     }
-
 }

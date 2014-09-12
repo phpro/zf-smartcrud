@@ -8,6 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Gateway;
+
 use Phpro\SmartCrud\Query\QueryProviderInterface;
 
 /**
@@ -17,7 +18,6 @@ use Phpro\SmartCrud\Query\QueryProviderInterface;
  */
 class ZendDbCrudGateway implements CrudGatewayInterface
 {
-
     /**
      * @param      $entityKey
      * @param null $id
@@ -84,5 +84,4 @@ class ZendDbCrudGateway implements CrudGatewayInterface
     {
         // TODO: Implement delete() method.
     }
-
 }

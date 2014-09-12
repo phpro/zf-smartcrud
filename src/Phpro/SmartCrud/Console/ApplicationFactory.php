@@ -22,7 +22,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class ApplicationFactory implements FactoryInterface
 {
-
     /**
      * @var \Zend\EventManager\EventManagerInterface
      */
@@ -69,5 +68,4 @@ class ApplicationFactory implements FactoryInterface
 
         return $cli;
     }
-
 }

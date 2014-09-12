@@ -9,7 +9,6 @@ namespace Phpro\SmartCrud\Query;
  */
 interface QueryProviderInterface
 {
-
     /**
      * This method creates a query
      *
@@ -17,5 +16,4 @@ interface QueryProviderInterface
      * @return mixed
      */
     public function createQuery($data);
-
 }

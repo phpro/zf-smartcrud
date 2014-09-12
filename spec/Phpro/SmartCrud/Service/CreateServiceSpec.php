@@ -19,7 +19,6 @@ use Prophecy\Argument;
  */
 class CreateServiceSpec extends AbstractSmartServiceSpec
 {
-
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Service\CreateService');
@@ -53,7 +52,8 @@ class CreateServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setForm($form);
 
-        $this->run(null,null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
+        $this->run(null,null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldNotBeCalled();
@@ -83,7 +83,8 @@ class CreateServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setForm($form);
 
-        $this->run(null,$this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
+        $this->run(null,$this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldNotBeCalled();
@@ -119,7 +120,8 @@ class CreateServiceSpec extends AbstractSmartServiceSpec
         $this->setResult($result);
         $this->setForm($form);
 
-        $this->run(null,$this->getMockPostData())->shouldReturn($result);;
+        $this->run(null,$this->getMockPostData())->shouldReturn($result);
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_CREATE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_CREATE))->shouldBeCalled();

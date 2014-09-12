@@ -18,7 +18,6 @@ use Phpro\SmartCrud\Event\CrudEvent;
  */
 class DeleteService extends AbstractSmartService
 {
-
     /**
      * @param null $id
      * @param null $data
@@ -46,5 +45,4 @@ class DeleteService extends AbstractSmartService
         $result->setSuccess($deleted);
         return $result;
     }
-
 }

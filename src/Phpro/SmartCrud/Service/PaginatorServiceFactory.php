@@ -12,7 +12,6 @@ use Zend\Paginator\Paginator;
  */
 class PaginatorServiceFactory
 {
-
     const CONFIG_ADAPTER_CLASS = 'adapter_class';
     const CONFIG_PAGE_SIZE = 'page_size';
     const CONFIG_QUERY_KEY = 'query_key';
@@ -68,5 +67,4 @@ class PaginatorServiceFactory
 
         return $paginator;
     }
-
 }

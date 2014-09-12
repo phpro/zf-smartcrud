@@ -18,7 +18,6 @@ use Symfony\Component\Console\Helper\Helper;
  */
 class ConfigHelper extends Helper
 {
-
     /**
      * @return array
      */

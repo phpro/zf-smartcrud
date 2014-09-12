@@ -19,7 +19,6 @@ use Prophecy\Argument;
  */
 class DeleteServiceSpec extends AbstractSmartServiceSpec
 {
-
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Service\DeleteService');
@@ -46,7 +45,8 @@ class DeleteServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setForm($form);
 
-        $this->run(null,$this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');;
+        $this->run(null,$this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_DELETE))->shouldNotBeCalled();
@@ -74,7 +74,8 @@ class DeleteServiceSpec extends AbstractSmartServiceSpec
         $this->setResult($result);
         $this->setForm($form);
 
-        $this->run(null,$this->getMockPostData())->shouldReturn($result);;
+        $this->run(null,$this->getMockPostData())->shouldReturn($result);
+        ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::AFTER_DELETE))->shouldBeCalled();

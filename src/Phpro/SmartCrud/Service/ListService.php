@@ -25,7 +25,6 @@ class ListService extends AbstractSmartService
     PaginatorFactoryAwareInterface,
     QueryProviderAwareInterface
 {
-
     /**
      * @var PaginatorServiceFactory
      */
@@ -78,7 +77,6 @@ class ListService extends AbstractSmartService
      */
     public function run($id, $data)
     {
-
         $result = $this->getResult();
         $em = $this->getEventManager();
         $em->trigger($this->createEvent(CrudEvent::BEFORE_LIST, null));
@@ -103,7 +101,6 @@ class ListService extends AbstractSmartService
      */
     public function getPaginator($records, $data)
     {
-
         $options = $this->getOptions();
         if (!isset($options['paginator'])) {
             throw new SmartCrudException('The CRUD list service needs paginator configuration.');

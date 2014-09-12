@@ -8,6 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Gateway;
+
 use Phpro\SmartCrud\Query\QueryProviderInterface;
 
 /**
@@ -17,7 +18,6 @@ use Phpro\SmartCrud\Query\QueryProviderInterface;
  */
 interface CrudGatewayInterface
 {
-
     /**
      * @param      $entityKey
      * @param null $id
@@ -66,5 +66,4 @@ interface CrudGatewayInterface
      * @return bool
      */
     public function delete($entity, $id);
-
 }

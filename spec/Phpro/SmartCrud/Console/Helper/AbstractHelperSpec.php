@@ -7,7 +7,6 @@ use Prophecy\Prophet;
 
 abstract class AbstractHelperSpec extends ObjectBehavior
 {
-
     public function it_should_extend_from_symfony_helper()
     {
         $this->shouldBeAnInstanceOf('Symfony\Component\Console\Helper\Helper');
@@ -34,5 +33,4 @@ abstract class AbstractHelperSpec extends ObjectBehavior
         $helperSet->get('Config')->willReturn($helper);
         $this->setHelperSet($helperSet);
     }
-
 }

@@ -9,7 +9,6 @@ use Prophecy\Prophet;
 
 class AbstractCrudControllerFactorySpec extends ObjectBehavior
 {
-
     /**
      * @param \Zend\Mvc\Controller\ControllerManager       $controllerManager
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
@@ -193,5 +192,4 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
         $this->shouldThrow('Phpro\SmartCrud\Exception\SmartCrudException')
             ->duringCreateServiceWithName($controllerManager, $name, $name);
     }
-
 }
