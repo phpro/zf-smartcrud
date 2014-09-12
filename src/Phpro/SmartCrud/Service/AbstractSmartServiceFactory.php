@@ -94,7 +94,7 @@ class AbstractSmartServiceFactory
 
         $defaultConfiguration = $this::getDefaultConfiguration();
 
-        $result = array_merge(
+        $result = array_replace_recursive(
             $defaultConfiguration[$this::CONFIG_DEFAULT],
             isset($defaultConfiguration[$action]) ? $defaultConfiguration[$action] : array(),
             isset($smartCrudConfig[$this::CONFIG_DEFAULT]) ? $smartCrudConfig[$this::CONFIG_DEFAULT] : array(),
