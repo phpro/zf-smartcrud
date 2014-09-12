@@ -37,6 +37,7 @@
         "fabpot/PHP-CS-Fixer":               "*",
 
         "doctrine/doctrine-orm-module":      "0.8.*@dev",
+        "doctrine/doctrine-mongo-odm-module":      "0.8.*",
         "zendframework/zend-db":             "2.*",
 
         "zendframework/zend-permissions-acl":"2.*",
@@ -46,7 +47,8 @@
     },
     "suggest": {
         "rwoverdijk/assetmanager":  "~1.3.5",
-        "doctrine/doctrine-orm-module":      "If you want to use the Doctrine Gateway",
+        "doctrine/doctrine-orm-module":      "If you want to use the Doctrine ORM Gateway",
+        "doctrine/doctrine-mongo-odm-module":      "If you want to use the Doctrine ODM Gateway",
         "zendframework/zend-db":             "If you want to use the Zend DB Gateway"
     },
     "autoload": {

@@ -13,6 +13,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Phpro\SmartCrud\Exception\SmartCrudException;
+use Phpro\SmartCrud\Query\DoctrineProvider;
+use Phpro\SmartCrud\Query\QueryProviderInterface;
 
 /**
  * Class DoctrineCrudGateway
@@ -49,12 +51,34 @@ class DoctrineCrudGateway
     /**
      * @param $entityClassName
      * @param $parameters
+     * @param QueryProviderInterface $queryProvider
      *
      * @return array|\Traversable
+     * @throws \RuntimeException
      */
-    public function getList($classNameOrEntity, $parameters)
+    public function getList($classNameOrEntity, $parameters, $queryProvider = null)
     {
-        return $this->getRepository($classNameOrEntity)->findAll();
+        if (!$queryProvider) {
+            $repository = $this->getRepository($classNameOrEntity);
+            $queryProvider = new DoctrineProvider($repository);
+        }
+
+        $query = $queryProvider->createQuery($parameters);
+
+        // Return results based on type of object manager
+        switch (true) {
+            case $this->objectManager instanceof \Doctrine\ORM\EntityManager:
+                $list = $query->getResult();
+                break;
+            case $this->objectManager instanceof \Doctrine\ODM\MongoDB\DocumentManager:
+                $list = $query->execute()->toArray();
+                break;
+            default:
+                throw new \RuntimeException('Unsupported type of object-manager.');
+                break;
+        }
+
+        return $list;
     }
 
     /**

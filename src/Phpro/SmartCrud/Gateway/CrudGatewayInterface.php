@@ -8,6 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Gateway;
+use Phpro\SmartCrud\Query\QueryProviderInterface;
 
 /**
  * Class CrudGatewayInterface
@@ -28,10 +29,11 @@ interface CrudGatewayInterface
     /**
      * @param $entity
      * @param $parameters
+     * @param QueryProviderInterface $queryProvider
      *
      * @return array|\Traversable
      */
-    public function getList($entity, $parameters);
+    public function getList($entity, $parameters, $queryProvider = null);
 
     /**
      * @param $entity

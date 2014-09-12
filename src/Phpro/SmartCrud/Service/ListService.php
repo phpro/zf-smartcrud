@@ -11,6 +11,8 @@ namespace Phpro\SmartCrud\Service;
 
 use Phpro\SmartCrud\Event\CrudEvent;
 use Phpro\SmartCrud\Exception\SmartCrudException;
+use Phpro\SmartCrud\Query\QueryProviderAwareInterface;
+use Phpro\SmartCrud\Query\QueryProviderInterface;
 use Zend\Paginator\Paginator;
 
 /**
@@ -19,13 +21,20 @@ use Zend\Paginator\Paginator;
  * @package Phpro\SmartCrud\Service
  */
 class ListService extends AbstractSmartService
-    implements PaginatorFactoryAwareInterface
+    implements
+    PaginatorFactoryAwareInterface,
+    QueryProviderAwareInterface
 {
 
     /**
      * @var PaginatorServiceFactory
      */
     protected $paginatorFactory;
+
+    /**
+     * @var QueryProviderInterface
+     */
+    protected $queryProvider;
 
     /**
      * @param PaginatorServiceFactory $paginatorFactory
@@ -46,6 +55,22 @@ class ListService extends AbstractSmartService
     }
 
     /**
+     * @param \Phpro\SmartCrud\Query\QueryProviderInterface $queryProvider
+     */
+    public function setQueryProvider($queryProvider)
+    {
+        $this->queryProvider = $queryProvider;
+    }
+
+    /**
+     * @return \Phpro\SmartCrud\Query\QueryProviderInterface
+     */
+    public function getQueryProvider()
+    {
+        return $this->queryProvider;
+    }
+
+    /**
      * @param int                $id
      * @param array|\Traversable $data
      *
@@ -59,7 +84,7 @@ class ListService extends AbstractSmartService
         $em->trigger($this->createEvent(CrudEvent::BEFORE_LIST, null));
 
         $gateway = $this->getGateway();
-        $records = $gateway->getList($this->getEntityKey(), $data);
+        $records = $gateway->getList($this->getEntityKey(), $data, $this->getQueryProvider());
         $paginator = $this->getPaginator($records, $data);
 
         $em->trigger($this->createEvent(CrudEvent::AFTER_LIST, null));

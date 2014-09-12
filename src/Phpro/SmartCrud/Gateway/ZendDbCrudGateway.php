@@ -8,6 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Gateway;
+use Phpro\SmartCrud\Query\QueryProviderInterface;
 
 /**
  * Class ZendDbCrudGateway
@@ -31,9 +32,11 @@ class ZendDbCrudGateway implements CrudGatewayInterface
     /***
      * @param $entity
      * @param $parameters
+     * @param QueryProviderInterface $queryProvider
+     *
      * @return array|\Traversable|void
      */
-    public function getList($entity, $parameters)
+    public function getList($entity, $parameters, $queryProvider = null)
     {
         // TODO: Implement getList() method.
     }
