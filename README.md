@@ -22,6 +22,18 @@ that are listed in `composer.json`
 
 ## Documentation
 
+### Configuration
+
+It is possible to configure the smartcrud services on multiple places.
+ e.g. For the list service, the configuration will be merged as followed:
+
+ - phpro-smartcrud-service['default']
+ - phpro-smartcrud-service['default-list']
+ - service_manager['my-custom-smartcrud-service']['default']
+ - service_manager['my-custom-smartcrud-service']['list']
+
+This means it is possible to specify some default configuration and overwrite it for custom services.
+
 ### SmartCrud Configuration
 
 ### Gateways
@@ -52,6 +64,42 @@ Those gateways are being used by the services to load and save the data.
             'listeners' => []
         ),
     ),
+),
+```
+
+##### List Service
+
+The list service has some extra configurable options.
+It is required to specify a paginator and it is optional to add a query provider to filter / sort lists.
+
+**Paginator**
+
+```php
+'phpro-smartcrud-service' => array(
+    'default-list' => array(
+        'options' => array(
+            'paginator' => array(
+                'adapter_class' => '\Zend\Paginator\Adapter\ArrayAdapter',
+                'page_size' => 50,
+                'page_key' => 'page',
+            ),
+        )
+    )
+),
+```
+
+**Query Provider**
+
+A query provider implements the `QueryProviderInterface`.
+It is possible to add your own query provider to a List Service:
+
+```php
+'phpro-smartcrud-service' => array(
+    'default-list' => array(
+        'options' => array(
+            'query-provider' => 'servicemanager.key.my-custom-query-provider',
+        ),
+    )
 ),
 ```
 
