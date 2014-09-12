@@ -4,7 +4,6 @@ namespace spec\Phpro\SmartCrud\Console\Helper;
 
 class ServiceManagerHelperSpec extends AbstractHelperSpec
 {
-
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
      */

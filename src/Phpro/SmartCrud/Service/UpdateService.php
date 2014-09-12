@@ -26,7 +26,6 @@ class UpdateService extends AbstractSmartService
      */
     public function run($id = null, $data = null)
     {
-
         $result = $this->getResult();
         $em = $this->getEventManager();
         $entity = $this->loadEntity($id);
@@ -41,7 +40,6 @@ class UpdateService extends AbstractSmartService
                 $result->setSuccess($this->getGateway()->update($entity, $data));
                 $em->trigger($this->createEvent(CrudEvent::AFTER_UPDATE, $entity));
             } else {
-
                 $em->trigger($this->createEvent(CrudEvent::INVALID_UPDATE, $form));
             }
         }
@@ -50,5 +48,4 @@ class UpdateService extends AbstractSmartService
         $result->setForm($form);
         return $result;
     }
-
 }

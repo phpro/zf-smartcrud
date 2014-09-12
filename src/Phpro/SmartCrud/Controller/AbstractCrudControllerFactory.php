@@ -26,7 +26,6 @@ use Zend\Mvc\Exception;
 class AbstractCrudControllerFactory
     implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
     const FACTORY_NAMESPACE = 'phpro-smartcrud-controller';
 
     const CONFIG_CONTROLLER = 'controller';
@@ -179,7 +178,6 @@ class AbstractCrudControllerFactory
         $this->injectDependencies($controller, $config);
 
         return $controller;
-
     }
 
     /**
@@ -275,5 +273,4 @@ class AbstractCrudControllerFactory
 
         return $this;
     }
-
 }

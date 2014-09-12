@@ -21,5 +21,4 @@ class ModuleListHelperSpec extends AbstractHelperSpec
         $list->shouldBeArray();
         $list[0]->shouldBe('SampleModule');
     }
-
 }

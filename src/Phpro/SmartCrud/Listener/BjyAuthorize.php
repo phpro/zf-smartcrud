@@ -22,7 +22,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class BjyAuthorize extends AbstractListenerAggregate
     implements FactoryInterface
 {
-
     /**
      * Set the priority of the listeners
      */
@@ -149,5 +148,4 @@ class BjyAuthorize extends AbstractListenerAggregate
 
         return $allowed;
     }
-
 }

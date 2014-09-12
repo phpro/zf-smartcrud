@@ -8,6 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Controller;
+
 use Phpro\SmartCrud\Service\SmartServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Phpro\SmartCrud\View\Model\ViewModelBuilder;
@@ -19,7 +20,6 @@ use Zend\View\Model\ModelInterface;
 class CrudController extends AbstractActionController
     implements CrudControllerInterface
 {
-
     /**
      * @var SmartServiceInterface
      */
@@ -126,7 +126,7 @@ class CrudController extends AbstractActionController
     {
         $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
         $result = $this->getSmartService()->run(null, $data);
-        if($this->getRequest()->isPost() && $result->isSuccessFull()) {
+        if ($this->getRequest()->isPost() && $result->isSuccessFull()) {
             return $this->redirect()->toRoute(null, array('action' => 'list'), true);
         }
         return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'create');
@@ -139,7 +139,7 @@ class CrudController extends AbstractActionController
     {
         $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
         $result = $this->getSmartService()->run($this->getEntityId(), $data);
-        if($this->getRequest()->isPost() && $result->isSuccessFull()) {
+        if ($this->getRequest()->isPost() && $result->isSuccessFull()) {
             return $this->redirect()->toRoute(null, array('action' => 'update', $this->getIdentifierName() => $this->getEntityId()), true);
         }
         return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'update');
@@ -161,7 +161,7 @@ class CrudController extends AbstractActionController
     {
         $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
         $result = $this->getSmartService()->run($this->getEntityId(), $data);
-        if($this->getRequest()->isPost() && $result->isSuccessFull()) {
+        if ($this->getRequest()->isPost() && $result->isSuccessFull()) {
             return $this->redirect()->toRoute(null, array('action' => 'list'), true);
         }
         return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'delete');

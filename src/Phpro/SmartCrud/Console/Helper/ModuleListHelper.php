@@ -18,16 +18,15 @@ use Symfony\Component\Console\Helper\Helper;
  */
 class ModuleListHelper extends Helper
 {
-
     /**
      * @return array
      */
     public function getList()
-   {
-       $config = $this->getHelperSet()->get('Config')->getApplicationConfig();
+    {
+        $config = $this->getHelperSet()->get('Config')->getApplicationConfig();
 
-       return isset($config['modules']) ? $config['modules'] : array();
-   }
+        return isset($config['modules']) ? $config['modules'] : array();
+    }
 
     /**
      * Get the canonical name of this helper.

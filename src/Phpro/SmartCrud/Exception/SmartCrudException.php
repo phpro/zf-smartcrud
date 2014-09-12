@@ -16,5 +16,4 @@ namespace Phpro\SmartCrud\Exception;
  */
 class SmartCrudException extends \Exception
 {
-
 }

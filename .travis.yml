@@ -6,6 +6,9 @@ php:
   - 5.5
   - hhvm
 
+before_script:
+  - pecl install -f mongo-1.4.1
+
 matrix:
   allow_failures:
     - php: hhvm

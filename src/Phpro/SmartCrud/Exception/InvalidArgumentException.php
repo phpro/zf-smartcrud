@@ -9,5 +9,4 @@ namespace Phpro\SmartCrud\Exception;
  */
 class InvalidArgumentException extends \InvalidArgumentException
 {
-
 }

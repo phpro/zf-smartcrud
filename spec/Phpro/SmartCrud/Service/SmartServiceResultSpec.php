@@ -18,7 +18,6 @@ use PhpSpec\ObjectBehavior;
  */
 class SmartServiceResultSpec extends ObjectBehavior
 {
-
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Service\SmartServiceResult');

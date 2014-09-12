@@ -27,5 +27,4 @@ class GenerateSpec extends ObjectBehavior
     {
         $this->shouldBeAnInstanceOf('Symfony\Component\Console\Command\Command');
     }
-
 }

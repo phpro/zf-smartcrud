@@ -20,7 +20,6 @@ use Prophecy\Prophet;
  */
 abstract class AbstractSmartServiceSpec extends ObjectBehavior
 {
-
     /**
      * @param array $paramsData
      *
@@ -127,5 +126,4 @@ abstract class AbstractSmartServiceSpec extends ObjectBehavior
         $crudEvent->getTarget()->shouldReturn($entity);
         $crudEvent->getParams()->shouldReturn($this->getParameters());
     }
-
 }

@@ -27,5 +27,4 @@ class ApplicationFactorySpec extends ObjectBehavior
     {
         $this->shouldHaveType('\Zend\ServiceManager\FactoryInterface');
     }
-
 }

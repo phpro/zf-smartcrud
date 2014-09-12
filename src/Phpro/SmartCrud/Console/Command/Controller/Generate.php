@@ -196,7 +196,6 @@ class Generate extends CliCommand
      */
     protected function parseConfig($gateway, $routePrefix, $controller, $entity, $form)
     {
-
         $entitySuffix = ltrim($entity, '\\');
         $serviceKey = 'SmartCrudService\\' . $entitySuffix;
         $controllerKey = 'SmartCrudController\\' . $entitySuffix;
@@ -293,5 +292,4 @@ class Generate extends CliCommand
 
         return $file;
     }
-
 }

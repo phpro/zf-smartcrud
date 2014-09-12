@@ -13,7 +13,6 @@ use Zend\View\Model\JsonModel;
  */
 class ViewModelBuilder
 {
-
     /** @var string  */
     private $template = 'phpro-smartcrud/%s';
 

@@ -16,7 +16,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class FlashMessenger extends AbstractListenerAggregate
     implements FactoryInterface
 {
-
     /**
      * Set the priority of the listeners
      */
@@ -111,5 +110,4 @@ class FlashMessenger extends AbstractListenerAggregate
     {
         $this->getFlashMessenger()->addErrorMessage('Could not delete the record.');
     }
-
 }

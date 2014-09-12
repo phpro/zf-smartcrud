@@ -61,7 +61,6 @@ class ParametersServiceSpec extends ObjectBehavior
         $this->mockServiceLocator($serviceLocator, $request, $controller, $params);
         $this->createService($serviceLocator)->shouldReturn($this);
         $controller->plugin('params')->shouldBeCalled();
-
     }
 
     /**
@@ -164,5 +163,4 @@ class ParametersServiceSpec extends ObjectBehavior
         $this->fromRoute('key', 'default');
         $params->fromRoute('key', 'default')->shouldBeCalled();
     }
-
 }

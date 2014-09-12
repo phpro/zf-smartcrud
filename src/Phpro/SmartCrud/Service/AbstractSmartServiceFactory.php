@@ -2,6 +2,7 @@
 
 namespace Phpro\SmartCrud\Service;
 
+use Phpro\SmartCrud\Query\QueryProviderAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
@@ -15,7 +16,6 @@ use Zend\Stdlib\ArrayObject;
 class AbstractSmartServiceFactory
     implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
-
     /**
      * The config key in the service manager
      */
@@ -93,7 +93,7 @@ class AbstractSmartServiceFactory
 
         $defaultConfiguration = $this::getDefaultConfiguration();
 
-        $result = array_merge(
+        $result = array_replace_recursive(
             $defaultConfiguration[$this::CONFIG_DEFAULT],
             isset($defaultConfiguration[$action]) ? $defaultConfiguration[$action] : array(),
             isset($smartCrudConfig[$this::CONFIG_DEFAULT]) ? $smartCrudConfig[$this::CONFIG_DEFAULT] : array(),
@@ -134,7 +134,6 @@ class AbstractSmartServiceFactory
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-
         $this->setServiceLocator($serviceLocator);
         $serviceAndAction = explode('::',$requestedName);
 
@@ -165,7 +164,8 @@ class AbstractSmartServiceFactory
             ->injectForm($smartCrudService, $config)
             ->injectListeners($smartCrudService, $config)
             ->injectOptions($smartCrudService, $config)
-            ->injectPaginatorFactory($smartCrudService, $config);
+            ->injectPaginatorFactory($smartCrudService, $config)
+            ->injectQueryProvider($smartCrudService, $config);
 
         return $this;
     }
@@ -293,6 +293,32 @@ class AbstractSmartServiceFactory
     }
 
     /**
+     * @param SmartServiceInterface $smartServiceInterface
+     * @param ArrayObject           $config
+     *
+     * @return $this
+     */
+    private function injectQueryProvider(SmartServiceInterface $smartServiceInterface, ArrayObject $config)
+    {
+        if (!($smartServiceInterface instanceof QueryProviderAwareInterface)) {
+            return $this;
+        }
+
+        if ($config->offsetExists($this::CONFIG_OPTIONS) && count($config[$this::CONFIG_OPTIONS]) < 1) {
+            return $this;
+        }
+
+        $options = $config[$this::CONFIG_OPTIONS];
+        if (!isset($options['query-provider'])) {
+            return $this;
+        }
+
+        $queryProvider = $this->getServiceLocator()->get($options['query-provider']);
+        $smartServiceInterface->setQueryProvider($queryProvider);
+        return $this;
+    }
+
+    /**
      * @param ServiceLocatorInterface $serviceLocator
      *
      * @return $this
@@ -311,5 +337,4 @@ class AbstractSmartServiceFactory
     {
         return $this->serviceLocator;
     }
-
 }

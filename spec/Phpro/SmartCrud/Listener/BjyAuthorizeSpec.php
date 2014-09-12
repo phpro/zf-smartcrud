@@ -10,7 +10,6 @@ use Prophecy\Prophet;
 
 class BjyAuthorizeSpec extends ObjectBehavior
 {
-
     /**
      * @param \BjyAuthorize\Service\Authorize $authorizeService
      */

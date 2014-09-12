@@ -27,5 +27,4 @@ class ZendDbCrudGatewaySpec extends ObjectBehavior
     {
         $this->shouldBeAnInstanceOf('Phpro\SmartCrud\Gateway\CrudGatewayInterface');
     }
-
 }

@@ -10,7 +10,6 @@ namespace Phpro\SmartCrud\Service;
 
 interface SmartServiceInterface
 {
-
     /**
      * @param int                $id
      * @param array|\Traversable $data
@@ -51,5 +50,4 @@ interface SmartServiceInterface
      * @return \Zend\EventManager\EventManager
      */
     public function getEventManager();
-
 }

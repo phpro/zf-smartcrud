@@ -39,5 +39,4 @@ class ConfigHelperSpec extends AbstractHelperSpec
         $this->mockApplicationConfig('ApplicationConfig', $config);
         $this->getApplicationConfig()->shouldBe($config);
     }
-
 }

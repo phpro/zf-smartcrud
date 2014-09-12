@@ -7,7 +7,6 @@ use Prophecy\Argument;
 
 class ModuleSpec extends ObjectBehavior
 {
-
     public function it_is_initializable()
     {
         $this->shouldHaveType('Phpro\SmartCrud\Module');
@@ -71,5 +70,4 @@ class ModuleSpec extends ObjectBehavior
         $cli->addCommands(Argument::type('array'))->shouldBeCalled();
         $helperSet->set(Argument::cetera())->shouldBeCalled();
     }
-
 }

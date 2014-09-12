@@ -131,5 +131,4 @@ class ParametersService implements FactoryInterface
     {
         return $this->proxyToPlugin('fromRoute', array($name, $default));
     }
-
 }

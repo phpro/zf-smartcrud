@@ -8,6 +8,7 @@
  */
 
 namespace Phpro\SmartCrud\Controller;
+
 use Phpro\SmartCrud\Service\SmartServiceInterface;
 use Phpro\SmartCrud\View\Model\ViewModelBuilder;
 /**
@@ -17,7 +18,6 @@ use Phpro\SmartCrud\View\Model\ViewModelBuilder;
  */
 interface CrudControllerInterface
 {
-
     /**
      * @param string $name
      *

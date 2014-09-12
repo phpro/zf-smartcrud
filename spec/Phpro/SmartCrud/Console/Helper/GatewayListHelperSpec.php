@@ -40,5 +40,4 @@ class GatewayListHelperSpec extends AbstractHelperSpec
         );
         $this->getDefault()->shouldBe('default.key');
     }
-
 }

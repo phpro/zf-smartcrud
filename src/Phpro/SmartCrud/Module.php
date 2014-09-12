@@ -22,9 +22,7 @@ class Module implements
     AutoloaderProviderInterface,
     BootstrapListenerInterface,
     ConfigProviderInterface
-
 {
-
     /**
      * @inheritdoc
      */
@@ -81,5 +79,4 @@ class Module implements
         $helperSet->set(new \Phpro\SmartCrud\Console\Helper\GatewayListHelper());
         $helperSet->set(new \Phpro\SmartCrud\Console\Helper\ModuleListHelper());
     }
-
 }

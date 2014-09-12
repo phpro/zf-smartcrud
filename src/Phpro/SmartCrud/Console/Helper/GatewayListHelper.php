@@ -20,7 +20,6 @@ use Phpro\SmartCrud\Gateway\AbstractGatewayFactory;
  */
 class GatewayListHelper extends Helper
 {
-
     /**
      * @return string
      */
