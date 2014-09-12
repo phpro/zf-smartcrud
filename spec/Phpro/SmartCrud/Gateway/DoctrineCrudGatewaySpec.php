@@ -36,7 +36,7 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager Make sure to use the wrapped / revealed object
+     * @param \Doctrine\ORM\EntityManager $objectManager Make sure to use the wrapped / revealed object
      */
     public function let($objectManager)
     {
@@ -87,13 +87,16 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
      * @param \Doctrine\Common\Persistence\ObjectManager    $objectManager
      * @param \Doctrine\Common\Persistence\ObjectRepository $repository
      * @param \stdClass                                     $entity
+     * @param \Phpro\SmartCrud\Query\QueryProviderInterface $queryProvider
+     * @param \Doctrine\ORM\AbstractQuery $query
      */
-    public function it_should_generate_list($objectManager, $repository, $entity)
+    public function it_should_generate_list($objectManager, $repository, $entity, $queryProvider, $query)
     {
         $objectManager->getRepository(Argument::type('string'))->willReturn($repository);
+        $queryProvider->createQuery(array())->willReturn($query);
+        $query->getResult()->willReturn(array());
 
-        $this->getList($entity, array());
-        $repository->findAll()->shouldBeCalled();
+        $this->getList($entity, array(), $queryProvider)->shouldReturn(array());
     }
 
     /**
