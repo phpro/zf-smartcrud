@@ -78,7 +78,7 @@ class DoctrineCrudGateway
         if ($omType === $this::TYPE_ODM) {
             return $query->execute()->toArray();
         }
-        return [];
+        return array();
     }
 
     /**
