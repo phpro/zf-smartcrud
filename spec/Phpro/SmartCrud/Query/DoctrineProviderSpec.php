@@ -32,7 +32,7 @@ class DoctrineProviderSpec extends ObjectBehavior
      */
     public function it_should_create_a_list($repository, $queryBuilder, $query)
     {
-        $repository->createQueryBuilder()->willReturn($queryBuilder);
+        $repository->createQueryBuilder('obj')->willReturn($queryBuilder);
         $queryBuilder->getQuery()->willReturn($query);
 
         $this->createQuery(array())->shouldReturn($query);

@@ -30,7 +30,7 @@ class DoctrineProvider implements QueryProviderInterface
      */
     public function createQuery($data)
     {
-        $qb = $this->repository->createQueryBuilder();
+        $qb = $this->repository->createQueryBuilder('obj');
         $query = $qb->getQuery();
         return $query;
     }
