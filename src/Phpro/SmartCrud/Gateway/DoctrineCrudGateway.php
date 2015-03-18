@@ -193,7 +193,7 @@ class DoctrineCrudGateway
         }
 
         if ($this->objectManager instanceof \Doctrine\ODM\MongoDB\DocumentManager) {
-            return $this::TYPE_ORM;
+            return $this::TYPE_ODM;
         }
 
         throw new \RuntimeException('Unsupported type of object-manager.');
