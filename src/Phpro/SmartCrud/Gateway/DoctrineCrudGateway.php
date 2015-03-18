@@ -61,7 +61,6 @@ class DoctrineCrudGateway
      */
     public function getList($classNameOrEntity, $parameters, $queryProvider = null)
     {
-
         $omType = $this->getObjectManagerType();
 
         if (!$queryProvider) {
@@ -189,7 +188,6 @@ class DoctrineCrudGateway
      */
     protected function getObjectManagerType()
     {
-
         if ($this->objectManager instanceof \Doctrine\ORM\EntityManager) {
             return $this::TYPE_ORM;
         }
@@ -199,6 +197,5 @@ class DoctrineCrudGateway
         }
 
         throw new \RuntimeException('Unsupported type of object-manager.');
-
     }
 }

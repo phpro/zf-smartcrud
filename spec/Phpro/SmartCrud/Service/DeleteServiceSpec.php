@@ -45,7 +45,7 @@ class DeleteServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setForm($form);
 
-        $this->run(null,$this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
+        $this->run(null, $this->getMockPostData())->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
         ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldNotBeCalled();
@@ -74,7 +74,7 @@ class DeleteServiceSpec extends AbstractSmartServiceSpec
         $this->setResult($result);
         $this->setForm($form);
 
-        $this->run(null,$this->getMockPostData())->shouldReturn($result);
+        $this->run(null, $this->getMockPostData())->shouldReturn($result);
         ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_DELETE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DELETE))->shouldBeCalled();

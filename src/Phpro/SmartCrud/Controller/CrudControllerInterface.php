@@ -11,6 +11,7 @@ namespace Phpro\SmartCrud\Controller;
 
 use Phpro\SmartCrud\Service\SmartServiceInterface;
 use Phpro\SmartCrud\View\Model\ViewModelBuilder;
+
 /**
  * Class CrudControllerInterface
  *
