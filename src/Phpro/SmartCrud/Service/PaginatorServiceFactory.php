@@ -39,7 +39,7 @@ class PaginatorServiceFactory
     {
         $options = array_merge($this->getDefaultConfiguration(), $options);
 
-        if (!$options[self::CONFIG_ADAPTER_CLASS] ) {
+        if (!$options[self::CONFIG_ADAPTER_CLASS]) {
             throw new InvalidArgumentException('No paginator adapter class configured.');
         }
 

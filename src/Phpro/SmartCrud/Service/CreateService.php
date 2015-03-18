@@ -36,9 +36,9 @@ class CreateService extends AbstractSmartService
             $form->setData($data);
             $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, array('postData' => $data)));
             if ($form->isValid()) {
-                $em->trigger($this->createEvent(CrudEvent::BEFORE_CREATE, $entity));
+                $em->trigger($this->createEvent(CrudEvent::BEFORE_CREATE, $entity, $data));
                 $result->setSuccess($this->getGateway()->create($entity, $data));
-                $em->trigger($this->createEvent(CrudEvent::AFTER_CREATE, $entity));
+                $em->trigger($this->createEvent(CrudEvent::AFTER_CREATE, $entity, $data));
             } else {
                 $em->trigger($this->createEvent(CrudEvent::INVALID_CREATE, $form));
             }

@@ -71,7 +71,7 @@ class CrudControllerSpec extends ObjectBehavior
         $action = 'create';
         $smartResult->isSuccessFull()->shouldNotBeCalled();
         $smartService->run(Argument::any(), Argument::any())->willReturn($smartResult);
-        $this->mockGet($request, $mvcEvent, $params,$smartResult, $smartService, $action, $viewModelBuilder);
+        $this->mockGet($request, $mvcEvent, $params, $smartResult, $smartService, $action, $viewModelBuilder);
     }
 
     /**
@@ -88,7 +88,7 @@ class CrudControllerSpec extends ObjectBehavior
         $postParameters = array('property' => 'value');
         $action = 'create';
         $smartResult->isSuccessFull()->shouldBeCalled()->willReturn(true);
-        $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn($smartResult);
+        $smartService->run(null, Argument::exact($postParameters))->shouldBeCalled()->willReturn($smartResult);
         $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
         $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'list')), true)->shouldBeCalled();
         $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'list'), true)->willReturn('mockRedirect');
@@ -109,7 +109,7 @@ class CrudControllerSpec extends ObjectBehavior
         $action = 'list';
         $smartResult->isSuccessFull()->shouldNotBeCalled();
         $smartService->run(Argument::any(), Argument::any())->willReturn($smartResult);
-        $this->mockGet($request, $mvcEvent, $params,$smartResult, $smartService, $action, $viewModelBuilder);
+        $this->mockGet($request, $mvcEvent, $params, $smartResult, $smartService, $action, $viewModelBuilder);
     }
 
     /**
@@ -125,7 +125,7 @@ class CrudControllerSpec extends ObjectBehavior
         $action = 'read';
         $smartResult->isSuccessFull()->shouldNotBeCalled();
         $smartService->run(Argument::any(), Argument::any())->willReturn($smartResult);
-        $this->mockGet($request, $mvcEvent, $params,$smartResult, $smartService, $action, $viewModelBuilder);
+        $this->mockGet($request, $mvcEvent, $params, $smartResult, $smartService, $action, $viewModelBuilder);
     }
 
     /**
@@ -141,7 +141,7 @@ class CrudControllerSpec extends ObjectBehavior
         $postParameters = array('property' => 'value');
         $action = 'create';
         $smartResult->isSuccessFull()->shouldBeCalled()->willReturn(false);
-        $smartService->run(null,Argument::exact($postParameters))->shouldBeCalled()->willReturn($smartResult);
+        $smartService->run(null, Argument::exact($postParameters))->shouldBeCalled()->willReturn($smartResult);
         $this->mockInvalidPost($request, $mvcEvent, $smartResult, $smartService, $params, $action, $postParameters, $viewModelBuilder);
     }
 
@@ -158,7 +158,7 @@ class CrudControllerSpec extends ObjectBehavior
         $action = 'update';
         $smartResult->isSuccessFull()->shouldNotBeCalled();
         $smartService->run(Argument::any(), Argument::any())->willReturn($smartResult);
-        $this->mockGet($request, $mvcEvent, $params,$smartResult, $smartService, $action, $viewModelBuilder);
+        $this->mockGet($request, $mvcEvent, $params, $smartResult, $smartService, $action, $viewModelBuilder);
     }
 
     /**
@@ -174,7 +174,7 @@ class CrudControllerSpec extends ObjectBehavior
         $postParameters = array('property' => 'value');
         $action = 'update';
         $smartResult->isSuccessFull()->shouldBeCalled()->willReturn(false);
-        $smartService->run(Argument::any(),Argument::any())->shouldBeCalled()->willReturn($smartResult);
+        $smartService->run(Argument::any(), Argument::any())->shouldBeCalled()->willReturn($smartResult);
         $this->mockInvalidPost($request, $mvcEvent, $smartResult, $smartService, $params, $action, $postParameters, $viewModelBuilder);
     }
 
@@ -215,7 +215,7 @@ class CrudControllerSpec extends ObjectBehavior
         $action = 'delete';
         $smartResult->isSuccessFull()->shouldNotBeCalled();
         $smartService->run(Argument::any(), Argument::any())->willReturn($smartResult);
-        $this->mockGet($request, $mvcEvent, $params,$smartResult, $smartService, $action, $viewModelBuilder);
+        $this->mockGet($request, $mvcEvent, $params, $smartResult, $smartService, $action, $viewModelBuilder);
     }
 
     /**
@@ -256,7 +256,7 @@ class CrudControllerSpec extends ObjectBehavior
         $postParameters = array('property' => 'value');
         $action = 'delete';
         $smartResult->isSuccessFull()->shouldBeCalled()->willReturn(false);
-        $smartService->run(Argument::any(),Argument::any())->shouldBeCalled()->willReturn($smartResult);
+        $smartService->run(Argument::any(), Argument::any())->shouldBeCalled()->willReturn($smartResult);
         $this->mockInvalidPost($request, $mvcEvent, $smartResult, $smartService, $params, $action, $postParameters, $viewModelBuilder);
     }
 

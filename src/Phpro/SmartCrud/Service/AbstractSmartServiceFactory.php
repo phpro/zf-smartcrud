@@ -115,7 +115,7 @@ class AbstractSmartServiceFactory
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $this->setServiceLocator($serviceLocator);
-        $serviceAndAction = explode('::',$requestedName);
+        $serviceAndAction = explode('::', $requestedName);
 
         if (count($serviceAndAction) != 2) {
             return false;
@@ -135,7 +135,7 @@ class AbstractSmartServiceFactory
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $this->setServiceLocator($serviceLocator);
-        $serviceAndAction = explode('::',$requestedName);
+        $serviceAndAction = explode('::', $requestedName);
 
         if (count($serviceAndAction) != 2) {
             return false;
@@ -154,10 +154,10 @@ class AbstractSmartServiceFactory
      *
      * @return $this
      */
-    private function injectDependencies(SmartServiceInterface $smartCrudService,ArrayObject $config)
+    private function injectDependencies(SmartServiceInterface $smartCrudService, ArrayObject $config)
     {
         $this
-            ->injectEntityClass($smartCrudService,$config)
+            ->injectEntityClass($smartCrudService, $config)
             // TODO: Parameter services can not be injected at this point because we would get into an infinite loop
             //->injectParameterService($smartCrudService, $config)
             ->injectGateway($smartCrudService, $config)
@@ -227,7 +227,7 @@ class AbstractSmartServiceFactory
      *
      * @return $this
      */
-    private function injectGateway(SmartServiceInterface $smartCrudService,ArrayObject $config)
+    private function injectGateway(SmartServiceInterface $smartCrudService, ArrayObject $config)
     {
         if (!$config->offsetExists($this::CONFIG_GATEWAY_KEY)) {
             return $this;
@@ -245,7 +245,7 @@ class AbstractSmartServiceFactory
      *
      * @return $this
      */
-    private function injectListeners(SmartServiceInterface $smartCrudService,ArrayObject $config)
+    private function injectListeners(SmartServiceInterface $smartCrudService, ArrayObject $config)
     {
         if ($config->offsetExists($this::CONFIG_LISTENERS_KEY) && count($config[$this::CONFIG_LISTENERS_KEY]) < 1) {
             return $this;
@@ -265,7 +265,7 @@ class AbstractSmartServiceFactory
      *
      * @return $this
      */
-    private function injectOptions(SmartServiceInterface $smartCrudService,ArrayObject $config)
+    private function injectOptions(SmartServiceInterface $smartCrudService, ArrayObject $config)
     {
         if ($config->offsetExists($this::CONFIG_OPTIONS) && count($config[$this::CONFIG_OPTIONS]) < 1) {
             return $this;

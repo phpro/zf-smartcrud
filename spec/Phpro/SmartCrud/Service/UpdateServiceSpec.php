@@ -53,7 +53,7 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
         $this->setGateway($gateway);
         $this->setForm($form);
 
-        $this->run($entity->id,null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
+        $this->run($entity->id, null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
         ;
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldNotBeCalled();
@@ -67,7 +67,7 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
      * @param \Zend\Form\Form                               $form
      * @param \Phpro\SmartCrud\Service\SmartServiceResult   $result
      */
-    public function it_should_handle_invalid_data($gateway, $eventManager,$form, $result)
+    public function it_should_handle_invalid_data($gateway, $eventManager, $form, $result)
     {
         $entity = new \StdClass();
         $entity->id = 1;
@@ -129,7 +129,7 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
         $this->setForm($form);
         $this->setResult($result);
 
-        $this->run($entity->id,$this->getMockPostData())->shouldReturn($result);
+        $this->run($entity->id, $this->getMockPostData())->shouldReturn($result);
 
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldNotBeCalled();

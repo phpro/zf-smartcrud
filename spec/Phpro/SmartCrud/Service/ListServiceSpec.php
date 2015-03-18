@@ -23,13 +23,11 @@ class ListServiceSpec extends AbstractSmartServiceSpec
      * @param \Phpro\SmartCrud\Gateway\CrudGatewayInterface $gateway
      * @param \Zend\EventManager\EventManager               $eventManager
      * @param \Zend\Form\Form                               $form
-     * @param \Phpro\SmartCrud\Query\QueryProviderInterface $queryProvider
      */
-    public function let($gateway, $eventManager, $entity, $queryProvider)
+    public function let($gateway, $eventManager, $entity)
     {
         parent::let($gateway, $eventManager, $entity);
 
-        $this->setQueryProvider($queryProvider);
         $this->setOptions(array(
             'paginator' => array(),
         ));
@@ -85,6 +83,9 @@ class ListServiceSpec extends AbstractSmartServiceSpec
     {
         $getData = array();
         $list = array();
+
+        $this->setQueryProvider($queryProvider);
+
         $gateway->getList('entityKey', $getData, $queryProvider)->willReturn($list);
 
         $paginatorFactory->createPaginator($list, Argument::cetera())->willReturn($paginator);

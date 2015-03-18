@@ -18,11 +18,18 @@ class DoctrineProvider implements QueryProviderInterface
     protected $repository;
 
     /**
-     * @param $repository
+     * @var mixed
      */
-    public function __construct($repository)
+    protected $alias;
+
+    /**
+     * @param $repository
+     * @param $alias
+     */
+    public function __construct($repository, $alias = null)
     {
         $this->repository = $repository;
+        $this->alias = $alias;
     }
 
     /**
@@ -30,7 +37,7 @@ class DoctrineProvider implements QueryProviderInterface
      */
     public function createQuery($data)
     {
-        $qb = $this->repository->createQueryBuilder();
+        $qb = $this->repository->createQueryBuilder($this->alias);
         $query = $qb->getQuery();
         return $query;
     }
