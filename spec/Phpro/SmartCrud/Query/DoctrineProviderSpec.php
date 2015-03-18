@@ -12,7 +12,7 @@ class DoctrineProviderSpec extends ObjectBehavior
      */
     public function let($repository)
     {
-        $this->beConstructedWith($repository);
+        $this->beConstructedWith($repository, 'e');
     }
 
     public function it_is_initializable()
@@ -32,7 +32,7 @@ class DoctrineProviderSpec extends ObjectBehavior
      */
     public function it_should_create_a_list($repository, $queryBuilder, $query)
     {
-        $repository->createQueryBuilder('obj')->willReturn($queryBuilder);
+        $repository->createQueryBuilder('e')->willReturn($queryBuilder);
         $queryBuilder->getQuery()->willReturn($query);
 
         $this->createQuery(array())->shouldReturn($query);

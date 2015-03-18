@@ -24,6 +24,10 @@ use Phpro\SmartCrud\Query\QueryProviderInterface;
 class DoctrineCrudGateway
     implements ObjectManagerAwareInterface, CrudGatewayInterface
 {
+
+    const TYPE_ORM = 'ORM';
+    const TYPE_ODM = 'ODM';
+
     /**
      * @var ObjectManager
      */
@@ -57,27 +61,25 @@ class DoctrineCrudGateway
      */
     public function getList($classNameOrEntity, $parameters, $queryProvider = null)
     {
+
+        $omType = $this->getObjectManagerType();
+
         if (!$queryProvider) {
             $repository = $this->getRepository($classNameOrEntity);
-            $queryProvider = new DoctrineProvider($repository);
+            $alias = ($omType === $this::TYPE_ORM) ? 'e' : null;
+            $queryProvider = new DoctrineProvider($repository, $alias);
         }
 
         $query = $queryProvider->createQuery($parameters);
 
         // Return results based on type of object manager
-        switch (true) {
-            case $this->objectManager instanceof \Doctrine\ORM\EntityManager:
-                $list = $query->getResult();
-                break;
-            case $this->objectManager instanceof \Doctrine\ODM\MongoDB\DocumentManager:
-                $list = $query->execute()->toArray();
-                break;
-            default:
-                throw new \RuntimeException('Unsupported type of object-manager.');
-                break;
+        if ($omType === $this::TYPE_ORM) {
+            return $query->getResult();
         }
-
-        return $list;
+        if ($omType === $this::TYPE_ODM) {
+            return $query->execute()->toArray();
+        }
+        return [];
     }
 
     /**
@@ -179,5 +181,24 @@ class DoctrineCrudGateway
         $className = is_string($classNameOrEntity) ? $classNameOrEntity : get_class($classNameOrEntity);
 
         return $this->getObjectManager()->getRepository($className);
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getObjectManagerType()
+    {
+
+        if ($this->objectManager instanceof \Doctrine\ORM\EntityManager) {
+            return $this::TYPE_ORM;
+        }
+
+        if ($this->objectManager instanceof \Doctrine\ODM\MongoDB\DocumentManager) {
+            return $this::TYPE_ORM;
+        }
+
+        throw new \RuntimeException('Unsupported type of object-manager.');
+
     }
 }
