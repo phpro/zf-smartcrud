@@ -131,8 +131,16 @@ CrudEvent::FORM_READY
 
 #### Controllers
 
+It is possible to specify some default controller configuration and overwrite it for custom controllers.
+The configuration will be merged as followed:
+ - phpro-smartcrud-controller['default']
+ - phpro-smartcrud-controller['my-custom-smartcrud-controller']
+
 ```php
 'phpro-smartcrud-controller' => array(
+    'default' => array(
+        'view-builder' => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
+    )
     'SmartCrudControllerKey' => array(
         'controller' => 'Phpro\SmartCrud\Controller\CrudController',
         'identifier-name' => 'identifier',

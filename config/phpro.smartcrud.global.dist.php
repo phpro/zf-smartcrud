@@ -64,6 +64,9 @@ array(
  *
 array(
     AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
+        'default' => array(
+            AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'App\View\CustomViewModelBuilder',
+        ),
         $controllerKey => array(
             AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'Phpro\SmartCrud\\Controller\\CrudController',
             AbstractCrudControllerFactory::CONFIG_IDENTIFIER => 'id',
