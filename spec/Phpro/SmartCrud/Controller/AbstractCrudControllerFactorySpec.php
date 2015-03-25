@@ -128,7 +128,6 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
      */
     public function it_should_load_correct_configuration($serviceLocator)
     {
-
         $config = array(
             AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
               AbstractCrudControllerFactory::CONFIG_DEFAULT => array(
@@ -148,9 +147,9 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
                 AbstractCrudControllerFactory::CONFIG_SMART_SERVICE => 'Phpro\SmartCrud\Service\AbstractSmartService',
                 AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'custom-view-builder',
                 AbstractCrudControllerFactory::CONFIG_VIEW_PATH => 'phpro-smartcrud',
+
             )
         );
-
     }
 
     /**
