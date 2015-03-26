@@ -59,13 +59,14 @@ array(
     ),
 );
 */
+
 /*
- * Sample crucontroller configuration
+ * Sample crudontroller configuration
  *
 array(
     AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
         'default' => array(
-            AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'App\View\CustomViewModelBuilder',
+            AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
         ),
         $controllerKey => array(
             AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'Phpro\SmartCrud\\Controller\\CrudController',
@@ -74,4 +75,4 @@ array(
         ),
     ),
 ),
- */
+*/
