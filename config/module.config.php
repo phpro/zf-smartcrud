@@ -10,8 +10,8 @@ return array(
             'Phpro\SmartCrud\Console\Application'          => 'Phpro\SmartCrud\Console\ApplicationFactory',
 
             // Listeners
-            'PhproSmartCrud\Listener\BjyAuthorize'     => 'PhproSmartCrud\Listener\BjyAuthorize',
-            'PhproSmartCrud\Listener\FlashMessenger'   => 'PhproSmartCrud\Listener\FlashMessenger',
+            'Phpro\SmartCrud\Listener\BjyAuthorize'     => 'Phpro\SmartCrud\Listener\BjyAuthorize',
+            'Phpro\SmartCrud\Listener\FlashMessenger'   => 'Phpro\SmartCrud\Listener\FlashMessenger',
         ),
         'invokables' => array(
 
