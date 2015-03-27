@@ -27,6 +27,7 @@ class AbstractCrudControllerFactory
     implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
     const FACTORY_NAMESPACE = 'phpro-smartcrud-controller';
+    const CONFIG_DEFAULT = 'default';
 
     const CONFIG_CONTROLLER = 'controller';
     const CONFIG_IDENTIFIER = 'identifier-name';
@@ -62,6 +63,22 @@ class AbstractCrudControllerFactory
             self::CONFIG_VIEW_MODEL_BUILDER => 'Phpro\SmartCrud\View\Model\ViewModelBuilder',
             self::CONFIG_VIEW_PATH => 'phpro-smartcrud',
         );
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        $serviceLocator = $this->getServiceLocator();
+        $config = $serviceLocator->get('Config');
+        $smartCrudConfig = null;
+        if (!isset($config[self::FACTORY_NAMESPACE][self::CONFIG_DEFAULT])) {
+            return $this::getDefaultConfiguration();
+        }
+
+        return array_merge($this::getDefaultConfiguration(), $config[self::FACTORY_NAMESPACE][self::CONFIG_DEFAULT]);
     }
 
     /**
@@ -170,10 +187,12 @@ class AbstractCrudControllerFactory
     {
         $this->setControllerManager($controllers);
         $this->setServiceLocator($controllers->getServiceLocator());
+
         $serviceLocator = $this->getServiceLocator();
-        $config   = $serviceLocator->get('Config');
-        $config   = $config[self::FACTORY_NAMESPACE][$requestedName];
-        $config     = array_merge($this->getDefaultConfiguration(), $config);
+        $config = $serviceLocator->get('Config');
+        $config = $config[self::FACTORY_NAMESPACE][$requestedName];
+        $config = array_merge($this->getConfig(), $config);
+
         $controller = $this->createController($config[self::CONFIG_CONTROLLER]);
         $this->injectDependencies($controller, $config);
 

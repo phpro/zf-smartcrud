@@ -122,6 +122,36 @@ class AbstractCrudControllerFactorySpec extends ObjectBehavior
         $config[AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER]->shouldBeString();
     }
 
+
+    /**
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     */
+    public function it_should_load_correct_configuration($serviceLocator)
+    {
+        $config = array(
+            AbstractCrudControllerFactory::FACTORY_NAMESPACE => array(
+              AbstractCrudControllerFactory::CONFIG_DEFAULT => array(
+                  AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'custom-controller',
+                  AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'custom-view-builder',
+              )
+            ),
+        );
+        $this->setServiceLocator($serviceLocator);
+
+        $serviceLocator->get('Config')->willReturn($config);
+
+        $this->getConfig()->shouldReturn(
+            array(
+                AbstractCrudControllerFactory::CONFIG_CONTROLLER => 'custom-controller',
+                AbstractCrudControllerFactory::CONFIG_IDENTIFIER => 'id',
+                AbstractCrudControllerFactory::CONFIG_SMART_SERVICE => 'Phpro\SmartCrud\Service\AbstractSmartService',
+                AbstractCrudControllerFactory::CONFIG_VIEW_MODEL_BUILDER => 'custom-view-builder',
+                AbstractCrudControllerFactory::CONFIG_VIEW_PATH => 'phpro-smartcrud',
+
+            )
+        );
+    }
+
     /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
