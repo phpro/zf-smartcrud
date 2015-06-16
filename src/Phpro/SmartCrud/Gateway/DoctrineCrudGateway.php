@@ -24,7 +24,6 @@ use Phpro\SmartCrud\Query\QueryProviderInterface;
 class DoctrineCrudGateway
     implements ObjectManagerAwareInterface, CrudGatewayInterface
 {
-
     const TYPE_ORM = 'ORM';
     const TYPE_ODM = 'ODM';
 
@@ -133,8 +132,8 @@ class DoctrineCrudGateway
     /**
      * @param $entity
      * @param $id
-     *
      * @return bool
+     * @throws \Exception
      */
     public function delete($entity, $id)
     {
