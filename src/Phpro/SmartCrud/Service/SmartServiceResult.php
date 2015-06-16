@@ -32,6 +32,11 @@ class SmartServiceResult
     private $list = array();
 
     /**
+     * @var array
+     */
+    private $messages = array();
+
+    /**
      * @param mixed|null $form
      */
     public function setForm($form)
@@ -108,5 +113,33 @@ class SmartServiceResult
     public function isSuccessFull()
     {
         return $this->success;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
+     * @param $message
+     * @return $this
+     */
+    public function addMessage($message)
+    {
+        $this->messages[] = $message;
+        return $this;
+    }
+
+    /**
+     * @param array $messages
+     * @return $this
+     */
+    public function setMessages($messages)
+    {
+        $this->messages = $messages;
+        return $this;
     }
 }

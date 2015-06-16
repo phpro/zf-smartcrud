@@ -176,7 +176,6 @@ class DoctrineCrudGatewaySpec extends ObjectBehavior
     public function it_should_not_delete_invalid_entity($objectManager, $entity)
     {
         $objectManager->flush()->willThrow('\Exception');
-
-        $this->delete($entity, array())->shouldReturn(false);
+        $this->shouldThrow('\Exception')->duringDelete($entity, array());
     }
 }

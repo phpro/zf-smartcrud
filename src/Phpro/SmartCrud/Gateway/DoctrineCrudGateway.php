@@ -143,7 +143,7 @@ class DoctrineCrudGateway
             $em->remove($entity);
             $em->flush();
         } catch (\Exception $e) {
-            return false;
+            throw new \Exception($e->getMessage());
         }
 
         return true;
