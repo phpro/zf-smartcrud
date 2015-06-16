@@ -56,6 +56,6 @@ class SmartServiceResultSpec extends ObjectBehavior
         $messages = array('msg1');
         $this->setMessages($messages)->shouldReturn($this);
         $this->addMessage('msg2')->shouldReturn($this);
-        $this->getMessages()->shouldReturn(['msg1', 'msg2']);
+        $this->getMessages()->shouldReturn(array('msg1', 'msg2'));
     }
 }
