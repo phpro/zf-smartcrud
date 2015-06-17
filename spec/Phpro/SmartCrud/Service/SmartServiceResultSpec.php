@@ -50,4 +50,12 @@ class SmartServiceResultSpec extends ObjectBehavior
         $this->setList($list)->shouldReturn($this);
         $this->getList()->shouldReturn($list);
     }
+
+    public function it_should_have_messages()
+    {
+        $messages = array('msg1');
+        $this->setMessages($messages)->shouldReturn($this);
+        $this->addMessage('msg2')->shouldReturn($this);
+        $this->getMessages()->shouldReturn(array('msg1', 'msg2'));
+    }
 }

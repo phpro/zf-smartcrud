@@ -39,10 +39,16 @@ class DeleteService extends AbstractSmartService
         }
 
         $em->trigger($this->createEvent(CrudEvent::BEFORE_DELETE, $entity));
-        $deleted = $this->getGateway()->delete($entity, $data);
+        try {
+            $deleted = $this->getGateway()->delete($entity, $data);
+            $result->setSuccess($deleted);
+        } catch (\Exception $exception) {
+            $result->setSuccess(false);
+            $result->addMessage($exception->getMessage());
+            return $result;
+        }
         $em->trigger($this->createEvent(CrudEvent::AFTER_DELETE, $entity));
 
-        $result->setSuccess($deleted);
         return $result;
     }
 }
