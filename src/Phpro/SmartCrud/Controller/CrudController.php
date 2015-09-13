@@ -159,9 +159,10 @@ class CrudController extends AbstractActionController
      */
     public function deleteAction()
     {
-        $data = $this->getRequest()->isPost() ? $this->getRequest()->getPost() : null;
+        $request = $this->getRequest();
+        $data = $request->isPost() ? $request->getPost() : null;
         $result = $this->getSmartService()->run($this->getEntityId(), $data);
-        if ($this->getRequest()->isPost() && $result->isSuccessFull()) {
+        if (($request->isPost() && !$request->isXmlHttpRequest()) && $result->isSuccessFull()) {
             return $this->redirect()->toRoute(null, array('action' => 'list'), true);
         }
         return $this->getViewModelBuilder()->build($this->getRequest(), $result, 'delete');
