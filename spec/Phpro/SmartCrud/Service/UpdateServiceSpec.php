@@ -55,6 +55,7 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
 
         $this->run($entity->id, null)->shouldReturnAnInstanceOf('Phpro\SmartCrud\Service\SmartServiceResult');
         ;
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_HYDRATION))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldNotBeCalled();
@@ -92,7 +93,8 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
         $this->setForm($form);
 
         $this->run($entity->id, $this->getMockPostData())->shouldReturn($result);
-        ;
+
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_HYDRATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldNotBeCalled();
@@ -131,6 +133,7 @@ class UpdateServiceSpec extends AbstractSmartServiceSpec
 
         $this->run($entity->id, $this->getMockPostData())->shouldReturn($result);
 
+        $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_HYDRATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_DATA_VALIDATION))->shouldBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::INVALID_UPDATE))->shouldNotBeCalled();
         $eventManager->trigger(Argument::which('getName', CrudEvent::BEFORE_UPDATE))->shouldBeCalled();

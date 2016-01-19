@@ -20,10 +20,7 @@ use Zend\Paginator\Paginator;
  *
  * @package Phpro\SmartCrud\Service
  */
-class ListService extends AbstractSmartService
-    implements
-    PaginatorFactoryAwareInterface,
-    QueryProviderAwareInterface
+class ListService extends AbstractSmartService implements PaginatorFactoryAwareInterface, QueryProviderAwareInterface
 {
     /**
      * @var PaginatorServiceFactory

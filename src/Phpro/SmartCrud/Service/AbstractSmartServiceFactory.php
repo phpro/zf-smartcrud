@@ -13,8 +13,7 @@ use Zend\Stdlib\ArrayObject;
  *
  * @package Phpro\SmartCrud\Service
  */
-class AbstractSmartServiceFactory
-    implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class AbstractSmartServiceFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
     /**
      * The config key in the service manager

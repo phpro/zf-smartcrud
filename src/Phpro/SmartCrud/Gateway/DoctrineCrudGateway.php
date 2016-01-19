@@ -21,8 +21,7 @@ use Phpro\SmartCrud\Query\QueryProviderInterface;
  *
  * @package Phpro\SmartCrud\Gateway
  */
-class DoctrineCrudGateway
-    implements ObjectManagerAwareInterface, CrudGatewayInterface
+class DoctrineCrudGateway implements ObjectManagerAwareInterface, CrudGatewayInterface
 {
     const TYPE_ORM = 'ORM';
     const TYPE_ODM = 'ODM';

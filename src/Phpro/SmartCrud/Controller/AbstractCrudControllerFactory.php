@@ -23,8 +23,7 @@ use Zend\Mvc\Exception;
  *
  * @package Phpro\SmartCrud\Controller
  */
-class AbstractCrudControllerFactory
-    implements AbstractFactoryInterface, ServiceLocatorAwareInterface
+class AbstractCrudControllerFactory implements AbstractFactoryInterface, ServiceLocatorAwareInterface
 {
     const FACTORY_NAMESPACE = 'phpro-smartcrud-controller';
     const CONFIG_DEFAULT = 'default';

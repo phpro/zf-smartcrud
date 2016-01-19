@@ -33,6 +33,7 @@ class UpdateService extends AbstractSmartService
         if ($data === null) {
             $result->setSuccess(true);
         } else {
+            $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_HYDRATION, $entity, $data));
             $form->setData($data);
             $em->trigger($this->createEvent(CrudEvent::BEFORE_DATA_VALIDATION, $form, array('postData' => $data)));
             if ($form->isValid()) {

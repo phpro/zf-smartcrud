@@ -13,8 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package Phpro\SmartCrud
  */
-class FlashMessenger extends AbstractListenerAggregate
-    implements FactoryInterface
+class FlashMessenger extends AbstractListenerAggregate implements FactoryInterface
 {
     /**
      * Set the priority of the listeners
