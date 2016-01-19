@@ -17,8 +17,7 @@ use Zend\View\Model\ModelInterface;
 /**
  * Class CrudController
  */
-class CrudController extends AbstractActionController
-    implements CrudControllerInterface
+class CrudController extends AbstractActionController implements CrudControllerInterface
 {
     /**
      * @var SmartServiceInterface

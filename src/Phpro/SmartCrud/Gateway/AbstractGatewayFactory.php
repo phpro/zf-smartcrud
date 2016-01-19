@@ -7,8 +7,7 @@ use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AbstractGatewayFactory
-    implements AbstractFactoryInterface
+class AbstractGatewayFactory implements AbstractFactoryInterface
 {
     const FACTORY_NAMESPACE = 'phpro-smartcrud-gateway';
 

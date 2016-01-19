@@ -193,8 +193,9 @@ class CrudControllerSpec extends ObjectBehavior
         $action = 'update';
         $smartResult->isSuccessFull()->shouldBeCalled()->willReturn(true);
         $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn($smartResult);
-        $pluginManager->get(Argument::exact('params'), null)->shouldBeCalled()->willReturn($params);
-        $params->fromRoute(Argument::exact('id'), null)->shouldBeCalled()->willReturn(1);
+        $params->__invoke()->willReturn($params);
+        $params->fromRoute('id', null)->willReturn(1);
+        $pluginManager->get('params', Argument::cetera())->willReturn($params);
         $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
         $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'update', 'id' => '1')), true)->shouldBeCalled();
         $redirectPlugin->toRoute(Argument::exact(null), array('action' => 'update', 'id' => '1'), true)->willReturn('mockRedirect');
@@ -233,8 +234,9 @@ class CrudControllerSpec extends ObjectBehavior
         $action = 'delete';
         $smartResult->isSuccessFull()->shouldBeCalled()->willReturn(true);
         $smartService->run(Argument::any(), Argument::exact($postParameters))->shouldBeCalled()->willReturn($smartResult);
-        $params->fromRoute(Argument::exact('id'), null)->shouldBeCalled()->willReturn(1);
         $pluginManager->get(Argument::exact('params'), null)->shouldBeCalled()->willReturn($params);
+        $params->__invoke()->willReturn($params);
+        $params->fromRoute(Argument::exact('id'), null)->shouldBeCalled()->willReturn(1);
         $pluginManager->get(Argument::exact('redirect'), null)->shouldBeCalled()->willReturn($redirectPlugin);
         $redirectPlugin->toRoute(Argument::exact(null), Argument::exact(array('action' => 'list')), true)
                        ->shouldBeCalled()

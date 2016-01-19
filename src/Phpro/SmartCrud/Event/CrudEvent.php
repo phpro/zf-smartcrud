@@ -20,6 +20,7 @@ class CrudEvent extends Event
 {
     const BEFORE_LIST = 'before-list';
     const AFTER_LIST = 'after-list';
+    const BEFORE_DATA_HYDRATION = 'before-data-hydration';
     const BEFORE_DATA_VALIDATION = 'before-data-validation';
     const BEFORE_CREATE = 'before-create';
     const AFTER_CREATE = 'after-create';

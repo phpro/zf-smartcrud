@@ -18,8 +18,7 @@ use Zend\EventManager\EventManager;
  *
  * @package Phpro\SmartCrud\Service
  */
-abstract class AbstractSmartService
-    implements SmartServiceInterface
+abstract class AbstractSmartService implements SmartServiceInterface
 {
     /**
      * @var ParametersService

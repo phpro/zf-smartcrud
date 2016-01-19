@@ -19,8 +19,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package Phpro\SmartCrud\Listener
  */
-class BjyAuthorize extends AbstractListenerAggregate
-    implements FactoryInterface
+class BjyAuthorize extends AbstractListenerAggregate implements FactoryInterface
 {
     /**
      * Set the priority of the listeners
