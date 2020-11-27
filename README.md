@@ -1,3 +1,8 @@
+> ## Repository abandoned 2020-11-27
+>
+> This repository has been archived since we are not using it anymore internally.
+> Feel free to use it AS-IS, we won't be providing any support anymore.
+
 # SmartCrud for Zend Framework
 Master: [![Build Status](https://secure.travis-ci.org/phpro/zf-smartcrud.png?branch=master)](http://travis-ci.org/phpro/zf-smartcrud)
 Dev-Master: [![Build Status](https://secure.travis-ci.org/phpro/zf-smartcrud.png?branch=0.1-dev)](http://travis-ci.org/phpro/zf-smartcrud)
